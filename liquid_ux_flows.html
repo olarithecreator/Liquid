@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Liquid – Complete UX Flow Document</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --ink:#0C0C0C;--ink2:#1A1A1A;
+  --gold:#C8973F;--gold-l:#E8B865;
+  --green:#1DB954;--red:#DC2626;--blue:#2563EB;--purple:#7C3AED;--orange:#D97706;
+  --bg:#F9F8F6;--surface:#fff;--border:#E5E4E0;
+  --muted:#888;--muted2:#555;
+  --font-h:'Syne',sans-serif;--font-b:'Inter',sans-serif;
+}
+body{background:var(--bg);font-family:var(--font-b);color:var(--ink);line-height:1.7;font-size:15px;}
+
+/* COVER */
+.cover{background:var(--ink);min-height:100vh;display:flex;flex-direction:column;padding:56px;}
+.cover-logo{font-family:var(--font-h);font-size:26px;font-weight:800;background:linear-gradient(135deg,var(--gold),var(--gold-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:auto;}
+.cover-main{padding:56px 0 48px;}
+.cover-eyebrow{font-size:11px;color:rgba(255,255,255,.28);letter-spacing:3px;text-transform:uppercase;font-family:var(--font-h);margin-bottom:18px;}
+.cover-h1{font-family:var(--font-h);font-size:52px;font-weight:800;color:#fff;line-height:1.0;letter-spacing:-1.5px;margin-bottom:20px;}
+.cover-h1 em{color:var(--gold);font-style:normal;}
+.cover-desc{font-size:16px;color:rgba(255,255,255,.38);line-height:1.7;max-width:560px;}
+.cover-footer{display:flex;gap:10px;flex-wrap:wrap;padding-top:40px;border-top:0.5px solid rgba(255,255,255,.08);}
+.chip{background:rgba(255,255,255,.05);border:0.5px solid rgba(255,255,255,.1);border-radius:20px;padding:5px 14px;font-size:11px;color:rgba(255,255,255,.4);font-family:var(--font-h);font-weight:600;}
+
+/* DOC */
+.doc{max-width:960px;margin:0 auto;padding:64px 40px;}
+
+/* FLOW SECTION */
+.flow-section{margin-bottom:72px;}
+.flow-eye{font-family:var(--font-h);font-size:11px;font-weight:700;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:10px;}
+.flow-title{font-family:var(--font-h);font-size:34px;font-weight:800;color:var(--ink);letter-spacing:-0.5px;margin-bottom:8px;line-height:1.1;}
+.flow-sub{font-size:15px;color:var(--muted2);margin-bottom:32px;line-height:1.65;max-width:700px;}
+.hr{height:0.5px;background:var(--border);margin:56px 0;}
+
+/* SCREEN CARD */
+.screen-card{background:var(--surface);border:0.5px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:18px;}
+.screen-card-header{display:flex;align-items:center;gap:14px;padding:18px 22px;border-bottom:0.5px solid var(--border);background:var(--bg);}
+.screen-badge{display:inline-flex;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;font-family:var(--font-h);}
+.screen-badge.entry{background:rgba(124,58,237,.1);color:var(--purple);}
+.screen-badge.home{background:rgba(29,185,84,.1);color:var(--green);}
+.screen-badge.exchange{background:rgba(200,151,63,.1);color:var(--gold);}
+.screen-badge.intel{background:rgba(37,99,235,.1);color:var(--blue);}
+.screen-badge.account{background:rgba(107,114,128,.1);color:#6B7280;}
+.screen-badge.admin{background:rgba(220,38,38,.08);color:var(--red);}
+.screen-name{font-family:var(--font-h);font-size:17px;font-weight:700;color:var(--ink);}
+.screen-card-body{padding:22px;}
+
+/* UX RULE ROWS */
+.ux-row{display:flex;gap:14px;padding:12px 0;border-bottom:0.5px solid var(--border);}
+.ux-row:last-child{border-bottom:none;}
+.ux-trigger{font-size:13px;font-weight:600;color:var(--ink);min-width:200px;flex-shrink:0;padding-top:1px;}
+.ux-trigger .icon{display:inline-flex;width:22px;height:22px;border-radius:6px;align-items:center;justify-content:center;font-size:11px;margin-right:6px;flex-shrink:0;}
+.ux-trigger .icon.tap{background:rgba(37,99,235,.1);color:var(--blue);}
+.ux-trigger .icon.auto{background:rgba(29,185,84,.1);color:var(--green);}
+.ux-trigger .icon.cond{background:rgba(200,151,63,.1);color:var(--gold);}
+.ux-trigger .icon.err{background:rgba(220,38,38,.08);color:var(--red);}
+.ux-trigger .icon.time{background:rgba(124,58,237,.1);color:var(--purple);}
+.ux-result{font-size:13px;color:var(--muted2);line-height:1.6;flex:1;}
+.ux-result strong{color:var(--ink);font-weight:600;}
+.ux-result .nav{display:inline-flex;align-items:center;gap:4px;background:rgba(37,99,235,.06);border:0.5px solid rgba(37,99,235,.15);border-radius:6px;padding:1px 8px;font-size:12px;color:var(--blue);font-weight:600;margin:0 2px;}
+.ux-result .state{display:inline-flex;align-items:center;gap:4px;background:rgba(200,151,63,.08);border:0.5px solid rgba(200,151,63,.2);border-radius:6px;padding:1px 8px;font-size:12px;color:var(--gold);font-weight:600;margin:0 2px;}
+.ux-result .db{display:inline-flex;align-items:center;gap:3px;background:rgba(124,58,237,.06);border:0.5px solid rgba(124,58,237,.15);border-radius:6px;padding:1px 8px;font-size:12px;color:var(--purple);font-weight:600;margin:0 2px;}
+.ux-result .notif{display:inline-flex;align-items:center;gap:3px;background:rgba(29,185,84,.06);border:0.5px solid rgba(29,185,84,.15);border-radius:6px;padding:1px 8px;font-size:12px;color:var(--green);font-weight:600;margin:0 2px;}
+
+/* LEGEND */
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px;padding:16px 18px;background:var(--surface);border:0.5px solid var(--border);border-radius:12px;}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted2);}
+.legend-ico{width:20px;height:20px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;}
+
+/* STATE MACHINE */
+.state-machine{background:var(--ink);border-radius:16px;padding:24px;margin:18px 0;}
+.sm-title{font-family:var(--font-h);font-size:13px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px;}
+.sm-states{display:flex;align-items:center;gap:0;flex-wrap:wrap;gap:8px;}
+.sm-state{background:rgba(255,255,255,.06);border:0.5px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 14px;text-align:center;}
+.sm-state.active{border-color:var(--gold);background:rgba(200,151,63,.1);}
+.sm-state.success{border-color:var(--green);background:rgba(29,185,84,.1);}
+.sm-state.fail{border-color:var(--red);background:rgba(220,38,38,.08);}
+.sm-state-name{font-family:var(--font-h);font-size:12px;font-weight:700;color:#fff;}
+.sm-state.active .sm-state-name{color:var(--gold);}
+.sm-state.success .sm-state-name{color:var(--green);}
+.sm-state.fail .sm-state-name{color:var(--red);}
+.sm-state-sub{font-size:10px;color:rgba(255,255,255,.35);margin-top:2px;}
+.sm-arrow{font-size:16px;color:rgba(255,255,255,.2);padding:0 2px;}
+
+/* TIMER BOX */
+.timer-box{background:rgba(200,151,63,.06);border:0.5px solid rgba(200,151,63,.2);border-radius:14px;padding:18px 20px;margin:14px 0;}
+.timer-box-title{font-family:var(--font-h);font-size:13px;font-weight:700;color:var(--gold);margin-bottom:10px;}
+.timer-rule{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:0.5px solid rgba(200,151,63,.1);}
+.timer-rule:last-child{border-bottom:none;}
+.timer-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:6px;}
+.timer-text{font-size:13px;color:var(--muted2);line-height:1.6;}
+.timer-text strong{color:var(--ink);}
+
+/* NAV STATE */
+.nav-states{display:grid;grid-template-columns:repeat(5,1fr);gap:0;border:0.5px solid var(--border);border-radius:14px;overflow:hidden;margin:14px 0;}
+.nav-state{padding:14px 10px;text-align:center;border-right:0.5px solid var(--border);}
+.nav-state:last-child{border-right:none;}
+.nav-state.active-state{background:rgba(29,185,84,.04);}
+.nav-state-icon{font-size:18px;margin-bottom:5px;}
+.nav-state-label{font-size:11px;font-family:var(--font-h);font-weight:600;color:var(--muted);}
+.nav-state.active-state .nav-state-label{color:var(--ink);}
+.nav-state-screens{font-size:10px;color:var(--muted);margin-top:4px;line-height:1.5;}
+
+/* CONDITION TABLE */
+.cond-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;}
+.cond-table th{font-family:var(--font-h);font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;padding:9px 14px;border-bottom:1px solid var(--border);text-align:left;background:var(--bg);}
+.cond-table td{padding:11px 14px;border-bottom:0.5px solid var(--border);vertical-align:top;}
+.cond-table tr:last-child td{border-bottom:none;}
+
+/* ALERT */
+.alert{display:flex;gap:12px;border-radius:12px;padding:14px 16px;margin:14px 0;}
+.alert-ico{font-size:18px;flex-shrink:0;line-height:1.3;}
+.alert-body{font-size:13px;line-height:1.6;color:var(--muted2);}
+.alert-body strong{color:var(--ink);font-weight:600;}
+.alert.note{background:rgba(200,151,63,.05);border:0.5px solid rgba(200,151,63,.18);}
+.alert.warn{background:rgba(220,38,38,.04);border:0.5px solid rgba(220,38,38,.15);}
+.alert.tip{background:rgba(29,185,84,.04);border:0.5px solid rgba(29,185,84,.15);}
+
+/* FLOW ARROW DIAGRAM */
+.flow-diagram{display:flex;flex-direction:column;gap:0;margin:14px 0;}
+.flow-node{display:flex;align-items:flex-start;gap:16px;padding-bottom:18px;position:relative;}
+.flow-node:last-child{padding-bottom:0;}
+.flow-node-left{display:flex;flex-direction:column;align-items:center;width:36px;flex-shrink:0;}
+.flow-node-circle{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;font-family:var(--font-h);font-weight:700;}
+.flow-node-circle.screen{background:var(--ink);color:#fff;font-size:12px;}
+.flow-node-circle.action{background:rgba(200,151,63,.12);color:var(--gold);border:0.5px solid rgba(200,151,63,.3);}
+.flow-node-circle.decision{background:rgba(37,99,235,.08);color:var(--blue);border:0.5px solid rgba(37,99,235,.2);}
+.flow-node-circle.db{background:rgba(124,58,237,.08);color:var(--purple);border:0.5px solid rgba(124,58,237,.2);}
+.flow-node-circle.notif{background:rgba(29,185,84,.08);color:var(--green);border:0.5px solid rgba(29,185,84,.2);}
+.flow-node-vl{flex:1;width:1.5px;background:var(--border);margin:4px 0;}
+.flow-node-content{padding-top:7px;flex:1;}
+.flow-node-title{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;}
+.flow-node-desc{font-size:12px;color:var(--muted2);line-height:1.6;}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-logo">Liquid.</div>
+  <div class="cover-main">
+    <div class="cover-eyebrow">UX Flow Document · Every Screen · Every State</div>
+    <div class="cover-h1">How every<br>screen <em>works</em><br>and connects.</div>
+    <div class="cover-desc">Every tap, every condition, every database write, every navigation transition — documented precisely so Cursor can build it exactly right the first time.</div>
+  </div>
+  <div class="cover-footer">
+    <div class="chip">Screen States</div>
+    <div class="chip">Nav Active Logic</div>
+    <div class="chip">Timer Rules</div>
+    <div class="chip">Order State Machine</div>
+    <div class="chip">Tier Lock Logic</div>
+    <div class="chip">Admin Flows</div>
+    <div class="chip">Error States</div>
+    <div class="chip">Real-time Updates</div>
+  </div>
+</div>
+
+<div class="doc">
+
+<!-- LEGEND -->
+<div class="legend">
+  <div class="legend-item"><div class="legend-ico" style="background:rgba(37,99,235,.1);color:var(--blue);">👆</div> User tap / interaction</div>
+  <div class="legend-item"><div class="legend-ico" style="background:rgba(29,185,84,.1);color:var(--green);">⚡</div> Auto / on load</div>
+  <div class="legend-item"><div class="legend-ico" style="background:rgba(200,151,63,.1);color:var(--gold);">◆</div> Condition / if-else</div>
+  <div class="legend-item"><div class="legend-ico" style="background:rgba(220,38,38,.08);color:var(--red);">✕</div> Error / validation fail</div>
+  <div class="legend-item"><div class="legend-ico" style="background:rgba(124,58,237,.1);color:var(--purple);">⏱</div> Timer / scheduled</div>
+  <div class="legend-item" style="gap:8px;"><span class="nav" style="display:inline-flex;background:rgba(37,99,235,.06);border:0.5px solid rgba(37,99,235,.15);border-radius:6px;padding:1px 8px;font-size:12px;color:var(--blue);font-weight:600;">→ Screen</span> Navigation destination</div>
+  <div class="legend-item" style="gap:8px;"><span class="db" style="display:inline-flex;background:rgba(124,58,237,.06);border:0.5px solid rgba(124,58,237,.15);border-radius:6px;padding:1px 8px;font-size:12px;color:var(--purple);font-weight:600;">DB write</span> Supabase database update</div>
+  <div class="legend-item" style="gap:8px;"><span class="notif" style="display:inline-flex;background:rgba(29,185,84,.06);border:0.5px solid rgba(29,185,84,.15);border-radius:6px;padding:1px 8px;font-size:12px;color:var(--green);font-weight:600;">Notify</span> Email / Telegram / In-app</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SECTION 1 · APP LAUNCH & ROUTING -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="flow-section">
+  <div class="flow-eye">Section 01</div>
+  <div class="flow-title">App Launch &amp; Routing</div>
+  <div class="flow-sub">The very first thing the app does when it opens. These decisions happen before any screen renders.</div>
+
+  <div class="flow-diagram">
+    <div class="flow-node">
+      <div class="flow-node-left"><div class="flow-node-circle action">⚡</div><div class="flow-node-vl"></div></div>
+      <div class="flow-node-content">
+        <div class="flow-node-title">App opens — check localStorage</div>
+        <div class="flow-node-desc">Check two flags: <code>liquid_onboarded</code> and the Supabase auth session token.</div>
+      </div>
+    </div>
+    <div class="flow-node">
+      <div class="flow-node-left"><div class="flow-node-circle decision">◆</div><div class="flow-node-vl"></div></div>
+      <div class="flow-node-content">
+        <div class="flow-node-title">Is user logged in? (Supabase session exists)</div>
+        <div class="flow-node-desc"><strong>YES →</strong> Check if email === ADMIN_EMAIL. If yes → <span class="nav">→ /admin Dashboard</span>. If no → <span class="nav">→ Home</span><br/><strong>NO →</strong> Check if liquid_onboarded === 'true'. If yes → <span class="nav">→ Sign In</span>. If no → <span class="nav">→ Splash</span></div>
+      </div>
+    </div>
+    <div class="flow-node">
+      <div class="flow-node-left"><div class="flow-node-circle action">⚡</div><div class="flow-node-vl"></div></div>
+      <div class="flow-node-content">
+        <div class="flow-node-title">On Home load — fetch live data</div>
+        <div class="flow-node-desc">Immediately fetch: (1) app_settings row buy_rate, (2) user's last 4 orders, (3) user's portfolio_value. Show skeleton loading state while fetching. Never show stale hardcoded data.</div>
+      </div>
+    </div>
+    <div class="flow-node">
+      <div class="flow-node-left"><div class="flow-node-circle decision">◆</div></div>
+      <div class="flow-node-content">
+        <div class="flow-node-title">Check announcement banner</div>
+        <div class="flow-node-desc">Fetch app_settings key='announcement'. If value is not empty → show gold banner at top of Home. If empty → no banner. This banner appears above everything else on Home.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="hr"></div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SECTION 2 · BOTTOM NAVIGATION -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="flow-section">
+  <div class="flow-eye">Section 02</div>
+  <div class="flow-title">Bottom Navigation — Active State Rules</div>
+  <div class="flow-sub">Exactly which nav item is active on every screen. The nav has two visual modes: white background (light screens) and dark background (dark screens).</div>
+
+  <div class="nav-states">
+    <div class="nav-state active-state">
+      <div class="nav-state-icon">⌂</div>
+      <div class="nav-state-label">Home</div>
+      <div class="nav-state-screens">Home screen only</div>
+    </div>
+    <div class="nav-state active-state">
+      <div class="nav-state-icon">⇄</div>
+      <div class="nav-state-label">Exchange</div>
+      <div class="nav-state-screens">Acquire, Sell Step 1, Sell Step 2, Order Status, Expired, Complete, Exchange Closed</div>
+    </div>
+    <div class="nav-state active-state">
+      <div class="nav-state-icon">◈</div>
+      <div class="nav-state-label">Insights</div>
+      <div class="nav-state-screens">Intelligence feed only</div>
+    </div>
+    <div class="nav-state active-state">
+      <div class="nav-state-icon">◎</div>
+      <div class="nav-state-label">Plans</div>
+      <div class="nav-state-screens">Subscription Plans only</div>
+    </div>
+    <div class="nav-state active-state">
+      <div class="nav-state-icon">▦</div>
+      <div class="nav-state-label">Portfolio</div>
+      <div class="nav-state-screens">Portfolio, Transaction History, Notifications, Account Settings</div>
+    </div>
+  </div>
+
+  <div class="screen-card" style="margin-top:18px;">
+    <div class="screen-card-header">
+      <span class="screen-badge account">Nav Rules</span>
+      <span class="screen-name">Nav background mode by screen</span>
+    </div>
+    <div class="screen-card-body">
+      <table class="cond-table">
+        <tr><th>Screen</th><th>Nav Style</th><th>Active Tab</th></tr>
+        <tr><td>Home</td><td>White nav (<code>bottom-nav-white</code>)</td><td>⌂ Home — dark icon background</td></tr>
+        <tr><td>Acquire USDT</td><td>Dark nav (<code>bottom-nav-dark</code>)</td><td>⇄ Exchange</td></tr>
+        <tr><td>Sell Step 1 + Step 2</td><td>Dark nav</td><td>⇄ Exchange</td></tr>
+        <tr><td>Order Status, Expired, Complete</td><td>Dark nav</td><td>⇄ Exchange</td></tr>
+        <tr><td>Exchange Closed</td><td>Dark nav</td><td>⇄ Exchange</td></tr>
+        <tr><td>Intelligence</td><td>Dark nav</td><td>◈ Insights</td></tr>
+        <tr><td>Plans</td><td>Dark nav</td><td>◎ Plans</td></tr>
+        <tr><td>Portfolio</td><td>White nav (white panel fills bottom)</td><td>▦ Portfolio</td></tr>
+        <tr><td>Transaction History</td><td>Dark nav</td><td>▦ Portfolio</td></tr>
+        <tr><td>Notifications</td><td>Dark nav</td><td>▦ Portfolio</td></tr>
+        <tr><td>Account Settings</td><td>Dark nav</td><td>▦ Portfolio</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="alert note">
+    <div class="alert-ico">💡</div>
+    <div class="alert-body"><strong>Nav tap behaviour:</strong> Tapping a nav item that is already the active screen does nothing (no navigation, no reload). Tapping a different nav item always navigates to that section's primary screen. Exception: tapping Exchange nav goes to Acquire USDT screen (not Sell). If exchange_open = false, tapping Exchange nav goes to Exchange Closed screen instead.</div>
+  </div>
+</div>
+
+<div class="hr"></div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SECTION 3 · ENTRY FLOW -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="flow-section">
+  <div class="flow-eye">Section 03</div>
+  <div class="flow-title">Entry Flow — Splash, Onboarding, Auth</div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge entry">01</span><span class="screen-name">Splash Screen</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>Screen loads</div><div class="ux-result">Show splash for <strong>1.5 seconds</strong> — no interaction needed. Auto-advance to Onboarding Screen 1. Do not show a button on splash — it auto-advances.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon cond">◆</span>Already onboarded</div><div class="ux-result">If localStorage liquid_onboarded = 'true' → skip splash entirely, go to <span class="nav">→ Sign In</span> immediately on app open.</div></div>
+    </div>
+  </div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge entry">A1–A3</span><span class="screen-name">Onboarding Screens (3 screens)</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Get Started" (A1)</div><div class="ux-result">Slide animation to <span class="nav">→ Onboarding Screen 2 (A2)</span>. Progress dot 2 becomes active (gold, wider). Dot 1 shrinks back.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Next" (A2)</div><div class="ux-result">Slide animation to <span class="nav">→ Onboarding Screen 3 (A3)</span>. Progress dot 3 active.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Create Account" (A3)</div><div class="ux-result"><span class="db">DB: set localStorage liquid_onboarded = 'true'</span> → navigate to <span class="nav">→ Sign Up</span></div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Skip intro"</div><div class="ux-result"><span class="db">DB: set localStorage liquid_onboarded = 'true'</span> → navigate to <span class="nav">→ Sign In</span></div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Swipe left</div><div class="ux-result">Advance to next screen (same as tapping button). Swipe right goes back to previous screen.</div></div>
+    </div>
+  </div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge entry">02</span><span class="screen-name">Sign In Screen</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Sign In" button</div><div class="ux-result"><strong>Validate:</strong> both fields filled. Show loading spinner inside button. Call Supabase auth.signInWithPassword(). On success: check email. If admin → <span class="nav">→ /admin</span>. If user → <span class="nav">→ Home</span>.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon err">✕</span>Wrong credentials</div><div class="ux-result">Show red error toast at top: "Incorrect email or password". Fields retain their values. Button returns to normal. No navigation.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon err">✕</span>Empty fields</div><div class="ux-result">Fields flash red border. Error text below empty field. Button does not fire request.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Forgot password?"</div><div class="ux-result">Navigate to <span class="nav">→ Forgot Password screen</span>. Back arrow returns here.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Create one"</div><div class="ux-result">Navigate to <span class="nav">→ Sign Up screen</span></div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap Google button</div><div class="ux-result">Open Supabase Google OAuth popup. On success: same routing logic as sign in. If new Google user, create users table row first.</div></div>
+    </div>
+  </div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge entry">—</span><span class="screen-name">Sign Up Screen</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Create Account"</div><div class="ux-result"><strong>Validate:</strong> all 4 fields filled, phone is 11 digits, T&C checked, password ≥ 8 chars. Loading spinner in button. Call Supabase auth.signUp(). On success: <span class="db">DB: insert into users table</span>. Navigate to <span class="nav">→ Home</span>.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon err">✕</span>Email already exists</div><div class="ux-result">Error toast: "An account with this email already exists. Sign in instead?" with a link to Sign In.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon err">✕</span>Password too short</div><div class="ux-result">Red text below password field: "Password must be at least 8 characters". Button disabled.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon err">✕</span>T&C not checked</div><div class="ux-result">Checkbox pulses / shakes. Error text: "Please accept the terms to continue". Button does not fire.</div></div>
+    </div>
+  </div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge entry">E2</span><span class="screen-name">Forgot Password Screen</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Send Reset Link"</div><div class="ux-result"><strong>Validate:</strong> email not empty. Loading spinner in button. Call <code>supabase.auth.resetPasswordForEmail(email, { redirectTo: window.origin + '/reset-password' })</code>. On success (regardless of whether email exists — Supabase returns success either way for security): <span class="nav">→ Reset Link Sent screen</span>. On error: red toast.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap ← back / "Back to Sign In"</div><div class="ux-result">Navigate to <span class="nav">→ Sign In screen</span></div></div>
+    </div>
+  </div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge entry">E3</span><span class="screen-name">Reset Link Sent Screen</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>Screen mounts</div><div class="ux-result">Static screen — no data fetch needed. Shows the email address that was entered on the previous screen (pass as router state). Green 📧 icon, "Check your email" heading.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Open Email App"</div><div class="ux-result">Call <code>window.open('mailto:')</code> to open the device's default mail app. No navigation.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Resend link"</div><div class="ux-result">Call <code>resetPasswordForEmail</code> again with the same email. Button shows loading for 1 second. Then show "Sent! ✓" text for 3 seconds in place of the link, then revert back to "Resend link".</div></div>
+    </div>
+  </div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge entry">E4</span><span class="screen-name">New Password Screen</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>Screen mounts</div><div class="ux-result">Call <code>supabase.auth.getSession()</code>. Supabase automatically processes the token from the URL. If no session (token invalid or expired): show error toast "Reset link is invalid or expired" and navigate to <span class="nav">→ Forgot Password screen</span>. If session valid: show the form.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>User types in password field</div><div class="ux-result">Update password strength bar in real time: &lt;8 chars = 1 red bar, 8–10 = 2 orange bars, 11–14 = 3 gold bars, 15+ = 4 green bars. Show label: Weak / Fair / Strong / Very strong.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Set New Password"</div><div class="ux-result"><strong>Validate:</strong> both fields filled, passwords match, minimum 8 chars. Call <code>supabase.auth.updateUser({ password: newPassword })</code>. On success: <span class="nav">→ Password Updated screen</span>. On error: red toast.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon err">✕</span>Passwords don't match</div><div class="ux-result">Red border on confirm field. "Passwords do not match" error below. Button remains disabled until they match.</div></div>
+    </div>
+  </div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge entry">E5</span><span class="screen-name">Password Updated Screen</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Back to Sign In"</div><div class="ux-result">Call <code>supabase.auth.signOut()</code> first (to clear the recovery session), then navigate to <span class="nav">→ Sign In screen</span>. User must sign in fresh with their new password.</div></div>
+    </div>
+  </div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge admin">G1</span><span class="screen-name">Admin Sign In Screen</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>Screen mounts</div><div class="ux-result">Check if user is already logged in AND is admin. If yes: immediately redirect to <span class="nav">→ /admin</span>. If regular user is logged in: sign them out silently first, then show the admin sign in form.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Sign In to Admin Panel"</div><div class="ux-result">Loading in button. Call <code>supabase.auth.signInWithPassword()</code>. On success: check if email === ADMIN_EMAIL. <strong>If YES</strong>: <span class="nav">→ /admin</span>. <strong>If NO</strong>: call <code>supabase.auth.signOut()</code> immediately, show red toast: "Access denied. This account is not an admin." Stay on this screen.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon err">✕</span>Wrong credentials</div><div class="ux-result">Red toast "Incorrect credentials". Fields keep their values. No navigation.</div></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="hr"></div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SECTION 4 · HOME SCREEN -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="flow-section">
+  <div class="flow-eye">Section 04</div>
+  <div class="flow-title">Home Screen</div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge home">03</span><span class="screen-name">Home Screen</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>Screen mounts</div><div class="ux-result">Fetch in parallel: (1) app_settings for buy_rate + announcement + exchange_open, (2) user's 4 most recent orders, (3) user's portfolio value. Show grey skeleton blocks while loading. Replace with real data on fetch success.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon cond">◆</span>announcement not empty</div><div class="ux-result">Show a <strong>gold top banner</strong> above everything: "📢 [message]". Has a dismiss ✕ button. Tapping dismiss hides it for this session only (not permanently — it reappears on next open if admin hasn't cleared it).</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon cond">◆</span>exchange_open = false</div><div class="ux-result">Show a small <strong>red status bar</strong> below the rate bar: "🔒 Exchange currently closed". The Acquire and Liquidate action cards still show but are visually dimmed (60% opacity). Tapping them goes to <span class="nav">→ Exchange Closed screen</span>.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Acquire" card</div><div class="ux-result">If exchange_open = true → <span class="nav">→ Acquire USDT screen</span>. If false → <span class="nav">→ Exchange Closed screen</span>.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Liquidate" card</div><div class="ux-result">If exchange_open = true → <span class="nav">→ Sell Step 1 (Bank Details)</span>. If false → <span class="nav">→ Exchange Closed screen</span>.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap ⚙ settings icon</div><div class="ux-result">Navigate to <span class="nav">→ Account Settings screen</span></div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "View all"</div><div class="ux-result">Navigate to <span class="nav">→ Transaction History screen</span></div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap any activity row</div><div class="ux-result">Navigate to <span class="nav">→ Order Status screen</span> for that specific order</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>Pull to refresh</div><div class="ux-result">Refetch all home data. Update rate, portfolio value, activity list. Show brief loading indicator at top.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon cond">◆</span>Pending order exists</div><div class="ux-result">If user has an order with status = awaiting_payment or proof_uploaded → show a <strong>gold banner</strong> at top of activity section: "You have a pending order. Tap to view →". Tap goes to that Order Status screen.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="hr"></div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SECTION 5 · EXCHANGE FLOW -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="flow-section">
+  <div class="flow-eye">Section 05</div>
+  <div class="flow-title">Exchange Flow — The 20-Minute Timer</div>
+  <div class="flow-sub">The timer is the most complex UX in the app. It has multiple visual states, a database expiry, and affects what the user can do. Read this section carefully.</div>
+
+  <div class="timer-box">
+    <div class="timer-box-title">⏱ Timer — Complete Rules</div>
+    <div class="timer-rule"><div class="timer-dot"></div><div class="timer-text"><strong>When does the timer START?</strong> The moment the user taps "Confirm Order" or "Submit for Verification" and the order is successfully created in the database. Not when they open the screen — only when they commit.</div></div>
+    <div class="timer-rule"><div class="timer-dot"></div><div class="timer-text"><strong>Timer display:</strong> MM:SS countdown. Colour changes: 20:00–10:01 = gold, 10:00–3:01 = orange (#D97706), 3:00–0:01 = red with pulsing animation. At 0:00 = expired.</div></div>
+    <div class="timer-rule"><div class="timer-dot"></div><div class="timer-text"><strong>Progress bar:</strong> Depletes from 100% to 0% over 20 minutes. Matches the colour changes above.</div></div>
+    <div class="timer-rule"><div class="timer-dot"></div><div class="timer-text"><strong>Timer on the Order Status screen:</strong> NOT shown here. The Order Status screen shows the step tracker instead. The timer only shows on the Acquire and Sell Step 2 screens.</div></div>
+    <div class="timer-rule"><div class="timer-dot"></div><div class="timer-text"><strong>What happens at 0:00 on the client?</strong> If the order status is still 'awaiting_payment' (no proof uploaded), automatically navigate to <span class="nav">→ Order Expired screen</span>. If proof was already uploaded (status = proof_uploaded), the timer disappears and shows "Proof received — waiting for admin" message instead.</div></div>
+    <div class="timer-rule"><div class="timer-dot"></div><div class="timer-text"><strong>Database expiry:</strong> A Supabase function runs every minute. Any order with status = 'awaiting_payment' older than 20 minutes is updated to status = 'expired'. This is the source of truth — the client timer is visual only.</div></div>
+    <div class="timer-rule"><div class="timer-dot"></div><div class="timer-text"><strong>Timer persistence:</strong> If the user leaves the app and comes back, the timer resumes from the correct time. Calculate remaining time as: created_at + 20 minutes - now(). If result is ≤ 0 → order is already expired.</div></div>
+    <div class="timer-rule"><div class="timer-dot"></div><div class="timer-text"><strong>Timer on Acquire screen (before order creation):</strong> NOT shown. The timer block only appears AFTER the order is created, on the Order Status screen. The Acquire/Sell screens show the timer ONLY when returning to a screen with an existing active order.</div></div>
+  </div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge exchange">04</span><span class="screen-name">Acquire USDT Screen</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>Screen mounts</div><div class="ux-result">Fetch live buy_rate from app_settings. Check if user already has an active order (status = awaiting_payment or proof_uploaded). If yes → show that order's details and remaining timer instead of the input form.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Type in USDT field</div><div class="ux-result">Instantly calculate Naira = USDT × buy_rate. Update "You pay" line and "Total to pay" in the payment card. No debounce needed — update on every keystroke. If input is empty or 0 → show "₦0.00" and "—" in total.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon err">✕</span>Amount below minimum</div><div class="ux-result">Show error text below input: "Minimum order is [min_order_usdt] USDT". Confirm Order button shows as disabled (50% opacity, not tappable).</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon err">✕</span>Amount above maximum</div><div class="ux-result">Show error: "Maximum order is [max_order_usdt] USDT". Button disabled.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap wallet address field</div><div class="ux-result">Keyboard opens. Field accepts any text. No real-time validation. Will validate format on submit.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap upload zone</div><div class="ux-result">Open native file picker. Accept: jpg, png, webp, pdf. Max 5MB. On file selected: show filename + file size preview inside the upload zone. Zone border changes from dashed grey to solid green. "Upload payment proof" text changes to "[filename] selected".</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Confirm Order"</div><div class="ux-result">
+        <strong>Validations (in this order):</strong><br/>
+        1. USDT amount: empty or 0 → error "Enter an amount"<br/>
+        2. Amount within limits → error if outside range<br/>
+        3. Wallet address: empty → error "Enter your USDT wallet address"<br/>
+        4. Wallet address format: must start with T and be 34 chars → error "Enter a valid TRC-20 address"<br/>
+        <br/>
+        <strong>If all valid:</strong> Show loading spinner in button. <span class="db">DB: insert order into orders table</span> with status='awaiting_payment'. If proof file was selected: <span class="db">DB: upload to Supabase Storage</span>, update order payment_proof_url, set status='proof_uploaded'. <span class="notif">Notify: Telegram to admin</span>. <span class="notif">Notify: Email confirmation to user</span>. Navigate to <span class="nav">→ Order Status screen</span>.
+      </div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap ← back</div><div class="ux-result">If no order created yet → go back to <span class="nav">→ Home</span>. No confirmation dialog needed. If order is in progress → show a dialog: "Leave order? Your order is still active." with "Stay" and "Leave" buttons. Leave goes to Home.</div></div>
+    </div>
+  </div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge exchange">B2</span><span class="screen-name">Sell Step 1 — Bank Details</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>Screen mounts</div><div class="ux-result">Check if user has saved bank accounts (from users table). If yes: pre-fill the form with default bank details. User can still change them.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Select bank from dropdown</div><div class="ux-result">Dropdown opens with full list. Selection updates the field. No other effect yet.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>Account number reaches 10 digits</div><div class="ux-result">Show a loading spinner next to the account name field for 1 second (simulating verification). Then show the green verification badge: "✓ [name] — Account verified successfully". Account name field auto-fills with the verified name (editable). This UX makes it feel professional even if real-time bank lookup isn't connected yet.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Delete digits below 10</div><div class="ux-result">Verification badge disappears. Account name field clears. User must re-enter 10 digits.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Continue to Amount →"</div><div class="ux-result"><strong>Validate:</strong> bank selected, account number = 10 digits, account name not empty. Store bank_name, bank_account, bank_holder in component state (NOT saved to DB yet). Navigate to <span class="nav">→ Sell Step 2</span> passing these values as state.</div></div>
+    </div>
+  </div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge exchange">05</span><span class="screen-name">Sell Step 2 — Amount &amp; Send</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>Screen mounts</div><div class="ux-result">Fetch sell_rate from app_settings. Display it in the live rate bar with a <strong>gold dot</strong> (not green — sell is gold). Show bank details summary: "to [BankName] ••[last4digits]" below the calculation.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Type in USDT field</div><div class="ux-result">Instantly calculate Naira = USDT × sell_rate. Update "You receive" line. Same limit validation as Buy.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "⧉ Copy address"</div><div class="ux-result">Copy wallet address to clipboard. Button text changes to "✓ Copied" for 2 seconds then reverts. No navigation.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap upload zone</div><div class="ux-result">Same as Buy — file picker opens. Shows selected file preview.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Submit for Verification"</div><div class="ux-result">Same validation flow as Buy. On success: <span class="db">DB: insert sell order with bank details from Step 1 state</span>. Upload proof if attached. <span class="notif">Notify: Telegram to admin</span>. <span class="notif">Notify: Email to user</span>. Navigate to <span class="nav">→ Order Status screen</span>.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap ← back</div><div class="ux-result">Go back to <span class="nav">→ Sell Step 1</span> — bank details are retained in state. Step indicator shows Step 1 active again.</div></div>
+    </div>
+  </div>
+
+  <!-- ORDER STATE MACHINE -->
+  <div class="state-machine">
+    <div class="sm-title">Order Status State Machine</div>
+    <div class="sm-states">
+      <div class="sm-state"><div class="sm-state-name">awaiting_payment</div><div class="sm-state-sub">Order created, no proof</div></div>
+      <div class="sm-arrow">→</div>
+      <div class="sm-state active"><div class="sm-state-name">proof_uploaded</div><div class="sm-state-sub">Proof attached</div></div>
+      <div class="sm-arrow">→</div>
+      <div class="sm-state active"><div class="sm-state-name">verifying</div><div class="sm-state-sub">Admin approved</div></div>
+      <div class="sm-arrow">→</div>
+      <div class="sm-state success"><div class="sm-state-name">completed</div><div class="sm-state-sub">Admin marked done</div></div>
+    </div>
+    <div class="sm-states" style="margin-top:10px;">
+      <div class="sm-state"><div class="sm-state-name">awaiting_payment</div><div class="sm-state-sub">20 min passes</div></div>
+      <div class="sm-arrow">→</div>
+      <div class="sm-state fail"><div class="sm-state-name">expired</div><div class="sm-state-sub">Auto by DB function</div></div>
+      <div style="width:20px;"></div>
+      <div class="sm-state"><div class="sm-state-name">any status</div><div class="sm-state-sub">Admin cancels</div></div>
+      <div class="sm-arrow">→</div>
+      <div class="sm-state fail"><div class="sm-state-name">cancelled</div><div class="sm-state-sub">Admin action</div></div>
+    </div>
+  </div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge exchange">06</span><span class="screen-name">Order Status Screen</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>Screen mounts</div><div class="ux-result">Fetch the current order from database. Subscribe to real-time updates (Supabase realtime) so status changes appear instantly without refresh.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>Status = awaiting_payment</div><div class="ux-result">Step 1 = done (green ✓). Steps 2, 3, 4 = idle (grey). Status pill = gold "Awaiting Payment". Show upload proof option if not yet uploaded.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>Status = proof_uploaded</div><div class="ux-result">Step 1 = done. Step 2 = done (green ✓). Steps 3, 4 = idle. Status pill = gold "Proof Uploaded — Pending Review". Show message: "Verification typically takes 5–10 minutes".</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>Status = verifying</div><div class="ux-result">Step 1, 2 = done. Step 3 = active (gold ⏱). Step 4 = idle. Status pill = gold "Admin Verification". Pulsing animation on step 3 dot.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>Status changes to completed</div><div class="ux-result">All 4 steps turn green ✓. Status pill turns green "Completed ✓". Confetti animation plays briefly. Navigate automatically to <span class="nav">→ Order Complete screen</span> after 1.5 seconds. <span class="notif">Notify: completion email sent</span>.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>Status changes to expired</div><div class="ux-result">Navigate immediately to <span class="nav">→ Order Expired screen</span>.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Back to Home"</div><div class="ux-result">Navigate to <span class="nav">→ Home</span>. Order continues processing in background. User can return via pending order banner on Home.</div></div>
+    </div>
+  </div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge exchange">C1</span><span class="screen-name">Exchange Closed Screen</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>Screen mounts</div><div class="ux-result">Fetch exchange_message from app_settings. Display it in the admin notice badge. If message is empty → hide the admin notice badge entirely.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Browse Intelligence →"</div><div class="ux-result">Navigate to <span class="nav">→ Intelligence screen</span>. Nav updates Exchange tab active to Insights tab active.</div></div>
+    </div>
+  </div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge exchange">C2</span><span class="screen-name">Order Expired Screen</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Try Again"</div><div class="ux-result">Navigate to <span class="nav">→ Acquire USDT</span> (if original order was buy) or <span class="nav">→ Sell Step 1</span> (if sell). Fresh form — no pre-filling from the expired order.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Back to Home"</div><div class="ux-result">Navigate to <span class="nav">→ Home</span></div></div>
+    </div>
+  </div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge exchange">C3</span><span class="screen-name">Order Complete Screen</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>Screen mounts</div><div class="ux-result">Show the completed order details. If buy order: show "Your USDT has been sent to your wallet". If sell order: show "₦[amount] has been sent to your [bank] account".</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Back to Home"</div><div class="ux-result">Navigate to <span class="nav">→ Home</span>. Portfolio value on Home should now reflect the completed order.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="hr"></div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SECTION 6 · INTELLIGENCE & PLANS -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="flow-section">
+  <div class="flow-eye">Section 06</div>
+  <div class="flow-title">Intelligence Feed &amp; Subscription Plans</div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge intel">07</span><span class="screen-name">Intelligence Feed</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>Screen mounts</div><div class="ux-result">Fetch user's subscription_plan from users table. Fetch all published insights (is_published = true) ordered by published_at DESC. Apply tier filter logic below.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon cond">◆</span>Tier lock logic</div><div class="ux-result">
+        <strong>Plan = 'none':</strong> All posts show as locked. Banner at top: "Subscribe to see intelligence content". Tap any post → <span class="nav">→ Plans screen</span>.<br/>
+        <strong>Plan = 'basic':</strong> Unlocked: tier_access = 'all' or 'basic'. Locked: 'business', 'institutional'.<br/>
+        <strong>Plan = 'business':</strong> Unlocked: 'all', 'basic', 'business'. Locked: 'institutional'.<br/>
+        <strong>Plan = 'institutional':</strong> Everything unlocked.
+      </div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap an unlocked post card</div><div class="ux-result">Expand the post inline (push content down, show full body text). A second tap collapses it. Alternatively: navigate to a Post Detail screen showing full content. Mark notification as read if user arrived from a notification.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap a locked post card</div><div class="ux-result">Navigate to <span class="nav">→ Plans screen</span>. Do not show the content. The card can slightly animate (wiggle) to communicate it's locked.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap plan badge (top right)</div><div class="ux-result">Navigate to <span class="nav">→ Plans screen</span></div></div>
+    </div>
+  </div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge intel">F1</span><span class="screen-name">Post Detail — Unlocked</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>Screen mounts</div><div class="ux-result">Fetch post by id from insights table. Run <code>canView(post.tier_access, user.subscription_plan)</code>. If user cannot view: render the locked state (F2) instead. If user can view: render full article.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>User arrived from notification</div><div class="ux-result"><span class="db">DB: mark notification as read</span> (update notifications.is_read = true for the notification that linked here).</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap ← back</div><div class="ux-result">Navigate to <span class="nav">→ Intelligence feed</span></div></div>
+    </div>
+  </div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge intel">F2</span><span class="screen-name">Post Detail — Locked</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>Screen renders locked state</div><div class="ux-result">Show post title and tier badge clearly. Blur the body content (CSS filter:blur). Overlay the lock icon + "[Tier] access only" message + upgrade button. Do NOT show any article content.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Upgrade to [Tier] →" button</div><div class="ux-result">Navigate to <span class="nav">→ Plans screen (/plans)</span>. The Plans screen handles payment via Paystack.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "View all plans" link</div><div class="ux-result">Navigate to <span class="nav">→ Plans screen (/plans)</span></div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap ← back</div><div class="ux-result">Navigate to <span class="nav">→ Intelligence feed</span></div></div>
+    </div>
+  </div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge intel">08</span><span class="screen-name">Subscription Plans Screen</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>Screen mounts</div><div class="ux-result">Read user's current plan from users table. For the plan they're on: replace "Subscribe Now" button with green "Current Plan ✓" label. Show "Upgrade" button on higher-tier plans.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Subscribe Now"</div><div class="ux-result">Open Paystack inline popup. Pre-fill user email. On payment success callback: <span class="db">DB: update users.subscription_plan</span>. <span class="db">DB: create notification for user</span>. <span class="notif">Notify: subscription email via Resend</span>. <span class="notif">Notify: Telegram to admin "New subscriber"</span>. Close popup. Show green toast: "Welcome to [Plan] 🎉". Refresh this screen so button state updates.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon err">✕</span>Payment failed</div><div class="ux-result">Paystack popup closes. Show red toast: "Payment failed. Please try again." No DB changes. Buttons return to normal.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap ← back</div><div class="ux-result">Return to wherever the user came from (Intelligence feed or wherever they navigated from)</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="hr"></div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SECTION 7 · PORTFOLIO & ACCOUNT -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="flow-section">
+  <div class="flow-eye">Section 07</div>
+  <div class="flow-title">Portfolio, History, Notifications &amp; Account</div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge account">09</span><span class="screen-name">Portfolio Screen</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>Screen mounts</div><div class="ux-result">Calculate portfolio value: sum(amount_usdt) of completed buy orders minus sum(amount_usdt) of completed sell orders × current buy_rate. Fetch allocation percentages from app_settings (alloc_stable, alloc_btc, alloc_eth). Calculate Naira values from portfolio total.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Adjust" link</div><div class="ux-result">Navigate to <span class="nav">→ Plans screen</span> — the only way to "adjust" allocation is to upgrade their plan tier which gives access to better allocation strategy posts.</div></div>
+    </div>
+  </div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge account">D1</span><span class="screen-name">Transaction History</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>Screen mounts</div><div class="ux-result">Fetch all orders for this user, ordered by created_at DESC. Group by date (Today, Yesterday, [Date]).</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "All" filter</div><div class="ux-result">Show all orders. Active filter pill has gold border, gold text.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Acquired" filter</div><div class="ux-result">Show only orders where type = 'buy'. Non-active filters have subtle border, grey text.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Liquidated" filter</div><div class="ux-result">Show only type = 'sell' orders.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Pending" filter</div><div class="ux-result">Show orders where status = 'awaiting_payment' or 'proof_uploaded' or 'verifying'.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap any order row</div><div class="ux-result">Navigate to <span class="nav">→ Order Status screen</span> for that order. The Order Status screen shows the current state of even old completed orders (all steps green, no active timer).</div></div>
+    </div>
+  </div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge account">D2</span><span class="screen-name">Notifications Screen</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>Screen mounts</div><div class="ux-result">Fetch notifications for this user ordered by created_at DESC. Unread items show gold dot on right. Unread count badge shows on the ▦ Portfolio nav icon if there are unread notifications.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap a notification row</div><div class="ux-result"><span class="db">DB: update is_read = true</span> for this notification. Gold dot disappears. If it's an order notification → navigate to that Order Status screen. If it's an insight notification → navigate to Intelligence feed. If subscription → navigate to Plans.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Mark all read"</div><div class="ux-result"><span class="db">DB: update all notifications is_read = true for this user</span>. All gold dots disappear. Nav badge count goes to 0.</div></div>
+    </div>
+  </div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge account">D3</span><span class="screen-name">Account Settings</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Saved Bank Accounts"</div><div class="ux-result">Navigate to a sub-screen listing saved banks. Each row: bank name + account number + "Default" badge on one. Swipe left on a row to delete. Tap "Add Bank" to add a new one. Tap any row to set as default.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "USDT Wallet Address"</div><div class="ux-result">Open an edit dialog/bottom sheet. Shows current address (if saved). Text field to enter new address. Validate TRC-20 format. "Save" button: <span class="db">DB: update users.usdt_wallet_address</span>.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Current Plan" row</div><div class="ux-result">Navigate to <span class="nav">→ Plans screen</span></div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Toggle "Order Updates"</div><div class="ux-result"><span class="db">DB: update users notification_prefs.order_updates</span>. Toggle animates. When off: order notifications will not be created for this user.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Contact Support"</div><div class="ux-result">Open WhatsApp with pre-filled message: "Hi, I need help with my Liquid account. User: [name], Email: [email]". Opens in a new window/app.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Sign Out"</div><div class="ux-result">Show confirmation dialog: "Sign out of Liquid?" with Cancel and "Sign Out" buttons. On confirm: call supabase.auth.signOut(). Clear any cached data. Navigate to <span class="nav">→ Sign In screen</span>. localStorage liquid_onboarded remains true (so they don't see onboarding again).</div></div>
+    </div>
+  </div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge account">D4</span><span class="screen-name">Saved Bank Accounts Screen</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>Screen mounts</div><div class="ux-result">Read users.saved_banks (JSON array) from Supabase. Display each bank as a row. The default bank has a gold "DEFAULT" badge. If no banks saved yet: show the dashed "Add a new bank account" card prominently with an explanation.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "+ Add Bank" button</div><div class="ux-result">Open Add Bank bottom sheet. Sheet has: bank dropdown, account number input (10 digits), auto-verify badge after 10 digits, account name field. "Save Bank Account" button: validate → append new bank object to the saved_banks JSON array in users table → close sheet → refresh list → toast "Bank account added ✓".</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Set default" on a bank row</div><div class="ux-result"><span class="db">DB: update users.saved_banks</span> — set is_default=true on this bank, set is_default=false on all others. Gold "DEFAULT" badge moves to this row immediately. Toast "Default updated ✓".</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Remove" on a bank row</div><div class="ux-result">Show confirmation: "Remove this bank account?" → On confirm: <span class="db">DB: filter out this bank from the JSON array</span>. If it was the default, the first remaining bank becomes default automatically. Toast "Bank removed".</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap ← back</div><div class="ux-result">Navigate to <span class="nav">→ Account Settings</span></div></div>
+    </div>
+  </div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge account">D5</span><span class="screen-name">Edit USDT Wallet Address (Bottom Sheet)</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>Sheet opens</div><div class="ux-result">Account Settings screen dims behind a dark overlay. Sheet slides up from bottom. Pre-fill input with user's current usdt_wallet_address (if it exists). Input has monospace font. Sheet handle (grey pill) visible at top.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>User types an address</div><div class="ux-result">After each keystroke: if value starts with 'T' AND length === 34: show green "✓ Valid TRC-20 address" badge below the input. If shorter or wrong format: badge hidden. "Save Address" button is only active when the green badge is showing.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap ✕ clear button inside input</div><div class="ux-result">Clear the input field. Green badge disappears. Save button becomes inactive.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Save Address"</div><div class="ux-result"><span class="db">DB: update users.usdt_wallet_address</span>. Close sheet (slide back down). Green toast "Address saved ✓". Account Settings row now shows truncated new address.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Cancel" or tap outside sheet</div><div class="ux-result">Sheet slides back down. No DB changes. Account Settings remains unchanged.</div></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="hr"></div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SECTION 8 · ADMIN UX FLOWS -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="flow-section">
+  <div class="flow-eye">Section 08</div>
+  <div class="flow-title">Admin App — UX Flows</div>
+  <div class="flow-sub">The admin app is desktop-first. No bottom nav. Left sidebar is always visible. All actions have immediate visual feedback.</div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge admin">Admin</span><span class="screen-name">Dashboard — Rate Setter</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Edit buy rate input</div><div class="ux-result">Input becomes active (border highlights). Spread calculation below updates live as you type: spread = buy_rate - sell_rate. "Save" button changes from grey to gold to indicate unsaved change.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Save" on buy rate</div><div class="ux-result"><span class="db">DB: update app_settings WHERE key='buy_rate'</span>. Show green checkmark next to input for 2 seconds: "Saved ✓". User app will immediately show the new rate on next fetch.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Toggle Exchange ON/OFF</div><div class="ux-result"><span class="db">DB: update app_settings WHERE key='exchange_open'</span>. Toggle animates. Status label changes: green "OPEN" or red "CLOSED". Top bar status chip updates. User app Exchange screens respond within seconds.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Edit closed message + Save</div><div class="ux-result"><span class="db">DB: update app_settings WHERE key='exchange_message'</span>. This text appears on the Exchange Closed screen in the user app.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Save order limits</div><div class="ux-result"><span class="db">DB: update app_settings min_order_usdt + max_order_usdt</span>. User app validates against these new limits immediately.</div></div>
+    </div>
+  </div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge admin">Admin</span><span class="screen-name">Orders Page</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>Page loads</div><div class="ux-result">Fetch all orders with status in [awaiting_payment, proof_uploaded, verifying]. Subscribe to real-time updates so new orders appear without refresh. "Pending (3)" badge updates live. Timer countdown runs for each pending order row.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap filter tab</div><div class="ux-result">"Pending" shows only active orders. "All" shows everything. "Completed" shows only completed. "Expired" shows only expired/cancelled. Active tab has gold underline or gold text.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "View" on any row</div><div class="ux-result">Order detail panel slides in from the right (or replaces right column in desktop layout). Order row in table gets a highlighted left border to show it's selected. Clicking elsewhere deselects.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Approve ✓" (in detail panel)</div><div class="ux-result"><span class="db">DB: update order status = 'verifying'</span>. Button changes to disabled "Verified ✓" in green. Status badge in the table row updates live. <span class="notif">Notify: User sees status update on their Order Status screen</span>.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Mark Complete ✓"</div><div class="ux-result">Show a quick confirmation: "Mark this order as complete? This will notify the user." Confirm → <span class="db">DB: update status = 'completed', completed_at = now()</span>. <span class="notif">Notify: Email to user (completion email)</span>. <span class="notif">Notify: In-app notification to user</span>. Order row moves to Completed tab. Detail panel closes.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Cancel ✕"</div><div class="ux-result">Show confirmation: "Cancel this order?" → <span class="db">DB: update status = 'cancelled'</span>. Order row updates in table. <span class="notif">Notify: In-app notification to user "Your order was cancelled"</span>.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>View proof image</div><div class="ux-result">Proof image shows inline in the detail panel. Tap image to open full size in a lightbox. Download button available in lightbox.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon time">⏱</span>Order timer hits 00:00</div><div class="ux-result">Timer cell turns red. Row gets a red left border. Status badge changes to red "Expired". No automatic action on admin side — admin must manually cancel if needed.</div></div>
+    </div>
+  </div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge admin">Admin</span><span class="screen-name">Intelligence Post Editor</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon auto">⚡</span>Page loads (New Post)</div><div class="ux-result">Empty form. Live preview on right shows empty state placeholder. Category tag = none selected. Tier = none selected. Publish button is disabled until title + content + tag + tier are all filled.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Type in title or content</div><div class="ux-result">Live preview updates in real-time as you type. Shows exactly how the card will appear to users in the app. Title is truncated at 80 chars in preview. Body shows first 120 chars.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Select a category tag</div><div class="ux-result">Selected tag gets a solid border. Only one tag selectable at a time. Preview updates to show the tag colour and label.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Select a tier</div><div class="ux-result">Selected tier card gets a gold border. Preview updates to show tier badge (◈ Basic & above, ◈ Business & above, 🔒 Institutional only). Publish button becomes active when title + content + tag + tier all filled.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Publish Post"</div><div class="ux-result"><span class="db">DB: insert into insights with is_published=true</span>. Toast: "Post published ✓". Navigate to All Posts page. Post appears immediately in user app for users with correct tier.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Save Draft"</div><div class="ux-result"><span class="db">DB: insert into insights with is_published=false</span>. Toast: "Draft saved". Navigate to All Posts → Drafts section.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Edit" on an existing post</div><div class="ux-result">Load post data into the form. All fields pre-filled. Title bar shows "Edit Post". Save button says "Update Post" instead of "Publish".</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Delete" on a post</div><div class="ux-result">Confirmation dialog: "Delete this post? This cannot be undone." On confirm: <span class="db">DB: delete from insights</span>. Post disappears from user feed immediately.</div></div>
+    </div>
+  </div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge admin">Admin</span><span class="screen-name">Settings — Save &amp; Test Telegram</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Save &amp; Test"</div><div class="ux-result"><span class="db">DB: save token + chat_id to app_settings</span>. Then call Telegram API immediately with a test message: "✅ Liquid admin alerts are now active." Check your Telegram phone app. If message received → show green success: "Test message sent ✓". If API error → show red error with the error message.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Publish Banner"</div><div class="ux-result"><span class="db">DB: update app_settings key='announcement'</span>. User app will show the gold banner on next Home load or pull-to-refresh.</div></div>
+      <div class="ux-row"><div class="ux-trigger"><span class="icon tap">👆</span>Tap "Clear" banner</div><div class="ux-result"><span class="db">DB: set app_settings key='announcement' value=''</span>. Banner disappears from user app immediately.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="hr"></div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- SECTION 9 · GLOBAL UX RULES -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="flow-section">
+  <div class="flow-eye">Section 09</div>
+  <div class="flow-title">Global UX Rules for Cursor</div>
+  <div class="flow-sub">These apply to every screen in both apps. Give this list to Cursor at the start of every build session.</div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge account">Global</span><span class="screen-name">Loading States</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger">Any button that makes an API call</div><div class="ux-result">Show a loading spinner inside the button. Disable the button (not tappable). Revert to normal after API responds (success or error). Never leave a button in a permanently loading state.</div></div>
+      <div class="ux-row"><div class="ux-trigger">Any screen that fetches data on load</div><div class="ux-result">Show skeleton loading blocks (grey animated placeholders) where content will appear. Same dimensions as real content. Replace with real data when fetch completes. Never show a blank white screen.</div></div>
+      <div class="ux-row"><div class="ux-trigger">Fetch error (network down)</div><div class="ux-result">Show a retry state: icon, "Couldn't load data", grey "Try Again" button. Log error to console. Do not crash the app.</div></div>
+    </div>
+  </div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge account">Global</span><span class="screen-name">Toast Notifications (in-app)</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger">Success</div><div class="ux-result">Green toast at top of screen. Shows for 3 seconds then auto-dismisses. Has ✓ icon. Example: "Rate updated successfully"</div></div>
+      <div class="ux-row"><div class="ux-trigger">Error</div><div class="ux-result">Red toast at top. Shows for 4 seconds (slightly longer so user can read it). Has ✕ icon. Example: "Payment failed. Try again."</div></div>
+      <div class="ux-row"><div class="ux-trigger">Info</div><div class="ux-result">Gold toast at top. Shows for 3 seconds. Has ℹ icon. Example: "Order copied to clipboard"</div></div>
+      <div class="ux-row"><div class="ux-trigger">Multiple toasts</div><div class="ux-result">Stack toasts vertically. New ones appear below existing ones. Each dismisses independently.</div></div>
+    </div>
+  </div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge account">Global</span><span class="screen-name">Back Navigation Rules</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger">Screens with back arrow</div><div class="ux-result">Acquire, Sell Step 1, Sell Step 2, Order Status, Exchange Closed, Plans, Transaction History, Notifications, Account Settings. All go back to their logical parent screen.</div></div>
+      <div class="ux-row"><div class="ux-trigger">Screens WITHOUT back arrow</div><div class="ux-result">Home, Intelligence, Portfolio — these are tab-root screens. No back arrow. Only accessible via nav tabs.</div></div>
+      <div class="ux-row"><div class="ux-trigger">Android hardware back button</div><div class="ux-result">Same behaviour as tapping the on-screen back arrow. If on a root tab screen with no back history → do nothing (do not close the app).</div></div>
+      <div class="ux-row"><div class="ux-trigger">Sell Step 2 back button</div><div class="ux-result">Goes to Sell Step 1 (not Home). Bank details from Step 1 must still be in state — user should not have to re-enter them.</div></div>
+    </div>
+  </div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge account">Global</span><span class="screen-name">Keyboard Behaviour</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger">Keyboard opens on input focus</div><div class="ux-result">Screen content scrolls up so the focused input is visible above the keyboard. Content below the keyboard does not get cut off — the screen is scrollable while keyboard is open.</div></div>
+      <div class="ux-row"><div class="ux-trigger">Tap outside input</div><div class="ux-result">Keyboard dismisses. No other action.</div></div>
+      <div class="ux-row"><div class="ux-trigger">USDT amount field type</div><div class="ux-result">Keyboard type = numeric (only numbers, no letters). inputmode="decimal" to allow decimal entry.</div></div>
+      <div class="ux-row"><div class="ux-trigger">Account number field type</div><div class="ux-result">Keyboard type = numeric. maxLength = 10. No decimal allowed.</div></div>
+    </div>
+  </div>
+
+  <div class="screen-card">
+    <div class="screen-card-header"><span class="screen-badge account">Global</span><span class="screen-name">Empty States</span></div>
+    <div class="screen-card-body">
+      <div class="ux-row"><div class="ux-trigger">No orders yet (Activity on Home)</div><div class="ux-result">Show illustration + "No transactions yet" + "Your first order will appear here". Do not show empty rows.</div></div>
+      <div class="ux-row"><div class="ux-trigger">No notifications</div><div class="ux-result">Show "You're all caught up" + "New notifications will appear here"</div></div>
+      <div class="ux-row"><div class="ux-trigger">No intelligence posts published yet</div><div class="ux-result">Show "Intelligence posts coming soon" message. Do not show empty card shapes.</div></div>
+      <div class="ux-row"><div class="ux-trigger">Admin Orders page — no pending orders</div><div class="ux-result">Show a green "✓ All clear — no pending orders" state. Feels reassuring not alarming.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div style="text-align:center;padding:40px 0 60px;border-top:0.5px solid var(--border);margin-top:20px;">
+  <div style="font-family:var(--font-h);font-size:26px;font-weight:800;background:linear-gradient(135deg,var(--gold),var(--gold-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;">Liquid.</div>
+  <div style="font-size:13px;color:var(--muted);">UX Flow Document · 9 Sections · Every Screen · Every State · 2025</div>
+</div>
+
+</div>
+</body>
+</html>

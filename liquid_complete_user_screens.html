@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Liquid – Complete User Screens</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0C0C0C;--ink2:#1A1A1A;--ink3:#2A2A2A;
+  --white:#FFFFFF;--off:#F7F6F4;--card:#FFFFFF;
+  --muted:#888;--muted2:#555;
+  --border:#E8E8E8;--border-dark:rgba(255,255,255,0.09);
+  --gold:#C8973F;--gold-light:#E8B865;
+  --green:#1DB954;--red:#E05252;
+  --font-h:'Syne',sans-serif;--font-b:'Inter',sans-serif;
+}
+body{background:#111;display:flex;flex-direction:column;align-items:center;padding:20px 0 60px;}
+
+.section-divider{
+  width:100%;text-align:center;padding:44px 20px 28px;
+  font-family:var(--font-h);font-size:10px;font-weight:700;
+  letter-spacing:3px;color:rgba(255,255,255,0.2);text-transform:uppercase;
+}
+.section-divider span{
+  background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.09);
+  border-radius:20px;padding:7px 20px;
+}
+.stage{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;justify-content:center;padding:0 10px;}
+
+/* ═══ PHONE SHELL — exact original ═══ */
+.phone{
+  width:340px;background:var(--ink);border-radius:44px;
+  border:1px solid rgba(255,255,255,0.1);overflow:hidden;
+  position:relative;font-family:var(--font-b);flex-shrink:0;
+  box-shadow:0 30px 80px rgba(0,0,0,0.7);
+}
+
+/* NOTCH — exact original */
+.notch{width:100px;height:28px;background:#000;border-radius:0 0 18px 18px;margin:0 auto;position:relative;z-index:5;}
+.notch-bar{display:flex;justify-content:space-between;align-items:center;padding:8px 16px 0;position:absolute;top:0;left:0;right:0;}
+.status-left{font-size:10px;color:rgba(255,255,255,0.6);font-weight:600;font-family:var(--font-h);}
+.status-right{display:flex;gap:4px;align-items:center;}
+.sig{width:12px;height:8px;display:flex;gap:1px;align-items:flex-end;}
+.sig span{width:2px;background:rgba(255,255,255,0.5);border-radius:1px;}
+
+/* SCREEN LABEL — exact original */
+.screen-tag{
+  text-align:center;font-family:var(--font-h);font-size:10px;font-weight:700;
+  letter-spacing:2px;color:rgba(255,255,255,0.3);text-transform:uppercase;padding:8px 0 0;
+}
+
+/* ═══ SPLASH — exact original ═══ */
+.splash{background:var(--ink);min-height:680px;display:flex;flex-direction:column;padding:0 0 36px;}
+.splash-art{flex:1;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;min-height:380px;}
+.geo-1{position:absolute;width:200px;height:200px;background:rgba(255,255,255,0.04);transform:rotate(25deg) translateX(30px) translateY(-20px);border:1px solid rgba(255,255,255,0.06);}
+.geo-2{position:absolute;width:160px;height:160px;background:rgba(255,255,255,0.03);transform:rotate(-15deg) translateX(-20px) translateY(30px);border:1px solid rgba(255,255,255,0.05);}
+.geo-3{position:absolute;width:80px;height:220px;background:rgba(255,255,255,0.06);transform:rotate(40deg) translateX(-60px) translateY(-10px);border:1px solid rgba(255,255,255,0.08);}
+.geo-noise{position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");opacity:0.5;}
+.splash-bottom{padding:0 28px 0;}
+.splash-tag{font-size:11px;color:rgba(255,255,255,0.35);letter-spacing:3px;text-transform:uppercase;font-family:var(--font-h);margin-bottom:16px;}
+.splash-headline{font-family:var(--font-h);font-size:32px;font-weight:800;color:#fff;line-height:1.1;letter-spacing:-0.5px;margin-bottom:12px;}
+.splash-headline em{color:var(--gold);font-style:normal;}
+.splash-body{font-size:13px;color:rgba(255,255,255,0.4);line-height:1.6;margin-bottom:28px;}
+.splash-btn{display:flex;align-items:center;justify-content:space-between;background:#fff;border-radius:16px;padding:16px 20px;cursor:pointer;}
+.splash-btn-text{font-family:var(--font-h);font-size:15px;font-weight:700;color:var(--ink);}
+.splash-arrow{width:32px;height:32px;background:var(--ink);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;}
+
+/* ═══ LOGIN — exact original ═══ */
+.login{background:var(--ink);min-height:680px;display:flex;flex-direction:column;padding:24px 24px 36px;}
+.login-logo{font-family:var(--font-h);font-size:28px;font-weight:800;color:#fff;margin-bottom:40px;}
+.login-logo em{color:var(--gold);font-style:normal;}
+.login-title{font-family:var(--font-h);font-size:24px;font-weight:700;color:#fff;margin-bottom:6px;}
+.login-sub{font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:32px;}
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:11px;color:rgba(255,255,255,0.4);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;}
+.field input{width:100%;background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.1);border-radius:14px;padding:14px 16px;color:#fff;font-family:var(--font-b);font-size:15px;outline:none;}
+.field input::placeholder{color:rgba(255,255,255,0.25);}
+.login-btn{width:100%;padding:16px;background:#fff;border:none;border-radius:14px;font-family:var(--font-h);font-size:15px;font-weight:700;color:var(--ink);cursor:pointer;margin-top:8px;}
+.login-divider{display:flex;align-items:center;gap:12px;margin:20px 0;}
+.div-line{flex:1;height:0.5px;background:rgba(255,255,255,0.1);}
+.div-text{font-size:12px;color:rgba(255,255,255,0.3);}
+.login-alt{display:flex;align-items:center;justify-content:center;gap:6px;padding:14px;background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.1);border-radius:14px;cursor:pointer;}
+.login-alt span{font-size:13px;color:rgba(255,255,255,0.6);}
+.login-footer{text-align:center;margin-top:20px;font-size:13px;color:rgba(255,255,255,0.4);}
+.login-footer a{color:var(--gold);}
+
+/* ═══ HOME — exact original ═══ */
+.home{background:var(--ink);min-height:680px;display:flex;flex-direction:column;}
+.home-top{padding:16px 20px 20px;}
+.home-greet{font-size:13px;color:rgba(255,255,255,0.45);margin-bottom:2px;}
+.home-greet strong{color:rgba(255,255,255,0.8);font-weight:500;}
+.home-bal-label{font-size:11px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;margin-top:20px;}
+.home-bal{font-family:var(--font-h);font-size:42px;font-weight:800;color:#fff;letter-spacing:-2px;line-height:1;}
+.home-bal-sub{display:flex;align-items:center;gap:10px;margin-top:8px;}
+.home-bal-usdt{font-size:13px;color:rgba(255,255,255,0.35);}
+.home-growth{font-size:12px;color:var(--green);font-weight:600;}
+.home-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 20px;margin-bottom:20px;}
+.h-action{background:var(--card);border-radius:20px;padding:18px 16px;cursor:pointer;display:flex;flex-direction:column;gap:10px;transition:transform 0.15s;}
+.h-action:hover{transform:scale(0.98);}
+.h-action.dark{background:var(--ink2);border:0.5px solid rgba(255,255,255,0.07);}
+.h-action-icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px;}
+.h-action-icon.buy{background:rgba(29,185,84,0.12);color:var(--green);}
+.h-action-icon.sell{background:rgba(200,151,63,0.12);color:var(--gold);}
+.h-action-icon.intel{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6);}
+.h-action-name{font-family:var(--font-h);font-size:14px;font-weight:700;color:var(--ink);}
+.h-action-name.light{color:#fff;}
+.h-action-sub{font-size:11px;color:var(--muted);}
+.h-action-sub.light{color:rgba(255,255,255,0.35);}
+.white-card{background:var(--card);border-radius:28px 28px 0 0;flex:1;padding:24px 20px;}
+.wc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.wc-title{font-family:var(--font-h);font-size:17px;font-weight:700;color:var(--ink);}
+.wc-link{font-size:12px;color:var(--gold);font-weight:600;}
+.tx-group-label{font-size:10px;font-weight:600;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;}
+.tx-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:0.5px solid var(--border);}
+.tx-item:last-child{border-bottom:none;}
+.tx-avatar{width:40px;height:40px;border-radius:13px;background:var(--off);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.tx-info{flex:1;}
+.tx-name{font-size:14px;font-weight:500;color:var(--ink);}
+.tx-cat{font-size:11px;color:var(--muted);margin-top:1px;}
+.tx-amount{font-family:var(--font-h);font-size:14px;font-weight:700;}
+.tx-amount.pos{color:var(--green);}
+.tx-amount.neg{color:var(--ink);}
+.tx-amount.pend{color:var(--gold);}
+.tx-right{text-align:right;}
+.tx-time{font-size:10px;color:var(--muted);margin-top:2px;}
+.rate-bar{display:flex;align-items:center;justify-content:space-between;background:var(--ink2);border-radius:14px;padding:12px 16px;margin:0 20px 16px;border:0.5px solid rgba(255,255,255,0.06);}
+.rate-left{display:flex;align-items:center;gap:8px;}
+.rate-dot{width:6px;height:6px;border-radius:50%;background:var(--green);}
+.rate-text{font-size:12px;color:rgba(255,255,255,0.5);}
+.rate-val{font-family:var(--font-h);font-size:13px;font-weight:700;color:rgba(255,255,255,0.85);}
+
+/* ═══ BUY / SELL — exact original ═══ */
+.buy-screen{background:var(--ink);min-height:700px;display:flex;flex-direction:column;}
+.sell-screen{background:var(--ink);min-height:700px;display:flex;flex-direction:column;}
+.buy-top{padding:16px 20px 24px;}
+.screen-nav{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+.back-circle{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.06);border:0.5px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:rgba(255,255,255,0.7);}
+.screen-nav-title{font-family:var(--font-h);font-size:18px;font-weight:700;color:#fff;}
+.buy-amount-label{font-size:11px;color:rgba(255,255,255,0.35);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;}
+.buy-input-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.currency-tag{font-family:var(--font-h);font-size:13px;font-weight:700;color:rgba(255,255,255,0.3);background:rgba(255,255,255,0.06);border-radius:8px;padding:6px 10px;}
+.buy-big-input{flex:1;background:transparent;border:none;outline:none;font-family:var(--font-h);font-size:38px;font-weight:800;color:#fff;letter-spacing:-1px;width:100%;}
+.buy-big-input::placeholder{color:rgba(255,255,255,0.12);}
+.buy-rate{font-size:12px;color:rgba(255,255,255,0.3);margin-bottom:20px;}
+.buy-rate span{color:var(--green);}
+.timer-compact{display:flex;align-items:center;justify-content:space-between;margin:0 20px 12px;padding:14px 18px;background:rgba(200,151,63,0.08);border:0.5px solid rgba(200,151,63,0.2);border-radius:16px;}
+.tc-left{display:flex;flex-direction:column;gap:3px;}
+.tc-label{font-size:10px;color:rgba(200,151,63,0.7);letter-spacing:1.5px;text-transform:uppercase;}
+.tc-sub{font-size:11px;color:rgba(255,255,255,0.3);}
+.tc-num{font-family:var(--font-h);font-size:26px;font-weight:800;color:var(--gold);}
+.tc-bar{width:70px;height:3px;background:rgba(255,255,255,0.08);border-radius:2px;margin-top:4px;overflow:hidden;}
+.tc-fill{height:100%;background:var(--gold);border-radius:2px;transition:width 1s linear;}
+.buy-card{background:var(--card);border-radius:24px;margin:0 20px 12px;padding:18px 18px;}
+.bc-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:0.5px solid var(--border);}
+.bc-row:last-child{border-bottom:none;}
+.bc-key{font-size:13px;color:var(--muted);}
+.bc-val{font-family:var(--font-h);font-size:13px;font-weight:700;color:var(--ink);}
+.bc-val.green{color:var(--green);}
+.bc-val.gold{color:var(--gold);}
+.upload-row{margin:0 20px 14px;border:1px dashed rgba(255,255,255,0.12);border-radius:16px;padding:18px;text-align:center;cursor:pointer;transition:all 0.2s;}
+.upload-row:hover{border-color:var(--gold);background:rgba(200,151,63,0.05);}
+.up-ico{font-size:22px;margin-bottom:6px;}
+.up-txt{font-size:12px;color:rgba(255,255,255,0.35);line-height:1.5;}
+.up-txt strong{color:rgba(255,255,255,0.7);}
+.primary-btn{display:block;margin:0 20px;width:calc(100% - 40px);padding:16px;border:none;border-radius:16px;font-family:var(--font-h);font-size:15px;font-weight:700;cursor:pointer;text-align:center;}
+.btn-white{background:#fff;color:var(--ink);}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#fff;}
+.wallet-block{margin:0 20px 12px;background:var(--card);border-radius:22px;padding:18px;}
+.wb-label{font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;}
+.wb-network{display:inline-flex;align-items:center;gap:5px;background:rgba(29,185,84,0.08);border:0.5px solid rgba(29,185,84,0.2);border-radius:20px;padding:3px 10px;font-size:11px;color:var(--green);font-weight:600;margin-bottom:10px;}
+.wb-addr{font-family:monospace;font-size:11px;color:var(--ink2);line-height:1.7;word-break:break-all;margin-bottom:10px;}
+.wb-copy{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);cursor:pointer;font-weight:500;}
+
+/* ═══ ORDER STATUS — exact original ═══ */
+.order-screen{background:var(--ink);min-height:700px;display:flex;flex-direction:column;}
+.order-hero{padding:20px 20px 24px;border-bottom:0.5px solid rgba(255,255,255,0.06);}
+.order-id{font-size:11px;color:rgba(255,255,255,0.3);letter-spacing:1px;margin-bottom:6px;}
+.order-amount{font-family:var(--font-h);font-size:36px;font-weight:800;color:#fff;letter-spacing:-1px;}
+.order-sub{font-size:13px;color:rgba(255,255,255,0.35);margin-top:4px;}
+.order-status-pill{display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:5px 14px;background:rgba(200,151,63,0.1);border:0.5px solid rgba(200,151,63,0.25);border-radius:20px;font-size:12px;color:var(--gold);font-weight:600;}
+.os-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);}
+.steps-card{background:var(--card);border-radius:24px;margin:16px 20px;padding:20px;}
+.step{display:flex;gap:14px;position:relative;padding-bottom:16px;}
+.step:last-child{padding-bottom:0;}
+.step-left{display:flex;flex-direction:column;align-items:center;width:32px;flex-shrink:0;}
+.step-circle{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.step-circle.done{background:rgba(29,185,84,0.1);color:var(--green);border:0.5px solid rgba(29,185,84,0.25);}
+.step-circle.now{background:rgba(200,151,63,0.1);color:var(--gold);border:0.5px solid rgba(200,151,63,0.3);}
+.step-circle.idle{background:var(--off);color:var(--muted);border:0.5px solid var(--border);}
+.step-line{flex:1;width:1px;background:var(--border);margin:4px 0;}
+.step-info{padding-top:6px;}
+.step-title{font-size:14px;font-weight:500;color:var(--ink);}
+.step-title.idle{color:var(--muted);}
+.step-desc{font-size:11px;color:var(--muted);margin-top:2px;}
+
+/* ═══ INTELLIGENCE — exact original ═══ */
+.intel-screen{background:var(--ink);min-height:700px;display:flex;flex-direction:column;}
+.intel-top{padding:16px 20px 0;}
+.intel-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;}
+.intel-title{font-family:var(--font-h);font-size:26px;font-weight:800;color:#fff;line-height:1.1;}
+.intel-plan{font-size:11px;color:var(--gold);font-weight:700;border:0.5px solid rgba(200,151,63,0.3);border-radius:20px;padding:5px 12px;font-family:var(--font-h);}
+.alloc-block{background:var(--ink2);border-radius:20px;padding:16px;margin-bottom:16px;border:0.5px solid rgba(255,255,255,0.06);}
+.ab-label{font-size:11px;color:rgba(255,255,255,0.35);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;}
+.ab-bar{display:flex;height:5px;border-radius:3px;overflow:hidden;gap:2px;margin-bottom:12px;}
+.ab-seg{height:100%;}
+.ab-rows{display:flex;flex-direction:column;gap:8px;}
+.ab-row{display:flex;align-items:center;justify-content:space-between;}
+.ab-left{display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(255,255,255,0.45);}
+.ab-dot{width:7px;height:7px;border-radius:2px;}
+.ab-pct{font-family:var(--font-h);font-size:13px;font-weight:700;color:rgba(255,255,255,0.8);}
+.feed-cards{display:flex;flex-direction:column;gap:10px;}
+.fc{background:var(--card);border-radius:20px;padding:18px;cursor:pointer;}
+.fc-locked{opacity:0.45;cursor:not-allowed;}
+.fc-tag{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;font-family:var(--font-h);margin-bottom:10px;}
+.fc-tag.gold{background:rgba(200,151,63,0.1);color:var(--gold);}
+.fc-tag.green{background:rgba(29,185,84,0.08);color:var(--green);}
+.fc-tag.gray{background:var(--off);color:var(--muted);}
+.fc-title{font-family:var(--font-h);font-size:14px;font-weight:700;color:var(--ink);line-height:1.35;margin-bottom:7px;}
+.fc-body{font-size:12px;color:var(--muted2);line-height:1.6;margin-bottom:12px;}
+.fc-foot{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--muted);}
+.fc-tier{display:inline-flex;align-items:center;gap:4px;background:var(--off);border-radius:20px;padding:3px 9px;color:var(--muted2);}
+
+/* ═══ PLANS — exact original ═══ */
+.plans-screen{background:var(--ink);min-height:700px;display:flex;flex-direction:column;}
+.plans-top{padding:16px 20px 20px;}
+.plans-title{font-family:var(--font-h);font-size:26px;font-weight:800;color:#fff;line-height:1.1;margin-bottom:6px;}
+.plans-sub{font-size:13px;color:rgba(255,255,255,0.35);}
+.plan-cards{display:flex;flex-direction:column;gap:10px;padding:0 20px;}
+.pc{background:var(--card);border-radius:22px;padding:20px;position:relative;cursor:pointer;}
+.pc.feat{border:1.5px solid var(--gold);}
+.pc-pop{position:absolute;top:-1px;right:16px;background:var(--gold);color:#fff;font-size:9px;font-weight:700;padding:4px 12px;border-radius:0 0 10px 10px;font-family:var(--font-h);letter-spacing:0.8px;}
+.pc-name{font-family:var(--font-h);font-size:18px;font-weight:700;color:var(--ink);margin-bottom:4px;}
+.pc-price{font-family:var(--font-h);font-size:26px;font-weight:800;color:var(--ink);margin:8px 0 4px;}
+.pc-price small{font-size:13px;font-weight:400;color:var(--muted);}
+.pc-desc{font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.5;}
+.pc-feats{display:flex;flex-direction:column;gap:8px;}
+.pc-feat{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink2);}
+.chk-circle{width:16px;height:16px;border-radius:50%;background:rgba(29,185,84,0.1);border:0.5px solid rgba(29,185,84,0.25);display:flex;align-items:center;justify-content:center;font-size:8px;color:var(--green);flex-shrink:0;}
+
+/* ═══ PORTFOLIO — exact original ═══ */
+.port-screen{background:var(--ink);min-height:700px;display:flex;flex-direction:column;}
+.port-top{padding:16px 20px 20px;}
+.port-label{font-size:11px;color:rgba(255,255,255,0.35);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;}
+.port-amount{font-family:var(--font-h);font-size:40px;font-weight:800;color:#fff;letter-spacing:-1.5px;line-height:1;}
+.port-growth{display:inline-flex;align-items:center;gap:5px;margin-top:8px;padding:4px 12px;background:rgba(29,185,84,0.1);border:0.5px solid rgba(29,185,84,0.2);border-radius:20px;font-size:12px;color:var(--green);font-weight:600;}
+.metrics-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 20px;margin-bottom:14px;}
+.met{background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.07);border-radius:16px;padding:14px;}
+.met-label{font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+.met-val{font-family:var(--font-h);font-size:18px;font-weight:700;color:#fff;}
+.met-val.green{color:var(--green);}
+.met-val.gold{color:var(--gold);}
+
+/* ═══ NAVBARS — exact original ═══ */
+.bottom-nav-white{background:var(--card);border-top:0.5px solid var(--border);display:flex;padding:12px 10px 20px;flex-shrink:0;}
+.nav-it{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;}
+.nav-ico{width:36px;height:36px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--muted);}
+.nav-ico.active{background:var(--ink);color:#fff;}
+.nav-lbl{font-size:10px;color:var(--muted);font-family:var(--font-h);font-weight:600;}
+.nav-lbl.active{color:var(--ink);}
+.bottom-nav-dark{background:rgba(12,12,12,0.97);border-top:0.5px solid rgba(255,255,255,0.07);display:flex;padding:12px 10px 20px;flex-shrink:0;}
+.nav-it-dark{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;}
+.nav-ico-dark{width:36px;height:36px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px;color:rgba(255,255,255,0.3);}
+.nav-ico-dark.active{background:rgba(255,255,255,0.08);color:#fff;}
+.nav-lbl-dark{font-size:10px;color:rgba(255,255,255,0.3);font-family:var(--font-h);font-weight:600;}
+.nav-lbl-dark.active{color:rgba(255,255,255,0.8);}
+
+/* ═══ NEW SCREENS — same style ═══ */
+/* Onboarding */
+.onboard-art{height:240px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.ob-geo1{position:absolute;width:180px;height:180px;background:rgba(200,151,63,0.06);transform:rotate(25deg) translateX(30px) translateY(-20px);border:1px solid rgba(200,151,63,0.1);}
+.ob-geo2{position:absolute;width:140px;height:140px;background:rgba(255,255,255,0.03);transform:rotate(-15deg) translateX(-20px) translateY(30px);border:1px solid rgba(255,255,255,0.05);}
+.ob-icon{font-size:56px;position:relative;z-index:2;}
+.ob-progress{display:flex;gap:6px;justify-content:center;margin:0 0 20px;}
+.ob-dot{width:20px;height:3px;border-radius:2px;background:rgba(255,255,255,0.15);}
+.ob-dot.active{background:var(--gold);width:32px;}
+.ob-content{padding:0 28px 28px;}
+.ob-tag{font-size:10px;color:rgba(255,255,255,0.35);letter-spacing:2px;text-transform:uppercase;font-family:var(--font-h);margin-bottom:10px;}
+.ob-title{font-family:var(--font-h);font-size:26px;font-weight:800;color:#fff;line-height:1.1;margin-bottom:10px;letter-spacing:-0.5px;}
+.ob-title em{color:var(--gold);font-style:normal;}
+.ob-body{font-size:13px;color:rgba(255,255,255,0.4);line-height:1.65;margin-bottom:24px;}
+.ob-btn{display:flex;align-items:center;justify-content:space-between;background:#fff;border-radius:14px;padding:14px 18px;cursor:pointer;}
+.ob-btn-text{font-family:var(--font-h);font-size:14px;font-weight:700;color:var(--ink);}
+.ob-btn-arrow{width:30px;height:30px;background:var(--ink);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;}
+.ob-skip{text-align:center;margin-top:12px;font-size:12px;color:rgba(255,255,255,0.25);}
+/* Fields for new screens */
+.field-lbl{font-size:11px;color:rgba(255,255,255,0.4);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;display:block;}
+.dark-input{width:100%;background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.1);border-radius:14px;padding:14px 16px;color:#fff;font-family:var(--font-b);font-size:14px;outline:none;}
+.dark-input::placeholder{color:rgba(255,255,255,0.25);}
+.dark-select{width:100%;background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.1);border-radius:14px;padding:14px 16px;color:rgba(255,255,255,0.8);font-family:var(--font-b);font-size:14px;outline:none;appearance:none;}
+/* Verify badge */
+.verify-badge{display:flex;align-items:center;gap:10px;background:rgba(29,185,84,0.07);border:0.5px solid rgba(29,185,84,0.2);border-radius:12px;padding:12px 14px;margin:0 20px 12px;}
+.vb-ico{font-size:18px;flex-shrink:0;}
+.vb-text{font-size:12px;color:rgba(255,255,255,0.6);line-height:1.5;}
+.vb-text strong{color:var(--green);}
+/* Exchange closed */
+.closed-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:36px 28px;min-height:500px;text-align:center;}
+.closed-ico{width:80px;height:80px;border-radius:24px;background:rgba(224,82,82,0.1);border:0.5px solid rgba(224,82,82,0.2);display:flex;align-items:center;justify-content:center;font-size:32px;margin-bottom:22px;}
+.closed-title{font-family:var(--font-h);font-size:24px;font-weight:800;color:#fff;margin-bottom:10px;letter-spacing:-0.5px;}
+.closed-body{font-size:13px;color:rgba(255,255,255,0.4);line-height:1.65;margin-bottom:22px;}
+.closed-badge{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.08);border-radius:14px;padding:12px 16px;margin-bottom:12px;width:100%;}
+.closed-badge-ico{font-size:18px;}
+.closed-badge-text{font-size:12px;color:rgba(255,255,255,0.5);text-align:left;line-height:1.5;}
+.closed-badge-text strong{color:rgba(255,255,255,0.8);display:block;}
+/* Expired */
+.expired-center{display:flex;flex-direction:column;align-items:center;padding:32px 28px 0;text-align:center;}
+.exp-ico{width:80px;height:80px;border-radius:24px;background:rgba(200,151,63,0.1);border:0.5px solid rgba(200,151,63,0.2);display:flex;align-items:center;justify-content:center;font-size:32px;margin-bottom:18px;}
+.exp-timer{font-family:var(--font-h);font-size:52px;font-weight:800;color:rgba(200,151,63,0.3);letter-spacing:-2px;line-height:1;margin-bottom:14px;}
+/* TX History */
+.tx-group-lbl-dark{font-size:10px;font-weight:600;color:rgba(255,255,255,0.3);letter-spacing:1.5px;text-transform:uppercase;padding:12px 20px 8px;}
+.tx-item-dark{display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:0.5px solid rgba(255,255,255,0.05);}
+.tx-item-dark:last-child{border-bottom:none;}
+.tx-ico-dark{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.tx-name-dark{font-size:13px;font-weight:500;color:#fff;}
+.tx-cat-dark{font-size:11px;color:rgba(255,255,255,0.35);margin-top:1px;}
+.tx-amt-dark{font-family:var(--font-h);font-size:13px;font-weight:700;}
+.tx-amt-dark.pos{color:var(--green);}.tx-amt-dark.neg{color:var(--gold);}.tx-amt-dark.exp{color:var(--red);}
+/* Notifications */
+.notif-item{display:flex;gap:12px;padding:14px 20px;border-bottom:0.5px solid rgba(255,255,255,0.06);}
+.notif-item:last-child{border-bottom:none;}
+.notif-ico{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.notif-title{font-size:13px;font-weight:500;color:#fff;margin-bottom:2px;}
+.notif-sub{font-size:11px;color:rgba(255,255,255,0.35);line-height:1.5;}
+.notif-time{font-size:10px;color:rgba(255,255,255,0.25);margin-top:3px;}
+.notif-unread{width:7px;height:7px;border-radius:50%;background:var(--gold);margin-top:4px;flex-shrink:0;}
+/* Account settings */
+.settings-lbl{font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:1.5px;text-transform:uppercase;padding:14px 20px 8px;font-family:var(--font-h);font-weight:700;}
+.settings-card{background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.07);border-radius:18px;margin:0 20px;overflow:hidden;}
+.settings-row{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:0.5px solid rgba(255,255,255,0.06);}
+.settings-row:last-child{border-bottom:none;}
+.settings-row-ico{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.settings-row-label{font-size:13px;font-weight:500;color:#fff;flex:1;}
+.settings-row-right{font-size:12px;color:rgba(255,255,255,0.3);}
+.settings-toggle{width:38px;height:22px;border-radius:11px;background:rgba(255,255,255,0.15);position:relative;flex-shrink:0;}
+.settings-toggle.on{background:var(--green);}
+.settings-toggle-thumb{position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;}
+.settings-toggle.on .settings-toggle-thumb{left:19px;}
+/* Step indicator for sell flow */
+.step-ind{display:flex;align-items:center;padding:12px 20px 14px;}
+.step-ind-circle{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-h);font-size:12px;font-weight:700;}
+.step-ind-circle.active{background:var(--gold);color:#fff;}
+.step-ind-circle.idle{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.3);}
+.step-ind-label{font-size:10px;font-weight:600;font-family:var(--font-h);}
+.step-ind-label.active{color:var(--gold);}
+.step-ind-label.idle{color:rgba(255,255,255,0.3);}
+.step-ind-line{flex:1;height:1px;background:rgba(255,255,255,0.1);margin-bottom:18px;}
+/* Order complete success */
+.success-center{display:flex;flex-direction:column;align-items:center;padding:32px 28px 20px;text-align:center;}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════ -->
+<!--  SECTION 1 · ENTRY                          -->
+<!-- ════════════════════════════════════════════ -->
+<div class="section-divider"><span>Section 1 — Entry Flow · Splash · Onboarding · Sign In · Sign Up · Password Reset</span></div>
+<div class="stage">
+
+  <!-- 01 SPLASH -->
+  <div class="phone">
+    <div class="screen-tag">01 · Splash</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span>
+      <div class="status-right"><div class="sig"><span style="height:3px"></span><span style="height:5px"></span><span style="height:7px"></span></div><span style="font-size:10px;color:rgba(255,255,255,0.5);">WiFi ▪ 100%</span></div>
+    </div>
+    <div class="splash">
+      <div class="splash-art">
+        <div class="geo-noise"></div><div class="geo-1"></div><div class="geo-2"></div><div class="geo-3"></div>
+        <div style="position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to bottom,transparent,var(--ink));"></div>
+      </div>
+      <div class="splash-bottom">
+        <div class="splash-tag">Digital Asset Platform</div>
+        <div class="splash-headline">Move <em>Liquid.</em><br>Stay in Control.</div>
+        <div class="splash-body">Buy and sell USDT instantly. Grow your capital with expert portfolio intelligence.</div>
+        <div class="splash-btn"><span class="splash-btn-text">Get Started</span><div class="splash-arrow">→</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- A1 ONBOARD 1 -->
+  <div class="phone">
+    <div class="screen-tag">A1 · Onboarding — Welcome</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div style="background:var(--ink);padding-bottom:28px;">
+      <div class="onboard-art"><div class="ob-geo1"></div><div class="ob-geo2"></div><div class="ob-icon">💧</div></div>
+      <div class="ob-progress" style="padding-top:6px;"><div class="ob-dot active"></div><div class="ob-dot"></div><div class="ob-dot"></div></div>
+      <div class="ob-content">
+        <div class="ob-tag">Welcome to Liquid</div>
+        <div class="ob-title">Move <em>USDT.</em><br>Stay in control.</div>
+        <div class="ob-body">Liquid is a digital asset platform combining instant USDT exchange with professional portfolio intelligence — built for serious Nigerian investors.</div>
+        <div class="ob-btn"><span class="ob-btn-text">Get Started</span><div class="ob-btn-arrow">→</div></div>
+        <div class="ob-skip">Already have an account? Sign in</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- A2 ONBOARD 2 -->
+  <div class="phone">
+    <div class="screen-tag">A2 · Onboarding — Exchange</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div style="background:var(--ink);padding-bottom:28px;">
+      <div class="onboard-art"><div class="ob-geo1" style="background:rgba(29,185,84,0.05);border-color:rgba(29,185,84,0.08);"></div><div class="ob-geo2"></div><div class="ob-icon">⇄</div></div>
+      <div class="ob-progress" style="padding-top:6px;"><div class="ob-dot"></div><div class="ob-dot active"></div><div class="ob-dot"></div></div>
+      <div class="ob-content">
+        <div class="ob-tag">USDT Exchange</div>
+        <div class="ob-title">Buy &amp; sell <em>USDT</em><br>in minutes.</div>
+        <div class="ob-body">Acquire USDT by paying Naira to our account. Liquidate USDT by sending to our wallet — we pay Naira directly to your bank. All transactions verified within 20 minutes.</div>
+        <div class="ob-btn"><span class="ob-btn-text">Next</span><div class="ob-btn-arrow">→</div></div>
+        <div class="ob-skip">Skip intro</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- A3 ONBOARD 3 -->
+  <div class="phone">
+    <div class="screen-tag">A3 · Onboarding — Intelligence</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div style="background:var(--ink);padding-bottom:28px;">
+      <div class="onboard-art"><div class="ob-geo1" style="background:rgba(200,151,63,0.06);border-color:rgba(200,151,63,0.1);"></div><div class="ob-geo2"></div><div class="ob-icon">◈</div></div>
+      <div class="ob-progress" style="padding-top:6px;"><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot active"></div></div>
+      <div class="ob-content">
+        <div class="ob-tag">Portfolio Intelligence</div>
+        <div class="ob-title">Expert insight to <em>grow</em><br>your capital.</div>
+        <div class="ob-body">Subscribe to receive macro outlooks, liquidity analysis, and portfolio allocation strategies. Three tiers — Basic, Business, and Institutional — each delivering more depth.</div>
+        <div class="ob-btn"><span class="ob-btn-text">Create Account</span><div class="ob-btn-arrow">→</div></div>
+        <div class="ob-skip">Skip intro</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 SIGN IN -->
+  <div class="phone">
+    <div class="screen-tag">02 · Sign In</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div class="login">
+      <div class="login-logo">Liquid<em>.</em></div>
+      <div class="login-title">Welcome back</div>
+      <div class="login-sub">Sign in to your account to continue</div>
+      <div class="field"><label>Email address</label><input type="email" placeholder="you@example.com" value="adaeze@email.com"/></div>
+      <div class="field"><label>Password</label><input type="password" placeholder="••••••••" value="password123"/></div>
+      <div style="text-align:right;margin-bottom:20px;margin-top:-6px;"><span style="font-size:12px;color:var(--gold);cursor:pointer;">Forgot password?</span></div>
+      <button class="login-btn">Sign In</button>
+      <div class="login-divider"><div class="div-line"></div><div class="div-text">or continue with</div><div class="div-line"></div></div>
+      <div class="login-alt"><span style="font-size:16px;">G</span><span>Google</span></div>
+      <div class="login-footer">Don't have an account? <a href="#">Create one</a></div>
+    </div>
+  </div>
+
+  <!-- E1 SIGN UP -->
+  <div class="phone">
+    <div class="screen-tag">E1 · Sign Up</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div class="login">
+      <div class="login-logo">Liquid<em>.</em></div>
+      <div class="login-title">Create account</div>
+      <div class="login-sub">Join Liquid to buy, sell and grow.</div>
+      <div class="field"><label>Full Name</label><input type="text" placeholder="Adaeze Okonkwo" value="Adaeze Okonkwo"/></div>
+      <div class="field"><label>Email Address</label><input type="email" placeholder="you@example.com" value="adaeze@email.com"/></div>
+      <div class="field">
+        <label>Phone Number</label>
+        <div style="display:flex;gap:8px;">
+          <div style="background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.1);border-radius:14px;padding:14px 14px;display:flex;align-items:center;gap:6px;flex-shrink:0;">
+            <span style="font-size:13px;">🇳🇬</span>
+            <span style="font-size:14px;color:rgba(255,255,255,0.6);font-family:var(--font-b);">+234</span>
+          </div>
+          <input style="flex:1;background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.1);border-radius:14px;padding:14px 16px;color:#fff;font-family:var(--font-b);font-size:15px;outline:none;" type="tel" placeholder="08012345678" value="08031234567"/>
+        </div>
+      </div>
+      <div class="field"><label>Password</label>
+        <div style="position:relative;">
+          <input style="width:100%;background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.1);border-radius:14px;padding:14px 46px 14px 16px;color:#fff;font-family:var(--font-b);font-size:15px;outline:none;" type="password" placeholder="Min. 8 characters" value="password123"/>
+          <span style="position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:16px;color:rgba(255,255,255,0.3);cursor:pointer;">👁</span>
+        </div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.25);margin-top:6px;">At least 8 characters</div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:12px;margin:4px 0 20px;">
+        <div style="width:20px;height:20px;border-radius:6px;background:var(--gold);border:0.5px solid var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">
+          <span style="font-size:11px;color:#fff;font-weight:700;">✓</span>
+        </div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.4);line-height:1.6;">I agree to the <span style="color:var(--gold);">Terms of Service</span> and <span style="color:var(--gold);">Privacy Policy</span></div>
+      </div>
+      <button class="login-btn">Create Account</button>
+      <div class="login-footer">Already have an account? <a href="#">Sign in</a></div>
+    </div>
+  </div>
+
+  <!-- E2 FORGOT PASSWORD -->
+  <div class="phone">
+    <div class="screen-tag">E2 · Forgot Password</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div class="login">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:36px;">
+        <div class="back-circle">←</div>
+        <div class="login-logo" style="margin-bottom:0;">Liquid<em>.</em></div>
+      </div>
+      <div style="width:64px;height:64px;border-radius:20px;background:rgba(200,151,63,0.1);border:0.5px solid rgba(200,151,63,0.2);display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:24px;">🔑</div>
+      <div class="login-title">Reset password</div>
+      <div class="login-sub" style="margin-bottom:28px;">Enter your email and we'll send you a link to reset your password.</div>
+      <div class="field"><label>Email Address</label><input type="email" placeholder="you@example.com" value="adaeze@email.com"/></div>
+      <button class="login-btn" style="margin-top:8px;">Send Reset Link</button>
+      <div class="login-divider" style="margin:28px 0 0;"><div class="div-line"></div><div class="div-text">remember your password?</div><div class="div-line"></div></div>
+      <div class="login-footer" style="margin-top:16px;"><a href="#">Back to Sign In</a></div>
+    </div>
+  </div>
+
+  <!-- E3 RESET LINK SENT -->
+  <div class="phone">
+    <div class="screen-tag">E3 · Reset Link Sent</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div class="login" style="align-items:center;text-align:center;padding-top:60px;">
+      <div style="width:80px;height:80px;border-radius:50%;background:rgba(29,185,84,0.12);border:0.5px solid rgba(29,185,84,0.3);display:flex;align-items:center;justify-content:center;font-size:32px;margin-bottom:24px;">📧</div>
+      <div class="login-title">Check your email</div>
+      <div class="login-sub" style="margin-bottom:8px;">We sent a reset link to</div>
+      <div style="font-size:14px;color:#fff;font-weight:500;margin-bottom:28px;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a3c2c7c2c6d9c6e3c6cec2cacf8dc0ccce">[email&#160;protected]</a></div>
+      <div style="width:100%;background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.08);border-radius:16px;padding:16px;margin-bottom:28px;text-align:left;">
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <span style="font-size:16px;">💡</span>
+          <div style="font-size:12px;color:rgba(255,255,255,0.45);line-height:1.65;">Check your spam folder if you don't see it. The link expires in 1 hour.</div>
+        </div>
+      </div>
+      <button class="login-btn" style="width:100%;">Open Email App</button>
+      <div class="login-footer" style="margin-top:20px;">Didn't receive it? <a href="#">Resend link</a></div>
+    </div>
+  </div>
+
+  <!-- E4 NEW PASSWORD -->
+  <div class="phone">
+    <div class="screen-tag">E4 · New Password</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div class="login">
+      <div class="login-logo">Liquid<em>.</em></div>
+      <div style="width:64px;height:64px;border-radius:20px;background:rgba(29,185,84,0.1);border:0.5px solid rgba(29,185,84,0.2);display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:24px;">🔒</div>
+      <div class="login-title">New password</div>
+      <div class="login-sub" style="margin-bottom:28px;">Must be at least 8 characters and different from your previous password.</div>
+      <div class="field"><label>New Password</label>
+        <div style="position:relative;">
+          <input style="width:100%;background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.1);border-radius:14px;padding:14px 46px 14px 16px;color:#fff;font-family:var(--font-b);font-size:15px;outline:none;" type="password" placeholder="••••••••" value="newpassword1"/>
+          <span style="position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:16px;color:rgba(255,255,255,0.3);cursor:pointer;">👁</span>
+        </div>
+      </div>
+      <div class="field"><label>Confirm New Password</label>
+        <div style="position:relative;">
+          <input style="width:100%;background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.1);border-radius:14px;padding:14px 46px 14px 16px;color:#fff;font-family:var(--font-b);font-size:15px;outline:none;" type="password" placeholder="••••••••" value="newpassword1"/>
+          <span style="position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:16px;color:rgba(255,255,255,0.3);cursor:pointer;">👁</span>
+        </div>
+      </div>
+      <div style="margin:0 0 20px;">
+        <div style="display:flex;gap:4px;margin-bottom:6px;">
+          <div style="flex:1;height:3px;border-radius:2px;background:var(--green);"></div>
+          <div style="flex:1;height:3px;border-radius:2px;background:var(--green);"></div>
+          <div style="flex:1;height:3px;border-radius:2px;background:var(--green);"></div>
+          <div style="flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,0.1);"></div>
+        </div>
+        <div style="font-size:11px;color:var(--green);">Strong password</div>
+      </div>
+      <button class="login-btn">Set New Password</button>
+    </div>
+  </div>
+
+  <!-- E5 PASSWORD UPDATED -->
+  <div class="phone">
+    <div class="screen-tag">E5 · Password Updated</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div class="login" style="align-items:center;text-align:center;padding-top:80px;">
+      <div style="width:80px;height:80px;border-radius:50%;background:rgba(29,185,84,0.12);border:0.5px solid rgba(29,185,84,0.3);display:flex;align-items:center;justify-content:center;font-size:32px;margin-bottom:24px;">✓</div>
+      <div class="login-title">Password updated!</div>
+      <div class="login-sub" style="margin-bottom:36px;">Your password has been changed successfully. You can now sign in with your new password.</div>
+      <button class="login-btn" style="width:100%;">Back to Sign In</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!--  SECTION 2 · HOME                           -->
+<!-- ════════════════════════════════════════════ -->
+<div class="section-divider"><span>Section 2 — Home · Normal · Exchange Closed · Announcement Banner</span></div>
+<div class="stage">
+
+  <!-- 03 HOME — exact original layout -->
+  <div class="phone">
+    <div class="screen-tag">03 · Home</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div class="home">
+      <div class="home-top">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div><div class="home-greet">Good morning, <strong>Adaeze</strong></div></div>
+          <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:14px;color:rgba(255,255,255,0.5);">⚙</div>
+        </div>
+        <div class="home-bal-label">Portfolio Value</div>
+        <div class="home-bal">₦2,847,500</div>
+        <div class="home-bal-sub"><span class="home-bal-usdt">≈ 1,850 USDT</span><span class="home-growth">▲ 12.4%</span></div>
+      </div>
+
+      <div class="rate-bar">
+        <div class="rate-left"><div class="rate-dot"></div><div class="rate-text">Live USDT rate</div></div>
+        <div class="rate-val">1 USDT = ₦1,538</div>
+      </div>
+
+      <div class="home-actions">
+        <div class="h-action">
+          <div class="h-action-icon buy">↓</div>
+          <div><div class="h-action-name">Acquire</div><div class="h-action-sub">Buy USDT</div></div>
+        </div>
+        <div class="h-action">
+          <div class="h-action-icon sell">↑</div>
+          <div><div class="h-action-name">Liquidate</div><div class="h-action-sub">Sell USDT</div></div>
+        </div>
+      </div>
+
+      <div class="white-card">
+        <div class="wc-header"><div class="wc-title">Recent Activity</div><div class="wc-link">View all</div></div>
+        <div class="tx-group-label">Today</div>
+        <div class="tx-item">
+          <div class="tx-avatar" style="background:rgba(29,185,84,0.08);">↓</div>
+          <div class="tx-info"><div class="tx-name">Acquired USDT</div><div class="tx-cat">Exchange · 09:42 AM</div></div>
+          <div class="tx-right"><div class="tx-amount pos">+200 USDT</div><div class="tx-time">₦307,600</div></div>
+        </div>
+        <div class="tx-group-label" style="margin-top:12px;">Yesterday</div>
+        <div class="tx-item">
+          <div class="tx-avatar" style="background:rgba(200,151,63,0.08);">↑</div>
+          <div class="tx-info"><div class="tx-name">Liquidated USDT</div><div class="tx-cat">Exchange · 3:15 PM</div></div>
+          <div class="tx-right"><div class="tx-amount neg">-500 USDT</div><div class="tx-time">₦769,000</div></div>
+        </div>
+        <div class="tx-item">
+          <div class="tx-avatar" style="background:rgba(200,151,63,0.08);">⏱</div>
+          <div class="tx-info"><div class="tx-name">Awaiting Verification</div><div class="tx-cat">11:00 AM</div></div>
+          <div class="tx-right"><div class="tx-amount pend">Pending</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-nav-white">
+      <div class="nav-it"><div class="nav-ico active">⌂</div><div class="nav-lbl active">Home</div></div>
+      <div class="nav-it"><div class="nav-ico">⇄</div><div class="nav-lbl">Exchange</div></div>
+      <div class="nav-it"><div class="nav-ico">◈</div><div class="nav-lbl">Insights</div></div>
+      <div class="nav-it"><div class="nav-ico">◎</div><div class="nav-lbl">Plans</div></div>
+      <div class="nav-it"><div class="nav-ico">▦</div><div class="nav-lbl">Portfolio</div></div>
+    </div>
+  </div>
+
+  <!-- 03B HOME — EXCHANGE CLOSED STATE -->
+  <div class="phone">
+    <div class="screen-tag">03B · Home — Exchange Closed</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div class="home">
+      <div class="home-top">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div><div class="home-greet">Good morning, <strong>Adaeze</strong></div></div>
+          <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:14px;color:rgba(255,255,255,0.5);">⚙</div>
+        </div>
+        <div class="home-bal-label">Portfolio Value</div>
+        <div class="home-bal">₦2,847,500</div>
+        <div class="home-bal-sub"><span class="home-bal-usdt">≈ 1,850 USDT</span><span class="home-growth">▲ 12.4%</span></div>
+      </div>
+      <div class="rate-bar">
+        <div class="rate-left"><div class="rate-dot"></div><div class="rate-text">Live USDT rate</div></div>
+        <div class="rate-val">1 USDT = ₦1,538</div>
+      </div>
+      <!-- Closed status bar — red pill below rate bar -->
+      <div style="display:flex;align-items:center;gap:8px;margin:0 20px 16px;padding:10px 14px;background:rgba(224,82,82,0.08);border:0.5px solid rgba(224,82,82,0.2);border-radius:12px;">
+        <div style="width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0;"></div>
+        <div style="font-size:12px;color:var(--red);font-weight:500;">Exchange currently closed — reopens Monday 9am</div>
+      </div>
+      <!-- Action cards dimmed 60% -->
+      <div class="home-actions" style="opacity:0.6;">
+        <div class="h-action">
+          <div class="h-action-icon buy">↓</div>
+          <div><div class="h-action-name">Acquire</div><div class="h-action-sub">Buy USDT</div></div>
+        </div>
+        <div class="h-action">
+          <div class="h-action-icon sell">↑</div>
+          <div><div class="h-action-name">Liquidate</div><div class="h-action-sub">Sell USDT</div></div>
+        </div>
+      </div>
+      <div class="white-card">
+        <div class="wc-header"><div class="wc-title">Recent Activity</div><div class="wc-link">View all</div></div>
+        <div class="tx-group-label">Today</div>
+        <div class="tx-item">
+          <div class="tx-avatar" style="background:rgba(29,185,84,0.08);">↓</div>
+          <div class="tx-info"><div class="tx-name">Acquired USDT</div><div class="tx-cat">Exchange · 09:42 AM</div></div>
+          <div class="tx-right"><div class="tx-amount pos">+200 USDT</div><div class="tx-time">₦307,600</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-nav-white">
+      <div class="nav-it"><div class="nav-ico active">⌂</div><div class="nav-lbl active">Home</div></div>
+      <div class="nav-it"><div class="nav-ico">⇄</div><div class="nav-lbl">Exchange</div></div>
+      <div class="nav-it"><div class="nav-ico">◈</div><div class="nav-lbl">Insights</div></div>
+      <div class="nav-it"><div class="nav-ico">◎</div><div class="nav-lbl">Plans</div></div>
+      <div class="nav-it"><div class="nav-ico">▦</div><div class="nav-lbl">Portfolio</div></div>
+    </div>
+  </div>
+
+  <!-- 03C HOME — ANNOUNCEMENT BANNER STATE -->
+  <div class="phone">
+    <div class="screen-tag">03C · Home — Announcement Banner</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div class="home">
+      <!-- Gold announcement banner — sits ABOVE everything -->
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px;background:rgba(200,151,63,0.12);border-bottom:0.5px solid rgba(200,151,63,0.25);">
+        <div style="display:flex;align-items:center;gap:8px;flex:1;">
+          <span style="font-size:13px;flex-shrink:0;">📢</span>
+          <span style="font-size:12px;color:rgba(255,255,255,0.8);line-height:1.5;">Rates update daily at 9am WAT. Exchange closes weekends.</span>
+        </div>
+        <span style="font-size:16px;color:rgba(255,255,255,0.4);cursor:pointer;flex-shrink:0;">✕</span>
+      </div>
+      <div class="home-top">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div><div class="home-greet">Good morning, <strong>Adaeze</strong></div></div>
+          <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:14px;color:rgba(255,255,255,0.5);">⚙</div>
+        </div>
+        <div class="home-bal-label">Portfolio Value</div>
+        <div class="home-bal">₦2,847,500</div>
+        <div class="home-bal-sub"><span class="home-bal-usdt">≈ 1,850 USDT</span><span class="home-growth">▲ 12.4%</span></div>
+      </div>
+      <div class="rate-bar">
+        <div class="rate-left"><div class="rate-dot"></div><div class="rate-text">Live USDT rate</div></div>
+        <div class="rate-val">1 USDT = ₦1,538</div>
+      </div>
+      <div class="home-actions">
+        <div class="h-action"><div class="h-action-icon buy">↓</div><div><div class="h-action-name">Acquire</div><div class="h-action-sub">Buy USDT</div></div></div>
+        <div class="h-action"><div class="h-action-icon sell">↑</div><div><div class="h-action-name">Liquidate</div><div class="h-action-sub">Sell USDT</div></div></div>
+      </div>
+      <div class="white-card">
+        <div class="wc-header"><div class="wc-title">Recent Activity</div><div class="wc-link">View all</div></div>
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 0;margin-bottom:10px;background:rgba(200,151,63,0.06);border-radius:10px;padding:10px 12px;">
+          <span style="font-size:13px;">⏱</span>
+          <span style="font-size:13px;color:var(--gold);font-weight:500;">You have a pending order →</span>
+        </div>
+        <div class="tx-group-label">Today</div>
+        <div class="tx-item">
+          <div class="tx-avatar" style="background:rgba(200,151,63,0.08);">⏱</div>
+          <div class="tx-info"><div class="tx-name">Awaiting Verification</div><div class="tx-cat">Acquire · 11:00 AM</div></div>
+          <div class="tx-right"><div class="tx-amount pend">Pending</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-nav-white">
+      <div class="nav-it"><div class="nav-ico active">⌂</div><div class="nav-lbl active">Home</div></div>
+      <div class="nav-it"><div class="nav-ico">⇄</div><div class="nav-lbl">Exchange</div></div>
+      <div class="nav-it"><div class="nav-ico">◈</div><div class="nav-lbl">Insights</div></div>
+      <div class="nav-it"><div class="nav-ico">◎</div><div class="nav-lbl">Plans</div></div>
+      <div class="nav-it"><div class="nav-ico">▦</div><div class="nav-lbl">Portfolio</div></div>
+    </div>
+  </div>
+
+</div>
+<div class="section-divider"><span>Section 3 — Exchange Flow · Buy · Sell · Order States · Complete Buy &amp; Sell</span></div>
+<div class="stage">
+
+  <!-- 04 BUY — original style + live rate bar + wallet field -->
+  <div class="phone">
+    <div class="screen-tag">04 · Acquire USDT</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div class="buy-screen">
+      <div class="buy-top">
+        <div class="screen-nav"><div class="back-circle">←</div><div class="screen-nav-title">Acquire USDT</div></div>
+        <!-- Live rate bar in original style -->
+        <div class="rate-bar" style="margin:0 0 16px;">
+          <div class="rate-left"><div class="rate-dot"></div><div class="rate-text">Live buy rate</div></div>
+          <div class="rate-val">1 USDT = ₦1,538</div>
+        </div>
+        <div class="buy-amount-label">You want</div>
+        <div class="buy-input-row">
+          <div class="currency-tag">USDT</div>
+          <input class="buy-big-input" type="number" placeholder="0" id="bi-usdt" oninput="calcBuy2()"/>
+        </div>
+        <div class="buy-rate">You pay: <span id="bi-ngn">₦0.00</span> · Min 50 · Max 2,000 USDT</div>
+      </div>
+
+      <div class="timer-compact">
+        <div class="tc-left"><div class="tc-label">Order Window</div><div class="tc-sub">Complete payment before expiry</div></div>
+        <div style="text-align:right;"><div class="tc-num" id="bi-timer">20:00</div><div class="tc-bar"><div class="tc-fill" id="bi-bar" style="width:100%"></div></div></div>
+      </div>
+
+      <div class="buy-card">
+        <div class="bc-row"><span class="bc-key">Bank</span><span class="bc-val">Opay</span></div>
+        <div class="bc-row"><span class="bc-key">Account No.</span><span class="bc-val green">8143 2750 91</span></div>
+        <div class="bc-row"><span class="bc-key">Account Name</span><span class="bc-val">Liquid Assets Ltd</span></div>
+        <div class="bc-row"><span class="bc-key">Total to pay</span><span class="bc-val gold" id="bi-total">—</span></div>
+      </div>
+
+      <!-- NEW: USDT wallet field -->
+      <div style="margin:0 20px 12px;">
+        <div class="field-lbl">Your USDT Wallet Address (TRC-20)</div>
+        <div class="dark-input" style="font-family:monospace;font-size:12px;color:rgba(255,255,255,0.5);">TRx9Km2...paste your address</div>
+      </div>
+
+      <div class="upload-row"><div class="up-ico">📎</div><div class="up-txt"><strong>Upload payment proof</strong><br>Screenshot or PDF · Max 5MB</div></div>
+      <button class="primary-btn btn-white">Confirm Order</button>
+    </div>
+    <div class="bottom-nav-dark">
+      <div class="nav-it-dark"><div class="nav-ico-dark">⌂</div><div class="nav-lbl-dark">Home</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark active">⇄</div><div class="nav-lbl-dark active">Exchange</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">◈</div><div class="nav-lbl-dark">Insights</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">◎</div><div class="nav-lbl-dark">Plans</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">▦</div><div class="nav-lbl-dark">Portfolio</div></div>
+    </div>
+  </div>
+
+  <!-- B2 SELL STEP 1: BANK DETAILS — original style -->
+  <div class="phone">
+    <div class="screen-tag">B2 · Liquidate — Step 1: Bank Details</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div class="sell-screen">
+      <div class="buy-top">
+        <div class="screen-nav"><div class="back-circle">←</div><div class="screen-nav-title">Liquidate USDT</div></div>
+        <!-- Step indicator in original style colours -->
+        <div class="step-ind">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;">
+            <div class="step-ind-circle active">1</div>
+            <div class="step-ind-label active">Bank</div>
+          </div>
+          <div class="step-ind-line"></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;">
+            <div class="step-ind-circle idle">2</div>
+            <div class="step-ind-label idle">Amount</div>
+          </div>
+          <div class="step-ind-line"></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;">
+            <div class="step-ind-circle idle">3</div>
+            <div class="step-ind-label idle">Send</div>
+          </div>
+        </div>
+        <div style="margin-bottom:20px;">
+          <div style="font-family:var(--font-h);font-size:18px;font-weight:700;color:#fff;margin-bottom:4px;">Where should we send<br>your Naira?</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.35);">Enter your bank details to receive payment.</div>
+        </div>
+        <div style="margin-bottom:14px;"><div class="field-lbl">Bank Name</div><select class="dark-select"><option>Select your bank</option><option selected>Opay</option><option>Access Bank</option><option>GTBank</option><option>Zenith Bank</option><option>First Bank</option><option>UBA</option><option>Kuda Bank</option><option>PalmPay</option></select></div>
+        <div style="margin-bottom:12px;"><div class="field-lbl">Account Number</div><div class="dark-input" style="color:rgba(255,255,255,0.8);">8143275091</div></div>
+      </div>
+      <div class="verify-badge"><div class="vb-ico">✓</div><div class="vb-text"><strong>Chioma Adeyemi</strong><br>Account verified successfully</div></div>
+      <div style="padding:0 20px;margin-bottom:20px;"><div class="field-lbl">Account Name (auto-verified)</div><div class="dark-input" style="color:var(--green);">Chioma Adeyemi</div></div>
+      <button class="primary-btn btn-gold">Continue to Amount →</button>
+    </div>
+    <div class="bottom-nav-dark">
+      <div class="nav-it-dark"><div class="nav-ico-dark">⌂</div><div class="nav-lbl-dark">Home</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark active">⇄</div><div class="nav-lbl-dark active">Exchange</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">◈</div><div class="nav-lbl-dark">Insights</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">◎</div><div class="nav-lbl-dark">Plans</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">▦</div><div class="nav-lbl-dark">Portfolio</div></div>
+    </div>
+  </div>
+
+  <!-- 05 SELL STEP 2: AMOUNT & SEND — exact original style -->
+  <div class="phone">
+    <div class="screen-tag">05 · Liquidate USDT — Step 2</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div class="sell-screen">
+      <div class="buy-top">
+        <div class="screen-nav"><div class="back-circle">←</div><div class="screen-nav-title">Liquidate USDT</div></div>
+        <div class="rate-bar" style="margin:0 0 16px;">
+          <div class="rate-left"><div class="rate-dot" style="background:var(--gold);"></div><div class="rate-text">Live sell rate</div></div>
+          <div class="rate-val">1 USDT = ₦1,520</div>
+        </div>
+        <div class="buy-amount-label">You are sending</div>
+        <div class="buy-input-row">
+          <div class="currency-tag">USDT</div>
+          <input class="buy-big-input" type="number" placeholder="0" id="si-usdt" oninput="calcSell2()"/>
+        </div>
+        <div class="buy-rate">You receive: <span id="si-ngn" style="color:var(--gold);">₦0.00</span> · to Opay ••9091</div>
+      </div>
+      <div class="timer-compact">
+        <div class="tc-left"><div class="tc-label">Transfer Window</div><div class="tc-sub">Send USDT before window closes</div></div>
+        <div style="text-align:right;"><div class="tc-num">20:00</div><div class="tc-bar"><div class="tc-fill" style="width:100%"></div></div></div>
+      </div>
+      <div class="wallet-block">
+        <div class="wb-label">Send USDT to this wallet</div>
+        <div class="wb-network">● TRC-20 Network</div>
+        <div class="wb-addr">TQn9Y2khEsLJW1ChVWFMSMeRDow5KcbLSE</div>
+        <div class="wb-copy" onclick="this.textContent='✓  Address copied'">⧉  Copy address</div>
+      </div>
+      <div class="upload-row"><div class="up-ico">📎</div><div class="up-txt"><strong>Upload transaction hash</strong><br>TxID screenshot or PDF · Max 5MB</div></div>
+      <button class="primary-btn btn-gold">Submit for Verification</button>
+    </div>
+    <div class="bottom-nav-dark">
+      <div class="nav-it-dark"><div class="nav-ico-dark">⌂</div><div class="nav-lbl-dark">Home</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark active">⇄</div><div class="nav-lbl-dark active">Exchange</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">◈</div><div class="nav-lbl-dark">Insights</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">◎</div><div class="nav-lbl-dark">Plans</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">▦</div><div class="nav-lbl-dark">Portfolio</div></div>
+    </div>
+  </div>
+
+  <!-- C1 EXCHANGE CLOSED -->
+  <div class="phone">
+    <div class="screen-tag">C1 · Exchange Closed</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div style="background:var(--ink);">
+      <div class="screen-nav" style="padding:16px 20px 0;"><div class="back-circle">←</div><div class="screen-nav-title">Exchange</div></div>
+      <div class="closed-screen">
+        <div class="closed-ico">🔒</div>
+        <div class="closed-title">Exchange is<br>currently closed</div>
+        <div class="closed-body">Our exchange operates within set hours. We are not currently processing new orders.</div>
+        <div class="closed-badge"><div class="closed-badge-ico">🕐</div><div class="closed-badge-text"><strong>Operating Hours (WAT)</strong>Mon – Fri · 9am – 8pm · Sat · 10am – 4pm</div></div>
+        <div class="closed-badge"><div class="closed-badge-ico">📢</div><div class="closed-badge-text"><strong>Admin notice</strong><span data-source="exchange_message">Back online Monday 9am. Happy weekend! 🙏</span></div></div>
+        <button class="primary-btn" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6);border:0.5px solid rgba(255,255,255,0.12);width:100%;margin:0;">Browse Intelligence →</button>
+      </div>
+    </div>
+    <div class="bottom-nav-dark">
+      <div class="nav-it-dark"><div class="nav-ico-dark">⌂</div><div class="nav-lbl-dark">Home</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark active">⇄</div><div class="nav-lbl-dark active">Exchange</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">◈</div><div class="nav-lbl-dark">Insights</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">◎</div><div class="nav-lbl-dark">Plans</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">▦</div><div class="nav-lbl-dark">Portfolio</div></div>
+    </div>
+  </div>
+
+  <!-- 06 ORDER STATUS — exact original -->
+  <div class="phone">
+    <div class="screen-tag">06 · Order Status</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div class="order-screen">
+      <div class="screen-nav" style="padding:16px 20px 0;"><div class="back-circle">←</div><div class="screen-nav-title">Order Status</div></div>
+      <div class="order-hero">
+        <div class="order-id">Order #LQ-2025-0847</div>
+        <div class="order-amount">200 USDT</div>
+        <div class="order-sub">₦307,600 · Acquire · Today 09:40 AM</div>
+        <div class="order-status-pill"><div class="os-dot"></div>Admin Verification</div>
+      </div>
+      <div class="steps-card">
+        <div class="step"><div class="step-left"><div class="step-circle done">✓</div><div class="step-line"></div></div><div class="step-info"><div class="step-title">Order Created</div><div class="step-desc">Today · 09:40 AM</div></div></div>
+        <div class="step"><div class="step-left"><div class="step-circle done">✓</div><div class="step-line"></div></div><div class="step-info"><div class="step-title">Payment Proof Uploaded</div><div class="step-desc">Today · 09:44 AM</div></div></div>
+        <div class="step"><div class="step-left"><div class="step-circle now">⏱</div><div class="step-line"></div></div><div class="step-info"><div class="step-title">Admin Verification</div><div class="step-desc">In progress · Est. 5–10 min</div></div></div>
+        <div class="step"><div class="step-left"><div class="step-circle idle">○</div></div><div class="step-info"><div class="step-title idle">Order Complete</div><div class="step-desc">Awaiting confirmation</div></div></div>
+      </div>
+      <button class="primary-btn btn-white">Back to Home</button>
+    </div>
+    <div class="bottom-nav-dark">
+      <div class="nav-it-dark"><div class="nav-ico-dark">⌂</div><div class="nav-lbl-dark">Home</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark active">⇄</div><div class="nav-lbl-dark active">Exchange</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">◈</div><div class="nav-lbl-dark">Insights</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">◎</div><div class="nav-lbl-dark">Plans</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">▦</div><div class="nav-lbl-dark">Portfolio</div></div>
+    </div>
+  </div>
+
+  <!-- C2 ORDER EXPIRED -->
+  <div class="phone">
+    <div class="screen-tag">C2 · Order Expired</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div class="order-screen">
+      <div class="screen-nav" style="padding:16px 20px 0;"><div class="back-circle">←</div><div class="screen-nav-title">Order Status</div></div>
+      <div class="expired-center">
+        <div class="exp-ico">⏰</div>
+        <div class="exp-timer">00:00</div>
+        <div style="font-family:var(--font-h);font-size:22px;font-weight:800;color:#fff;margin-bottom:10px;">Order Expired</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.4);line-height:1.65;margin-bottom:22px;">Your 20-minute payment window has passed and no proof was detected. Order auto-cancelled. No funds deducted.</div>
+        <div style="background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.08);border-radius:16px;padding:14px;width:100%;margin-bottom:20px;text-align:left;">
+          <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-bottom:4px;">Cancelled order</div>
+          <div style="font-family:var(--font-h);font-size:18px;font-weight:700;color:rgba(255,255,255,0.4);">500 USDT</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.25);margin-top:2px;">Order #LQ-2025-0849 · Today 10:20 AM</div>
+        </div>
+        <button class="primary-btn btn-white" style="width:100%;margin:0 0 10px;">Try Again</button>
+        <button class="primary-btn" style="width:100%;margin:0;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.5);border:0.5px solid rgba(255,255,255,0.12);">Back to Home</button>
+      </div>
+    </div>
+    <div class="bottom-nav-dark">
+      <div class="nav-it-dark"><div class="nav-ico-dark">⌂</div><div class="nav-lbl-dark">Home</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark active">⇄</div><div class="nav-lbl-dark active">Exchange</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">◈</div><div class="nav-lbl-dark">Insights</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">◎</div><div class="nav-lbl-dark">Plans</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">▦</div><div class="nav-lbl-dark">Portfolio</div></div>
+    </div>
+  </div>
+
+  <!-- C3 ORDER COMPLETE -->
+  <div class="phone">
+    <div class="screen-tag">C3 · Order Complete</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div class="order-screen">
+      <div class="success-center">
+        <div style="width:80px;height:80px;border-radius:50%;background:rgba(29,185,84,0.12);border:0.5px solid rgba(29,185,84,0.3);display:flex;align-items:center;justify-content:center;font-size:32px;margin-bottom:18px;">✓</div>
+        <div style="font-family:var(--font-h);font-size:28px;font-weight:800;color:#fff;letter-spacing:-1px;margin-bottom:6px;">Order Complete</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.4);line-height:1.6;margin-bottom:22px;">Your USDT has been sent successfully. Check your wallet for the incoming transfer.</div>
+      </div>
+      <div class="steps-card">
+        <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:0.5px solid var(--border);"><span style="font-size:13px;color:var(--muted);">Amount sent</span><span style="font-family:var(--font-h);font-size:13px;font-weight:700;color:var(--green);">500 USDT</span></div>
+        <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:0.5px solid var(--border);"><span style="font-size:13px;color:var(--muted);">Naira paid</span><span style="font-family:var(--font-h);font-size:13px;font-weight:700;color:var(--ink);">₦769,000</span></div>
+        <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:0.5px solid var(--border);"><span style="font-size:13px;color:var(--muted);">Rate applied</span><span style="font-family:var(--font-h);font-size:13px;font-weight:700;color:var(--ink);">₦1,538 / USDT</span></div>
+        <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:0.5px solid var(--border);"><span style="font-size:13px;color:var(--muted);">Reference</span><span style="font-family:monospace;font-size:11px;color:var(--ink);">LQ-2025-0848</span></div>
+        <div style="display:flex;justify-content:space-between;padding:9px 0;"><span style="font-size:13px;color:var(--muted);">Status</span><span style="font-family:var(--font-h);font-size:13px;font-weight:700;color:var(--green);">Completed ✓</span></div>
+      </div>
+      <div style="margin:0 20px 14px;padding:12px 14px;background:rgba(29,185,84,0.06);border:0.5px solid rgba(29,185,84,0.15);border-radius:14px;display:flex;gap:8px;align-items:center;">
+        <span style="font-size:15px;">📧</span>
+        <div style="font-size:12px;color:rgba(255,255,255,0.5);">Confirmation sent to <strong style="color:rgba(255,255,255,0.75);"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b6d7d2d7d3ccd3f6d3dbd7dfda98d5d9db">[email&#160;protected]</a></strong></div>
+      </div>
+      <button class="primary-btn btn-white">Back to Home</button>
+    </div>
+    <div class="bottom-nav-dark">
+      <div class="nav-it-dark"><div class="nav-ico-dark">⌂</div><div class="nav-lbl-dark">Home</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark active">⇄</div><div class="nav-lbl-dark active">Exchange</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">◈</div><div class="nav-lbl-dark">Insights</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">◎</div><div class="nav-lbl-dark">Plans</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">▦</div><div class="nav-lbl-dark">Portfolio</div></div>
+    </div>
+  </div>
+
+  <!-- C3B ORDER COMPLETE — SELL (LIQUIDATE) -->
+  <div class="phone">
+    <div class="screen-tag">C3B · Order Complete — Sell</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div class="order-screen">
+      <div class="success-center">
+        <div style="width:80px;height:80px;border-radius:50%;background:rgba(29,185,84,0.12);border:0.5px solid rgba(29,185,84,0.3);display:flex;align-items:center;justify-content:center;font-size:32px;margin-bottom:18px;">✓</div>
+        <div style="font-family:var(--font-h);font-size:28px;font-weight:800;color:#fff;letter-spacing:-1px;margin-bottom:6px;">Naira Sent</div>
+        <!-- Key difference from buy: Naira sent to bank, not USDT to wallet -->
+        <div style="font-size:13px;color:rgba(255,255,255,0.4);line-height:1.6;margin-bottom:22px;">₦456,000 has been sent to your Opay account ••9091. Check your bank for the incoming transfer.</div>
+      </div>
+      <div class="steps-card">
+        <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:0.5px solid var(--border);"><span style="font-size:13px;color:var(--muted);">USDT received</span><span style="font-family:var(--font-h);font-size:13px;font-weight:700;color:var(--green);">300 USDT</span></div>
+        <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:0.5px solid var(--border);"><span style="font-size:13px;color:var(--muted);">Naira sent to</span><span style="font-family:var(--font-h);font-size:13px;font-weight:700;color:var(--ink);">Opay ••9091</span></div>
+        <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:0.5px solid var(--border);"><span style="font-size:13px;color:var(--muted);">Amount</span><span style="font-family:var(--font-h);font-size:13px;font-weight:700;color:var(--gold);">₦456,000</span></div>
+        <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:0.5px solid var(--border);"><span style="font-size:13px;color:var(--muted);">Rate applied</span><span style="font-family:var(--font-h);font-size:13px;font-weight:700;color:var(--ink);">₦1,520 / USDT</span></div>
+        <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:0.5px solid var(--border);"><span style="font-size:13px;color:var(--muted);">Reference</span><span style="font-family:monospace;font-size:11px;color:var(--ink);">LQ-2025-0849</span></div>
+        <div style="display:flex;justify-content:space-between;padding:9px 0;"><span style="font-size:13px;color:var(--muted);">Status</span><span style="font-family:var(--font-h);font-size:13px;font-weight:700;color:var(--green);">Completed ✓</span></div>
+      </div>
+      <div style="margin:0 20px 14px;padding:12px 14px;background:rgba(29,185,84,0.06);border:0.5px solid rgba(29,185,84,0.15);border-radius:14px;display:flex;gap:8px;align-items:center;">
+        <span style="font-size:15px;">📧</span>
+        <div style="font-size:12px;color:rgba(255,255,255,0.5);">Confirmation sent to <strong style="color:rgba(255,255,255,0.75);"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6a0b0e0b0f100f2a0f070b030644090507">[email&#160;protected]</a></strong></div>
+      </div>
+      <button class="primary-btn btn-white">Back to Home</button>
+    </div>
+    <div class="bottom-nav-dark">
+      <div class="nav-it-dark"><div class="nav-ico-dark">⌂</div><div class="nav-lbl-dark">Home</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark active">⇄</div><div class="nav-lbl-dark active">Exchange</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">◈</div><div class="nav-lbl-dark">Insights</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">◎</div><div class="nav-lbl-dark">Plans</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">▦</div><div class="nav-lbl-dark">Portfolio</div></div>
+    </div>
+  </div>
+
+  <!-- 06B ORDER STATUS — AWAITING PAYMENT (no proof uploaded yet) -->
+  <div class="phone">
+    <div class="screen-tag">06B · Order Status — Awaiting Payment</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div class="order-screen">
+      <div class="screen-nav" style="padding:16px 20px 0;"><div class="back-circle">←</div><div class="screen-nav-title">Order Status</div></div>
+      <div class="order-hero">
+        <div class="order-id">Order #LQ-2025-0850</div>
+        <div class="order-amount">200 USDT</div>
+        <div class="order-sub">₦307,600 · Acquire · Today 11:00 AM</div>
+        <!-- Blue "awaiting payment" status pill -->
+        <div style="display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:5px 14px;background:rgba(59,130,246,0.1);border:0.5px solid rgba(59,130,246,0.25);border-radius:20px;font-size:12px;color:#60A5FA;font-weight:600;"><div style="width:5px;height:5px;border-radius:50%;background:#60A5FA;"></div>Awaiting Payment</div>
+      </div>
+      <!-- Upload proof CTA — shown when no proof uploaded yet -->
+      <div style="margin:16px 20px 0;padding:16px;background:rgba(200,151,63,0.06);border:0.5px solid rgba(200,151,63,0.18);border-radius:16px;">
+        <div style="font-family:var(--font-h);font-size:13px;font-weight:700;color:rgba(255,255,255,0.8);margin-bottom:6px;">Upload your payment proof</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:12px;line-height:1.5;">You have not uploaded proof yet. Upload your Opay payment screenshot to speed up verification.</div>
+        <div class="upload-row" style="margin:0;"><div class="up-ico">📎</div><div class="up-txt"><strong>Upload payment proof</strong><br>Screenshot or PDF · Max 5MB</div></div>
+      </div>
+      <div class="steps-card" style="margin-top:14px;">
+        <div class="step"><div class="step-left"><div class="step-circle done">✓</div><div class="step-line"></div></div><div class="step-info"><div class="step-title">Order Created</div><div class="step-desc">Today · 11:00 AM</div></div></div>
+        <div class="step"><div class="step-left"><div class="step-circle now">⏳</div><div class="step-line"></div></div><div class="step-info"><div class="step-title">Upload Payment Proof</div><div class="step-desc">Waiting for your upload</div></div></div>
+        <div class="step"><div class="step-left"><div class="step-circle idle">○</div><div class="step-line"></div></div><div class="step-info"><div class="step-title idle">Admin Verification</div><div class="step-desc">Pending your proof</div></div></div>
+        <div class="step"><div class="step-left"><div class="step-circle idle">○</div></div><div class="step-info"><div class="step-title idle">Order Complete</div><div class="step-desc">Awaiting confirmation</div></div></div>
+      </div>
+      <button class="primary-btn btn-white">Back to Home</button>
+    </div>
+    <div class="bottom-nav-dark">
+      <div class="nav-it-dark"><div class="nav-ico-dark">⌂</div><div class="nav-lbl-dark">Home</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark active">⇄</div><div class="nav-lbl-dark active">Exchange</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">◈</div><div class="nav-lbl-dark">Insights</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">◎</div><div class="nav-lbl-dark">Plans</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">▦</div><div class="nav-lbl-dark">Portfolio</div></div>
+    </div>
+  </div>
+
+</div>
+<div class="section-divider"><span>Section 4 — Intelligence · Plans · Post Detail</span></div>
+<div class="stage">
+
+  <!-- 07 INTELLIGENCE — exact original -->
+  <div class="phone">
+    <div class="screen-tag">07 · Intelligence</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div class="intel-screen">
+      <div class="intel-top">
+        <div class="intel-header"><div class="intel-title">Portfolio<br>Intelligence</div><div class="intel-plan">Business</div></div>
+        <div class="alloc-block">
+          <div class="ab-label">Suggested Allocation · March 2025</div>
+          <div class="ab-bar"><div class="ab-seg" style="width:40%;background:var(--green);border-radius:3px 0 0 3px;"></div><div class="ab-seg" style="width:35%;background:var(--gold);"></div><div class="ab-seg" style="width:25%;background:#444;border-radius:0 3px 3px 0;"></div></div>
+          <div class="ab-rows">
+            <div class="ab-row"><div class="ab-left"><div class="ab-dot" style="background:var(--green);"></div>Stablecoins</div><div class="ab-pct">40%</div></div>
+            <div class="ab-row"><div class="ab-left"><div class="ab-dot" style="background:var(--gold);"></div>Bitcoin (BTC)</div><div class="ab-pct">35%</div></div>
+            <div class="ab-row"><div class="ab-left"><div class="ab-dot" style="background:#444;"></div>Ethereum (ETH)</div><div class="ab-pct">25%</div></div>
+          </div>
+        </div>
+        <!-- Subscription prompt — shown when user has no plan (plan='none') -->
+        <div style="margin-bottom:14px;padding:12px 14px;background:rgba(200,151,63,0.07);border:0.5px solid rgba(200,151,63,0.2);border-radius:14px;display:flex;align-items:center;justify-content:space-between;gap:10px;">
+          <div>
+            <div style="font-family:var(--font-h);font-size:12px;font-weight:700;color:var(--gold);margin-bottom:3px;">Unlock full intelligence access</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.4);line-height:1.5;">Subscribe from ₦15,000/mo to unlock insights beyond Basic tier.</div>
+          </div>
+          <div style="flex-shrink:0;padding:8px 14px;background:linear-gradient(135deg,var(--gold),var(--gold-light));border-radius:10px;font-family:var(--font-h);font-size:11px;font-weight:700;color:#fff;cursor:pointer;white-space:nowrap;">View Plans</div>
+        </div>
+        <div style="font-size:14px;font-weight:600;color:rgba(255,255,255,0.8);font-family:var(--font-h);margin-bottom:12px;">Latest Insights</div>
+        <div class="feed-cards">
+          <div class="fc"><div class="fc-tag gold">Macro Outlook</div><div class="fc-title">Liquidity conditions signal a risk-on shift in Q2 2025</div><div class="fc-body">Global M2 expansion is accelerating. Capital rotation into digital assets expected within 6–8 weeks.</div><div class="fc-foot"><span>Mar 17, 2025</span><span class="fc-tier">◈ Basic & above</span></div></div>
+          <div class="fc"><div class="fc-tag green">Allocation Strategy</div><div class="fc-title">Defensive positioning with asymmetric upside — the current framework</div><div class="fc-body">40/35/25 split reflects market structure favouring re-entry flexibility with BTC/ETH exposure.</div><div class="fc-foot"><span>Mar 15, 2025</span><span class="fc-tier">◈ Business & above</span></div></div>
+          <div class="fc fc-locked"><div class="fc-tag gray">Private Strategy</div><div class="fc-title">Institutional capital flow briefing — March 2025</div><div class="fc-foot"><span>Mar 14, 2025</span><span class="fc-tier" style="color:var(--gold);">🔒 Institutional only</span></div></div>
+        </div>
+        <div style="height:16px;"></div>
+      </div>
+    </div>
+    <div class="bottom-nav-dark">
+      <div class="nav-it-dark"><div class="nav-ico-dark">⌂</div><div class="nav-lbl-dark">Home</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">⇄</div><div class="nav-lbl-dark">Exchange</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark active">◈</div><div class="nav-lbl-dark active">Insights</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">◎</div><div class="nav-lbl-dark">Plans</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">▦</div><div class="nav-lbl-dark">Portfolio</div></div>
+    </div>
+  </div>
+
+  <!-- F1 POST DETAIL — UNLOCKED -->
+  <div class="phone">
+    <div class="screen-tag">F1 · Post Detail — Unlocked</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div class="intel-screen">
+      <!-- Nav row -->
+      <div class="screen-nav" style="padding:16px 20px 0;">
+        <div class="back-circle">←</div>
+        <div class="screen-nav-title">Intelligence</div>
+      </div>
+
+      <div style="padding:16px 20px 0;">
+        <!-- Tag + date -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+          <div class="fc-tag gold" style="margin-bottom:0;">Macro Outlook</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.3);">Mar 17, 2025</div>
+        </div>
+
+        <!-- Title -->
+        <div style="font-family:var(--font-h);font-size:20px;font-weight:800;color:#fff;line-height:1.2;letter-spacing:-0.3px;margin-bottom:8px;">Liquidity conditions signal a risk-on shift in Q2 2025</div>
+
+        <!-- Tier badge -->
+        <div style="display:inline-flex;align-items:center;gap:5px;background:rgba(29,185,84,0.08);border:0.5px solid rgba(29,185,84,0.2);border-radius:20px;padding:3px 10px;font-size:11px;color:var(--green);font-weight:600;margin-bottom:20px;">◈ Basic &amp; above</div>
+
+        <!-- Divider -->
+        <div style="height:0.5px;background:rgba(255,255,255,0.07);margin-bottom:20px;"></div>
+
+        <!-- Article body -->
+        <div style="font-size:14px;color:rgba(255,255,255,0.75);line-height:1.8;margin-bottom:16px;">Global M2 expansion is accelerating across major central bank balance sheets. The Fed's net reserve position has begun expanding for the first time since Q3 2023, and historical precedent suggests capital rotation into risk assets follows within a 6–8 week lag.</div>
+
+        <div style="font-family:var(--font-h);font-size:14px;font-weight:700;color:rgba(255,255,255,0.9);margin-bottom:8px;">What this means for your portfolio</div>
+        <div style="font-size:14px;color:rgba(255,255,255,0.65);line-height:1.8;margin-bottom:16px;">BTC dominance is likely to compress from current levels as altcoin liquidity improves. Our current 35% BTC allocation provides adequate exposure without overconcentration. Stablecoin dry powder at 40% positions you to deploy into dips.</div>
+
+        <!-- Pull quote -->
+        <div style="border-left:2px solid var(--gold);padding:12px 14px;background:rgba(200,151,63,0.06);border-radius:0 10px 10px 0;margin-bottom:16px;">
+          <div style="font-size:13px;color:rgba(255,255,255,0.6);line-height:1.7;font-style:italic;">"The setup heading into Q2 resembles April 2023 — liquidity-led, with BTC as the lead indicator for the broader market move."</div>
+        </div>
+
+        <div style="font-size:14px;color:rgba(255,255,255,0.65);line-height:1.8;margin-bottom:24px;">Watch the 14-day moving average on M2 globally. A sustained breach above the 60-day MA would confirm the thesis. We will update this post with revised allocations if conditions change materially before Q2.</div>
+
+        <div style="height:16px;"></div>
+      </div>
+    </div>
+    <div class="bottom-nav-dark">
+      <div class="nav-it-dark"><div class="nav-ico-dark">⌂</div><div class="nav-lbl-dark">Home</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">⇄</div><div class="nav-lbl-dark">Exchange</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark active">◈</div><div class="nav-lbl-dark active">Insights</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">◎</div><div class="nav-lbl-dark">Plans</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">▦</div><div class="nav-lbl-dark">Portfolio</div></div>
+    </div>
+  </div>
+
+  <!-- F2 POST DETAIL — LOCKED STATE -->
+  <div class="phone">
+    <div class="screen-tag">F2 · Post Detail — Locked</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div class="intel-screen">
+      <div class="screen-nav" style="padding:16px 20px 0;">
+        <div class="back-circle">←</div>
+        <div class="screen-nav-title">Intelligence</div>
+      </div>
+      <div style="padding:16px 20px 0;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+          <div class="fc-tag gray" style="margin-bottom:0;">Private Strategy</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.3);">Mar 14, 2025</div>
+        </div>
+        <div style="font-family:var(--font-h);font-size:20px;font-weight:800;color:#fff;line-height:1.2;letter-spacing:-0.3px;margin-bottom:8px;">Institutional capital flow briefing — March 2025</div>
+        <div style="display:inline-flex;align-items:center;gap:5px;background:rgba(200,151,63,0.1);border:0.5px solid rgba(200,151,63,0.2);border-radius:20px;padding:3px 10px;font-size:11px;color:var(--gold);font-weight:600;margin-bottom:20px;">🔒 Institutional only</div>
+        <div style="height:0.5px;background:rgba(255,255,255,0.07);margin-bottom:24px;"></div>
+
+        <!-- Blurred locked content -->
+        <div style="position:relative;">
+          <div style="filter:blur(5px);opacity:0.35;pointer-events:none;">
+            <div style="font-size:14px;color:rgba(255,255,255,0.75);line-height:1.8;margin-bottom:12px;">Institutional flows into BTC ETFs have been net positive for 14 consecutive days. The largest allocation shifts are coming from sovereign wealth funds in the Middle East and Southeast Asian family offices repositioning away from US Treasuries.</div>
+            <div style="font-size:14px;color:rgba(255,255,255,0.65);line-height:1.8;margin-bottom:12px;">Our proprietary on-chain data shows wallet cluster behaviour consistent with pre-rally accumulation seen in October 2023. The signal-to-noise ratio on these flows is the highest we have observed in 18 months.</div>
+          </div>
+
+          <!-- Lock overlay -->
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;">
+            <div style="width:56px;height:56px;border-radius:18px;background:rgba(200,151,63,0.12);border:0.5px solid rgba(200,151,63,0.25);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;">🔒</div>
+            <div style="font-family:var(--font-h);font-size:16px;font-weight:700;color:#fff;margin-bottom:8px;">Institutional access only</div>
+            <div style="font-size:13px;color:rgba(255,255,255,0.4);line-height:1.6;margin-bottom:20px;">Upgrade your plan to unlock private strategy briefings and capital flow data.</div>
+            <div style="width:100%;padding:14px;background:linear-gradient(135deg,var(--gold),var(--gold-light));border-radius:14px;font-family:var(--font-h);font-size:14px;font-weight:700;color:#fff;text-align:center;cursor:pointer;">Upgrade to Institutional → /plans</div>
+            <div style="margin-top:12px;font-size:12px;color:rgba(255,255,255,0.3);cursor:pointer;">View all plans → /plans</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-nav-dark">
+      <div class="nav-it-dark"><div class="nav-ico-dark">⌂</div><div class="nav-lbl-dark">Home</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">⇄</div><div class="nav-lbl-dark">Exchange</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark active">◈</div><div class="nav-lbl-dark active">Insights</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">◎</div><div class="nav-lbl-dark">Plans</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">▦</div><div class="nav-lbl-dark">Portfolio</div></div>
+    </div>
+  </div>
+
+  <!-- 08 PLANS — exact original -->
+  <div class="phone">
+    <div class="screen-tag">08 · Subscription Plans</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div class="plans-screen">
+      <div class="plans-top">
+        <div class="screen-nav" style="margin-bottom:20px;"><div class="back-circle">←</div><div class="screen-nav-title">Plans</div></div>
+        <div class="plans-title">Grow smarter.<br>Pick your level.</div>
+        <div class="plans-sub">Portfolio intelligence — independent of exchange</div>
+      </div>
+      <div class="plan-cards">
+        <div class="pc"><div class="pc-name">Basic</div><div class="pc-price">₦15,000 <small>/ month</small></div><div class="pc-desc">Weekly market outlook for the informed individual building their portfolio.</div><div class="pc-feats"><div class="pc-feat"><div class="chk-circle">✓</div>Weekly macro outlook</div><div class="pc-feat"><div class="chk-circle">✓</div>Portfolio allocation guidance</div><div class="pc-feat"><div class="chk-circle">✓</div>Market direction signals</div></div><div style="margin-top:16px;padding:13px;background:var(--ink);border-radius:14px;text-align:center;font-family:var(--font-h);font-size:13px;font-weight:700;color:#fff;cursor:pointer;">Subscribe Now →</div></div>
+        <div class="pc feat"><div class="pc-pop">MOST POPULAR</div><div class="pc-name">Business</div><div class="pc-price">₦45,000 <small>/ month</small></div><div class="pc-desc">Institutional-level analysis and liquidity insights for serious capital growth.</div><div class="pc-feats"><div class="pc-feat"><div class="chk-circle">✓</div>Everything in Basic</div><div class="pc-feat"><div class="chk-circle">✓</div>Liquidity flow analysis</div><div class="pc-feat"><div class="chk-circle">✓</div>Cycle positioning strategy</div><div class="pc-feat"><div class="chk-circle">✓</div>Priority support</div></div><div style="margin-top:16px;padding:13px;background:linear-gradient(135deg,var(--gold),var(--gold-light));border-radius:14px;text-align:center;font-family:var(--font-h);font-size:13px;font-weight:700;color:#fff;cursor:pointer;">Subscribe Now →</div></div>
+        <div class="pc"><div class="pc-name">Institutional</div><div class="pc-price">₦120,000 <small>/ month</small></div><div class="pc-desc">Private briefings and capital allocation frameworks for large portfolios.</div><div class="pc-feats"><div class="pc-feat"><div class="chk-circle">✓</div>Everything in Business</div><div class="pc-feat"><div class="chk-circle">✓</div>Private strategy briefings</div><div class="pc-feat"><div class="chk-circle">✓</div>1-on-1 consultation</div></div><div style="margin-top:16px;padding:13px;background:var(--ink);border-radius:14px;text-align:center;font-family:var(--font-h);font-size:13px;font-weight:700;color:#fff;cursor:pointer;">Subscribe Now →</div></div>
+      </div>
+      <div style="height:20px;"></div>
+    </div>
+    <div class="bottom-nav-dark">
+      <div class="nav-it-dark"><div class="nav-ico-dark">⌂</div><div class="nav-lbl-dark">Home</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">⇄</div><div class="nav-lbl-dark">Exchange</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">◈</div><div class="nav-lbl-dark">Insights</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark active">◎</div><div class="nav-lbl-dark active">Plans</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">▦</div><div class="nav-lbl-dark">Portfolio</div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!--  SECTION 5 · PORTFOLIO & ACCOUNT            -->
+<!-- ════════════════════════════════════════════ -->
+<div class="section-divider"><span>Section 5 — Portfolio · History · Notifications · Account · Saved Banks · Wallet Edit</span></div>
+<div class="stage">
+
+  <!-- 09 PORTFOLIO — exact original -->
+  <div class="phone">
+    <div class="screen-tag">09 · Portfolio</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div class="port-screen">
+      <div class="port-top">
+        <div style="display:flex;justify-content:space-between;margin-bottom:20px;align-items:center;">
+          <div class="screen-nav-title" style="color:#fff;font-size:18px;font-family:var(--font-h);">Portfolio</div>
+          <div style="font-size:11px;color:var(--gold);font-family:var(--font-h);font-weight:600;border:0.5px solid rgba(200,151,63,0.3);border-radius:20px;padding:4px 12px;">Business Plan</div>
+        </div>
+        <div class="port-label">Total Value</div>
+        <div class="port-amount">₦2,847,500</div>
+        <div class="port-growth">▲ 12.4% this month</div>
+      </div>
+      <div class="metrics-row">
+        <div class="met"><div class="met-label">USDT HELD</div><div class="met-val green">740 USDT</div></div>
+        <div class="met"><div class="met-label">TOTAL ORDERS</div><div class="met-val">24</div></div>
+        <div class="met"><div class="met-label">MONTHLY ROI</div><div class="met-val green">+12.4%</div></div>
+        <div class="met"><div class="met-label">ACTIVE SINCE</div><div class="met-val" style="font-size:14px;">Jan 2025</div></div>
+      </div>
+      <div style="background:var(--card);border-radius:28px 28px 0 0;flex:1;padding:22px 20px;">
+        <div class="wc-header"><div class="wc-title">Asset Allocation</div><div class="wc-link">Adjust</div></div>
+        <div style="display:flex;height:6px;border-radius:3px;overflow:hidden;gap:2px;margin-bottom:16px;">
+          <div style="width:40%;background:var(--green);border-radius:3px 0 0 3px;"></div>
+          <div style="width:35%;background:var(--gold);"></div>
+          <div style="width:25%;background:#ccc;border-radius:0 3px 3px 0;"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;"><div style="display:flex;align-items:center;gap:8px;"><div style="width:8px;height:8px;border-radius:2px;background:var(--green);"></div><span style="font-size:13px;color:var(--muted2);">Stablecoins (USDT)</span></div><div style="text-align:right;"><div style="font-family:var(--font-h);font-size:13px;font-weight:700;color:var(--ink);">40%</div><div style="font-size:11px;color:var(--muted);">₦1,139,000</div></div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;"><div style="display:flex;align-items:center;gap:8px;"><div style="width:8px;height:8px;border-radius:2px;background:var(--gold);"></div><span style="font-size:13px;color:var(--muted2);">Bitcoin (BTC)</span></div><div style="text-align:right;"><div style="font-family:var(--font-h);font-size:13px;font-weight:700;color:var(--ink);">35%</div><div style="font-size:11px;color:var(--muted);">₦996,625</div></div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;"><div style="display:flex;align-items:center;gap:8px;"><div style="width:8px;height:8px;border-radius:2px;background:#ccc;"></div><span style="font-size:13px;color:var(--muted2);">Ethereum (ETH)</span></div><div style="text-align:right;"><div style="font-family:var(--font-h);font-size:13px;font-weight:700;color:var(--ink);">25%</div><div style="font-size:11px;color:var(--muted);">₦711,875</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-nav-white">
+      <div class="nav-it"><div class="nav-ico">⌂</div><div class="nav-lbl">Home</div></div>
+      <div class="nav-it"><div class="nav-ico">⇄</div><div class="nav-lbl">Exchange</div></div>
+      <div class="nav-it"><div class="nav-ico">◈</div><div class="nav-lbl">Insights</div></div>
+      <div class="nav-it"><div class="nav-ico">◎</div><div class="nav-lbl">Plans</div></div>
+      <div class="nav-it"><div class="nav-ico active">▦</div><div class="nav-lbl active">Portfolio</div></div>
+    </div>
+  </div>
+
+  <!-- D1 TRANSACTION HISTORY -->
+  <div class="phone">
+    <div class="screen-tag">D1 · Transaction History</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div style="background:var(--ink);min-height:680px;">
+      <div class="screen-nav" style="padding:16px 20px 12px;"><div class="back-circle">←</div><div class="screen-nav-title">All Transactions</div></div>
+      <!-- Filter pills — original pill style -->
+      <div style="display:flex;gap:8px;padding:0 20px 14px;overflow-x:auto;">
+        <div style="padding:6px 14px;background:var(--ink2);border:0.5px solid var(--gold);border-radius:20px;font-size:11px;color:var(--gold);font-weight:700;font-family:var(--font-h);white-space:nowrap;">All</div>
+        <div style="padding:6px 14px;background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.08);border-radius:20px;font-size:11px;color:rgba(255,255,255,0.4);white-space:nowrap;">Acquired</div>
+        <div style="padding:6px 14px;background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.08);border-radius:20px;font-size:11px;color:rgba(255,255,255,0.4);white-space:nowrap;">Liquidated</div>
+        <div style="padding:6px 14px;background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.08);border-radius:20px;font-size:11px;color:rgba(255,255,255,0.4);white-space:nowrap;">Pending</div>
+      </div>
+      <div class="tx-group-lbl-dark">Today</div>
+      <div class="tx-item-dark"><div class="tx-ico-dark" style="background:rgba(29,185,84,0.08);">↓</div><div style="flex:1;"><div class="tx-name-dark">Acquired USDT</div><div class="tx-cat-dark">09:42 AM · #LQ-0848</div></div><div style="text-align:right;"><div class="tx-amt-dark pos">+200 USDT</div><div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:2px;">₦307,600</div></div></div>
+      <div class="tx-group-lbl-dark">Yesterday</div>
+      <div class="tx-item-dark"><div class="tx-ico-dark" style="background:rgba(200,151,63,0.08);">↑</div><div style="flex:1;"><div class="tx-name-dark">Liquidated USDT</div><div class="tx-cat-dark">3:15 PM · #LQ-0847</div></div><div style="text-align:right;"><div class="tx-amt-dark neg">-500 USDT</div><div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:2px;">₦760,000</div></div></div>
+      <div class="tx-item-dark"><div class="tx-ico-dark" style="background:rgba(224,82,82,0.08);">✕</div><div style="flex:1;"><div class="tx-name-dark">Expired — Acquire</div><div class="tx-cat-dark">11:00 AM · #LQ-0846</div></div><div style="text-align:right;"><div class="tx-amt-dark exp">Expired</div><div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:2px;">100 USDT</div></div></div>
+      <div class="tx-group-lbl-dark">Mar 15</div>
+      <div class="tx-item-dark"><div class="tx-ico-dark" style="background:rgba(29,185,84,0.08);">↓</div><div style="flex:1;"><div class="tx-name-dark">Acquired USDT</div><div class="tx-cat-dark">2:00 PM · #LQ-0845</div></div><div style="text-align:right;"><div class="tx-amt-dark pos">+1,000 USDT</div><div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:2px;">₦1,538,000</div></div></div>
+      <div class="tx-item-dark"><div class="tx-ico-dark" style="background:rgba(200,151,63,0.08);">↑</div><div style="flex:1;"><div class="tx-name-dark">Liquidated USDT</div><div class="tx-cat-dark">10:30 AM · #LQ-0844</div></div><div style="text-align:right;"><div class="tx-amt-dark neg">-250 USDT</div><div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:2px;">₦380,000</div></div></div>
+    </div>
+    <div class="bottom-nav-dark">
+      <div class="nav-it-dark"><div class="nav-ico-dark">⌂</div><div class="nav-lbl-dark">Home</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">⇄</div><div class="nav-lbl-dark">Exchange</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">◈</div><div class="nav-lbl-dark">Insights</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">◎</div><div class="nav-lbl-dark">Plans</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark active">▦</div><div class="nav-lbl-dark active">Portfolio</div></div>
+    </div>
+  </div>
+
+  <!-- D2 NOTIFICATIONS -->
+  <div class="phone">
+    <div class="screen-tag">D2 · Notifications</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div style="background:var(--ink);min-height:680px;">
+      <div class="screen-nav" style="padding:16px 20px 14px;">
+        <div class="back-circle">←</div>
+        <div style="flex:1;display:flex;align-items:center;justify-content:space-between;">
+          <div class="screen-nav-title">Notifications</div>
+          <div style="font-size:12px;color:var(--gold);cursor:pointer;font-weight:600;">Mark all read</div>
+        </div>
+      </div>
+      <div class="notif-item"><div class="notif-ico" style="background:rgba(29,185,84,0.08);">✓</div><div style="flex:1;"><div class="notif-title">Order Complete — 200 USDT</div><div class="notif-sub">Your USDT has been sent to your wallet. Check your balance.</div><div class="notif-time">Just now</div></div><div class="notif-unread"></div></div>
+      <div class="notif-item"><div class="notif-ico" style="background:rgba(200,151,63,0.08);">◈</div><div style="flex:1;"><div class="notif-title">New Intelligence Post</div><div class="notif-sub">BTC liquidity conditions update — March 2025 outlook revised.</div><div class="notif-time">2 hours ago</div></div><div class="notif-unread"></div></div>
+      <div class="notif-item"><div class="notif-ico" style="background:rgba(200,151,63,0.08);">📎</div><div style="flex:1;"><div class="notif-title">Proof Uploaded — Pending Review</div><div class="notif-sub">We received your payment proof for order #LQ-0848.</div><div class="notif-time">Today · 09:45 AM</div></div></div>
+      <div class="notif-item" style="opacity:0.5;"><div class="notif-ico" style="background:rgba(224,82,82,0.08);">⏰</div><div style="flex:1;"><div class="notif-title">Order Expired — #LQ-0846</div><div class="notif-sub">Your order for 100 USDT expired. No payment detected.</div><div class="notif-time">Yesterday · 11:20 AM</div></div></div>
+      <div class="notif-item" style="opacity:0.5;"><div class="notif-ico" style="background:rgba(29,185,84,0.08);">✓</div><div style="flex:1;"><div class="notif-title">Order Complete — 500 USDT Liquidated</div><div class="notif-sub">₦760,000 has been sent to your Opay account ••9091.</div><div class="notif-time">Yesterday · 3:30 PM</div></div></div>
+      <div class="notif-item" style="opacity:0.5;"><div class="notif-ico" style="background:rgba(200,151,63,0.08);">◎</div><div style="flex:1;"><div class="notif-title">Subscription Renewed</div><div class="notif-sub">Your Business plan has been renewed for another month.</div><div class="notif-time">Mar 1, 2025</div></div></div>
+    </div>
+    <div class="bottom-nav-dark">
+      <div class="nav-it-dark"><div class="nav-ico-dark">⌂</div><div class="nav-lbl-dark">Home</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">⇄</div><div class="nav-lbl-dark">Exchange</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">◈</div><div class="nav-lbl-dark">Insights</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">◎</div><div class="nav-lbl-dark">Plans</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark active">▦</div><div class="nav-lbl-dark active">Portfolio</div></div>
+    </div>
+  </div>
+
+  <!-- D3 ACCOUNT SETTINGS -->
+  <div class="phone">
+    <div class="screen-tag">D3 · Account Settings</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div style="background:var(--ink);min-height:680px;">
+      <!-- Profile header — same style as original avatar areas -->
+      <div style="padding:16px 20px 18px;display:flex;flex-direction:column;align-items:center;gap:10px;">
+        <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));display:flex;align-items:center;justify-content:center;font-family:var(--font-h);font-size:22px;font-weight:800;color:#fff;">CA</div>
+        <div style="text-align:center;">
+          <div style="font-family:var(--font-h);font-size:16px;font-weight:700;color:#fff;">Chioma Adeyemi</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:2px;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="34555055514e51745159555d581a575b59">[email&#160;protected]</a></div>
+          <div style="display:inline-flex;margin-top:7px;padding:3px 12px;background:rgba(200,151,63,0.1);border:0.5px solid rgba(200,151,63,0.2);border-radius:20px;font-size:11px;color:var(--gold);font-weight:700;font-family:var(--font-h);">Business Plan</div>
+        </div>
+      </div>
+      <div style="margin-bottom:4px;"><div class="settings-lbl">Exchange</div><div class="settings-card"><div class="settings-row"><div class="settings-row-ico" style="background:rgba(29,185,84,0.1);">🏦</div><div style="flex:1;"><div class="settings-row-label">Saved Bank Accounts</div><div style="font-size:11px;color:rgba(255,255,255,0.3);">Opay ••9091 · Default</div></div><div class="settings-row-right">›</div></div><div class="settings-row"><div class="settings-row-ico" style="background:rgba(200,151,63,0.1);">◎</div><div style="flex:1;"><div class="settings-row-label">USDT Wallet Address</div><div style="font-size:11px;color:rgba(255,255,255,0.3);font-family:monospace;">TRx9K...4mBc</div></div><div class="settings-row-right">›</div></div></div></div>
+      <div style="margin-bottom:4px;"><div class="settings-lbl">Subscription</div><div class="settings-card"><div class="settings-row"><div class="settings-row-ico" style="background:rgba(200,151,63,0.1);">◈</div><div style="flex:1;"><div class="settings-row-label">Current Plan</div><div style="font-size:11px;color:var(--gold);">Business · ₦45,000/mo</div></div><div class="settings-row-right">›</div></div><div class="settings-row"><div class="settings-row-ico" style="background:rgba(255,255,255,0.06);">📅</div><div style="flex:1;"><div class="settings-row-label">Renewal Date</div><div style="font-size:11px;color:rgba(255,255,255,0.3);">April 1, 2025</div></div></div></div></div>
+      <div style="margin-bottom:4px;"><div class="settings-lbl">Notifications</div><div class="settings-card"><div class="settings-row"><div class="settings-row-ico" style="background:rgba(255,255,255,0.06);">🔔</div><div style="flex:1;"><div class="settings-row-label">Order Updates</div></div><div class="settings-toggle on"><div class="settings-toggle-thumb"></div></div></div><div class="settings-row"><div class="settings-row-ico" style="background:rgba(255,255,255,0.06);">◈</div><div style="flex:1;"><div class="settings-row-label">New Intelligence Posts</div></div><div class="settings-toggle on"><div class="settings-toggle-thumb"></div></div></div></div></div>
+      <div style="margin-bottom:4px;"><div class="settings-lbl">Support &amp; Legal</div><div class="settings-card"><div class="settings-row"><div class="settings-row-ico" style="background:rgba(29,185,84,0.1);">💬</div><div style="flex:1;"><div class="settings-row-label">Contact Support</div><div style="font-size:11px;color:rgba(255,255,255,0.3);">WhatsApp · Mon–Fri 9am–8pm</div></div><div class="settings-row-right">›</div></div><div class="settings-row"><div class="settings-row-ico" style="background:rgba(255,255,255,0.06);">📄</div><div style="flex:1;"><div class="settings-row-label">Terms of Service</div></div><div class="settings-row-right">›</div></div></div></div>
+      <div style="padding:14px 20px;"><div style="padding:13px;background:rgba(224,82,82,0.06);border:0.5px solid rgba(224,82,82,0.15);border-radius:14px;text-align:center;font-family:var(--font-h);font-size:14px;font-weight:700;color:var(--red);cursor:pointer;">Sign Out</div></div>
+    </div>
+    <div class="bottom-nav-dark">
+      <div class="nav-it-dark"><div class="nav-ico-dark">⌂</div><div class="nav-lbl-dark">Home</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">⇄</div><div class="nav-lbl-dark">Exchange</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">◈</div><div class="nav-lbl-dark">Insights</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">◎</div><div class="nav-lbl-dark">Plans</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark active">▦</div><div class="nav-lbl-dark active">Portfolio</div></div>
+    </div>
+  </div>
+
+  <!-- D4 SAVED BANK ACCOUNTS sub-screen -->
+  <div class="phone">
+    <div class="screen-tag">D4 · Saved Bank Accounts</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div style="background:var(--ink);min-height:680px;">
+      <div class="screen-nav" style="padding:16px 20px 14px;justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div class="back-circle">←</div>
+          <div class="screen-nav-title">Saved Banks</div>
+        </div>
+        <!-- Add bank button -->
+        <div style="padding:7px 14px;background:rgba(200,151,63,0.1);border:0.5px solid rgba(200,151,63,0.25);border-radius:20px;font-size:12px;color:var(--gold);font-weight:600;cursor:pointer;font-family:var(--font-h);">+ Add Bank</div>
+      </div>
+
+      <div style="font-size:11px;color:rgba(255,255,255,0.3);letter-spacing:1px;text-transform:uppercase;padding:4px 20px 10px;font-family:var(--font-h);font-weight:600;">Your accounts</div>
+
+      <!-- Bank 1 — default -->
+      <div style="margin:0 20px 10px;background:rgba(255,255,255,0.04);border:0.5px solid rgba(200,151,63,0.25);border-radius:16px;overflow:hidden;">
+        <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;">
+          <div style="width:38px;height:38px;border-radius:11px;background:rgba(29,185,84,0.1);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">🏦</div>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:500;color:#fff;">Opay</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:2px;">8143 2750 91 · Chioma Adeyemi</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+            <div style="font-size:10px;font-weight:700;padding:2px 8px;background:rgba(200,151,63,0.12);border:0.5px solid rgba(200,151,63,0.25);border-radius:20px;color:var(--gold);font-family:var(--font-h);">DEFAULT</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.3);cursor:pointer;">Remove</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bank 2 -->
+      <div style="margin:0 20px 10px;background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.07);border-radius:16px;overflow:hidden;">
+        <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;">
+          <div style="width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">🏦</div>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:500;color:#fff;">GTBank</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:2px;">0123 456 789 · Chioma Adeyemi</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+            <div style="font-size:11px;color:var(--gold);cursor:pointer;">Set default</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.3);cursor:pointer;">Remove</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add new bank card -->
+      <div style="margin:16px 20px 0;border:1px dashed rgba(255,255,255,0.12);border-radius:16px;padding:20px;text-align:center;cursor:pointer;">
+        <div style="font-size:22px;margin-bottom:6px;">+</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.4);">Add a new bank account</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.25);margin-top:4px;">Used for Liquidate USDT payments</div>
+      </div>
+    </div>
+    <div class="bottom-nav-dark">
+      <div class="nav-it-dark"><div class="nav-ico-dark">⌂</div><div class="nav-lbl-dark">Home</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">⇄</div><div class="nav-lbl-dark">Exchange</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">◈</div><div class="nav-lbl-dark">Insights</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark">◎</div><div class="nav-lbl-dark">Plans</div></div>
+      <div class="nav-it-dark"><div class="nav-ico-dark active">▦</div><div class="nav-lbl-dark active">Portfolio</div></div>
+    </div>
+  </div>
+
+  <!-- D5 EDIT USDT WALLET — bottom sheet -->
+  <div class="phone">
+    <div class="screen-tag">D5 · Edit USDT Wallet Address</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <!-- Account settings dimmed behind the sheet -->
+    <div style="background:var(--ink);min-height:360px;opacity:0.4;">
+      <div class="screen-nav" style="padding:16px 20px 14px;"><div class="back-circle">←</div><div class="screen-nav-title">Account Settings</div></div>
+      <div style="padding:0 20px;">
+        <div style="height:12px;background:rgba(255,255,255,0.05);border-radius:6px;margin-bottom:10px;"></div>
+        <div style="height:12px;background:rgba(255,255,255,0.04);border-radius:6px;width:70%;"></div>
+      </div>
+    </div>
+    <!-- Bottom sheet slides up from bottom -->
+    <div style="background:var(--ink2);border-radius:24px 24px 0 0;border-top:0.5px solid rgba(255,255,255,0.1);padding:20px 24px 36px;">
+      <!-- Sheet handle -->
+      <div style="width:36px;height:4px;border-radius:2px;background:rgba(255,255,255,0.15);margin:0 auto 20px;"></div>
+      <div style="font-family:var(--font-h);font-size:18px;font-weight:700;color:#fff;margin-bottom:4px;">USDT Wallet Address</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:20px;line-height:1.5;">This is where you receive USDT when you buy. Make sure it's a TRC-20 address.</div>
+
+      <div style="margin-bottom:14px;">
+        <div style="font-size:11px;color:rgba(255,255,255,0.4);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">TRC-20 Address</div>
+        <div style="position:relative;">
+          <input style="width:100%;background:rgba(255,255,255,0.06);border:0.5px solid rgba(200,151,63,0.3);border-radius:14px;padding:14px 44px 14px 16px;color:#fff;font-family:monospace;font-size:13px;outline:none;" type="text" value="TRx9Km2nBLhJW1ChVWFMSMeRDow5Kcb"/>
+          <!-- Clear button -->
+          <span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:16px;color:rgba(255,255,255,0.3);cursor:pointer;">✕</span>
+        </div>
+        <!-- Network badge -->
+        <div style="display:inline-flex;align-items:center;gap:5px;margin-top:8px;background:rgba(29,185,84,0.08);border:0.5px solid rgba(29,185,84,0.2);border-radius:20px;padding:3px 10px;font-size:11px;color:var(--green);font-weight:600;">✓ Valid TRC-20 address</div>
+      </div>
+
+      <button class="primary-btn btn-white" style="margin:0;width:100%;margin-bottom:10px;">Save Address</button>
+      <button class="primary-btn" style="margin:0;width:100%;background:transparent;color:rgba(255,255,255,0.4);border:0.5px solid rgba(255,255,255,0.12);">Cancel</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!--  SECTION 6 · ADMIN SIGN IN                  -->
+<!-- ════════════════════════════════════════════ -->
+<div class="section-divider"><span>Section 6 — Admin Sign In (separate from user app)</span></div>
+<div class="stage">
+
+  <!-- G1 ADMIN SIGN IN -->
+  <div class="phone">
+    <div class="screen-tag">G1 · Admin Sign In</div>
+    <div class="notch-bar" style="position:relative;z-index:10;padding:6px 16px 0;display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-left">9:41</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">WiFi ▪ 100%</span>
+    </div>
+    <div class="login">
+      <!-- Admin branding — gold logo + "Admin Panel" tag -->
+      <div style="margin-bottom:40px;">
+        <div class="login-logo">Liquid<em>.</em></div>
+        <div style="display:inline-flex;align-items:center;gap:6px;padding:3px 10px;background:rgba(200,151,63,0.1);border:0.5px solid rgba(200,151,63,0.2);border-radius:20px;font-size:11px;color:var(--gold);font-family:var(--font-h);font-weight:700;margin-top:6px;">Admin Panel</div>
+      </div>
+
+      <div class="login-title">Admin access</div>
+      <div class="login-sub" style="margin-bottom:28px;">Sign in with your admin credentials. This area is restricted.</div>
+
+      <div class="field"><label>Admin Email</label><input type="email" placeholder="admin@liquidng.com" value="admin@liquidng.com"/></div>
+      <div class="field"><label>Password</label>
+        <div style="position:relative;">
+          <input style="width:100%;background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.1);border-radius:14px;padding:14px 46px 14px 16px;color:#fff;font-family:var(--font-b);font-size:15px;outline:none;" type="password" placeholder="••••••••" value="adminpass"/>
+          <span style="position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:16px;color:rgba(255,255,255,0.3);cursor:pointer;">👁</span>
+        </div>
+      </div>
+
+      <!-- Security notice -->
+      <div style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:rgba(224,82,82,0.06);border:0.5px solid rgba(224,82,82,0.15);border-radius:12px;margin-bottom:20px;">
+        <span style="font-size:14px;flex-shrink:0;">🔒</span>
+        <div style="font-size:12px;color:rgba(255,255,255,0.45);line-height:1.6;">Only authorised email addresses can access the admin panel. Unauthorised attempts are logged.</div>
+      </div>
+
+      <button class="login-btn" style="background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#fff;">Sign In to Admin Panel</button>
+    </div>
+  </div>
+
+</div>
+
+<div style="padding:24px 0 10px;text-align:center;font-family:var(--font-h);font-size:10px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,0.12);text-transform:uppercase;">Liquid · Complete User Screens · 33 Screens · 6 Sections · 2025</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+function calcBuy2(){
+  const v=parseFloat(document.getElementById('bi-usdt').value)||0;
+  const n=(v*1538).toLocaleString('en-NG',{minimumFractionDigits:2,maximumFractionDigits:2});
+  document.getElementById('bi-ngn').textContent='₦'+n;
+  document.getElementById('bi-total').textContent=v?'₦'+n:'—';
+}
+function calcSell2(){
+  const v=parseFloat(document.getElementById('si-usdt').value)||0;
+  document.getElementById('si-ngn').textContent='₦'+(v*1520).toLocaleString('en-NG',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+let secs2=1200;
+const t2=setInterval(()=>{
+  if(secs2<=0){clearInterval(t2);return;}
+  secs2--;
+  const m=Math.floor(secs2/60),s=secs2%60;
+  const el=document.getElementById('bi-timer');
+  const bar=document.getElementById('bi-bar');
+  if(el) el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+  if(bar) bar.style.width=((secs2/1200)*100)+'%';
+},1000);
+</script>
+</body>
+</html>

@@ -1,0 +1,232 @@
+.adminPostsRoot {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 6px 4px 56px;
+  color: #151515;
+}
+
+.adminPostsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.05);
+  border-radius: 14px;
+  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.06);
+  margin-bottom: 14px;
+}
+
+.adminPostsTitle {
+  margin: 0;
+  font-family: var(--font-h);
+  font-weight: 900;
+  font-size: 18px;
+  letter-spacing: -0.2px;
+}
+
+.adminPostsNewBtn {
+  border: 0;
+  border-radius: 999px;
+  padding: 9px 14px;
+  cursor: pointer;
+  font-weight: 900;
+  font-size: 13px;
+  background: linear-gradient(135deg, #6700af, #8B2FE0);
+  color: #fff;
+}
+
+.adminPostsToast {
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 13px;
+  margin-bottom: 14px;
+  text-align: left;
+  width: fit-content;
+}
+
+.adminPostsToast.success {
+  background: rgba(29, 185, 84, 0.12);
+  border: 1px solid rgba(29, 185, 84, 0.35);
+  color: #147a37;
+}
+
+.adminPostsToast.error {
+  background: rgba(224, 82, 82, 0.1);
+  border: 1px solid rgba(224, 82, 82, 0.3);
+  color: #9f2e2e;
+}
+
+.adminPostsToast.info {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.75);
+}
+
+.adminPostsLoading {
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 13px;
+  padding: 6px 2px;
+}
+
+.adminPostsStack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.adminPostsSectionHead {
+  font-family: var(--font-h);
+  font-weight: 900;
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.75);
+  margin: 4px 0 8px;
+}
+
+.adminPostsCard {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 6px 0;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(15, 23, 42, 0.05);
+}
+
+.adminPostsEmpty {
+  padding: 14px 18px;
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 13px;
+}
+
+.adminPostsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.adminPostRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 18px;
+  border-top: 1px solid rgba(15, 23, 42, 0.05);
+}
+
+.adminPostRow:first-child {
+  border-top: 0;
+}
+
+.adminPostRowLeft {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+
+.adminRowTag {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 5px 9px;
+  font-size: 10px;
+  font-weight: 900;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(0, 0, 0, 0.03);
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.adminRowTag.tone-purple {
+  background: rgba(103, 0, 175, 0.12);
+  border-color: rgba(103, 0, 175, 0.35);
+  color: #6700af;
+}
+
+.adminRowTag.tone-green {
+  background: rgba(29, 185, 84, 0.14);
+  border-color: rgba(29, 185, 84, 0.33);
+  color: #146a33;
+}
+
+.adminRowTag.tone-grey {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.adminRowText {
+  min-width: 0;
+}
+
+.adminRowTitle {
+  font-size: 13px;
+  font-weight: 800;
+  color: rgba(0, 0, 0, 0.86);
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 660px;
+}
+
+.adminRowMeta {
+  margin-top: 3px;
+  font-size: 11px;
+  color: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.adminRowTier {
+  font-weight: 900;
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.adminRowDot {
+  color: rgba(0, 0, 0, 0.25);
+}
+
+.adminPostRowActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 0 0 auto;
+}
+
+.adminRowBtn {
+  border: 0;
+  background: transparent;
+  color: rgba(0, 0, 0, 0.55);
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.adminRowBtn.danger {
+  color: rgba(224, 82, 82, 0.95);
+}
+
+.adminRowBtn.success {
+  color: rgba(29, 185, 84, 0.95);
+}
+
+@media (max-width: 720px) {
+  .adminPostRow {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .adminPostRowActions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .adminRowTitle {
+    max-width: 100%;
+  }
+}
+

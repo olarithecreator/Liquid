@@ -1,0 +1,443 @@
+.homePageRoot {
+  min-height: 100svh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--ink);
+}
+
+.homeMain {
+  padding: 18px 18px 96px;
+  display: flex;
+  flex-direction: column;
+}
+
+.homeAnnouncementBanner {
+  width: 100%;
+  margin: 0;
+  background: rgba(103, 0, 175, 0.12);
+  border-bottom: 1px solid rgba(103, 0, 175, 0.25);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  box-sizing: border-box;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.homeAnnouncementIcon {
+  font-size: 16px;
+}
+
+.homeAnnouncementText {
+  flex: 1;
+  text-align: left;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.homeAnnouncementDismiss {
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+  border: 1px solid rgba(103, 0, 175, 0.35);
+  background: rgba(0, 0, 0, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+}
+
+.homeTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.homeGreeting {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.homeGreetingMuted {
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.homeGreetingName {
+  font-family: var(--font-h);
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.homeSettingsBtn {
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+}
+
+.homePortfolioBlock {
+  margin-bottom: 16px;
+}
+
+.homePortfolioLabel {
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(139, 47, 224, 0.7);
+  margin-bottom: 8px;
+}
+
+.homePortfolioValue {
+  font-family: var(--font-h);
+  font-size: 42px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 8px;
+}
+
+.homeUsdtApproxRow {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.homeChangeRow {
+  color: rgba(29, 185, 84, 0.95);
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.homeRatePill {
+  width: 100%;
+  height: 48px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 0 14px;
+  box-sizing: border-box;
+  margin-bottom: 12px;
+}
+
+.homeLiveDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--green);
+  box-shadow: 0 0 0 4px rgba(29, 185, 84, 0.14);
+}
+
+.homeRatePillLabel {
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.homeRatePillValue {
+  margin-left: auto;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.homeClosedStatusBar {
+  width: 100%;
+  background: rgba(224, 82, 82, 0.08);
+  border: 1px solid rgba(224, 82, 82, 0.2);
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+}
+
+.homeRedDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--red);
+  box-shadow: 0 0 0 4px rgba(224, 82, 82, 0.14);
+}
+
+.homeActionsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.homeActionCard {
+  background: #fff;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  padding: 14px 12px;
+  height: 92px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 8px;
+}
+
+.homeActionCardAcquire {
+  background: linear-gradient(135deg, var(--purple), var(--purple-l));
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.homeActionCardAcquire .homeActionText {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.homeActionCardAcquire .homeActionArrowGreen {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.homeActionSkeletonCard {
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 18px;
+  height: 92px;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  position: relative;
+  overflow: hidden;
+}
+
+.homeActionSkeletonCard::after {
+  content: '';
+  position: absolute;
+  inset: -40% -40%;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.04) 0%,
+    rgba(0, 0, 0, 0.08) 45%,
+    rgba(0, 0, 0, 0.04) 100%
+  );
+  transform: rotate(12deg);
+  animation: homeShimmer 1.2s ease-in-out infinite;
+}
+
+@keyframes homeShimmer {
+  0% {
+    transform: translateX(-40%) rotate(12deg);
+  }
+  100% {
+    transform: translateX(40%) rotate(12deg);
+  }
+}
+
+.homeActionArrow {
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.homeActionArrowGreen {
+  color: rgba(29, 185, 84, 0.95);
+}
+
+.homeActionArrowGold {
+  color: rgba(103, 0, 175, 0.95);
+}
+
+.homeActionText {
+  color: rgba(12, 12, 12, 0.95);
+  font-family: var(--font-h);
+  font-weight: 900;
+  letter-spacing: -0.2px;
+}
+
+.homeRecentPanel {
+  background: #fff;
+  border-radius: 28px 28px 16px 16px;
+  padding: 16px 16px 14px;
+  box-sizing: border-box;
+}
+
+.homeRecentHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.homeRecentTitle {
+  font-family: var(--font-h);
+  font-weight: 900;
+  color: rgba(12, 12, 12, 0.95);
+}
+
+.homeViewAllBtn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: rgba(103, 0, 175, 0.95);
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.homePendingOrderRow {
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  background: rgba(103, 0, 175, 0.06);
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  border: 1px solid rgba(103, 0, 175, 0.25);
+  color: rgba(103, 0, 175, 0.95);
+}
+
+.homePendingIcon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.homeRecentList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.homeRecentGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.homeDateLabel {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 11px;
+  color: rgba(12, 12, 12, 0.45);
+  margin-top: 4px;
+}
+
+.homeActivityRow {
+  width: 100%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 10px 10px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.homeActivityRow:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.homeActivityType {
+  font-weight: 900;
+  color: rgba(12, 12, 12, 0.9);
+  font-family: var(--font-h);
+}
+
+.homeActivityRight {
+  font-weight: 900;
+  color: rgba(12, 12, 12, 0.6);
+  font-size: 13px;
+}
+
+.homeBottomNav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 84px;
+  background: #fff;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: center;
+}
+
+.homeNavItem {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: rgba(12, 12, 12, 0.5);
+  height: 84px;
+}
+
+.homeNavItemActive {
+  color: rgba(103, 0, 175, 0.95);
+}
+
+.homeNavIcon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.homeNavText {
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.homeSkeletonPill {
+  width: 100%;
+  height: 44px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.homeSkeletonText {
+  width: 70%;
+  height: 46px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.homeSkeletonSmall {
+  width: 60%;
+  height: 14px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.homeClosedStatusSkeleton {
+  width: 100%;
+  height: 48px;
+  border-radius: 14px;
+  background: rgba(224, 82, 82, 0.08);
+  border: 1px solid rgba(224, 82, 82, 0.15);
+  margin-bottom: 12px;
+}
+
+.homeRecentSkeletonBody {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.homeSkeletonRow {
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.homeSkeletonGroupLabel {
+  width: 40%;
+  height: 12px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.04);
+}
+

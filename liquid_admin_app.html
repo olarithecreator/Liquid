@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Liquid Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --ink:#0C0C0C;--ink2:#1A1A1A;--ink3:#222;
+  --surface:#fff;--off:#F7F6F4;--border:#E8E8E8;
+  --muted:#888;--muted2:#555;
+  --gold:#C8973F;--gold-l:#E8B865;--gold-dim:rgba(200,151,63,0.08);
+  --green:#1DB954;--green-dim:rgba(29,185,84,0.08);
+  --red:#E05252;--red-dim:rgba(224,82,82,0.08);
+  --blue:#3B82F6;--blue-dim:rgba(59,130,246,0.08);
+  --font-h:'Syne',sans-serif;--font-b:'Inter',sans-serif;
+}
+body{background:#0A0A0A;font-family:var(--font-b);color:var(--ink);min-height:100vh;}
+
+/* ═══ LAYOUT ═══ */
+.admin-shell{display:flex;min-height:100vh;}
+.sidebar{width:220px;background:var(--ink2);border-right:0.5px solid rgba(255,255,255,0.07);display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;z-index:10;}
+.main{margin-left:220px;flex:1;background:#F0EFED;min-height:100vh;}
+
+/* SIDEBAR */
+.sidebar-logo{padding:24px 20px 20px;border-bottom:0.5px solid rgba(255,255,255,0.07);}
+.sidebar-logo-text{font-family:var(--font-h);font-size:22px;font-weight:800;background:linear-gradient(135deg,var(--gold),var(--gold-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.sidebar-logo-sub{font-size:11px;color:rgba(255,255,255,0.25);margin-top:2px;}
+.sidebar-nav{padding:16px 12px;flex:1;}
+.nav-group-lbl{font-size:10px;font-weight:700;color:rgba(255,255,255,0.2);letter-spacing:1.5px;text-transform:uppercase;padding:8px 8px 6px;font-family:var(--font-h);}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;cursor:pointer;margin-bottom:2px;transition:all 0.15s;}
+.nav-item:hover{background:rgba(255,255,255,0.05);}
+.nav-item.active{background:rgba(200,151,63,0.12);border:0.5px solid rgba(200,151,63,0.2);}
+.nav-item-ico{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.nav-item-ico.gold{background:rgba(200,151,63,0.15);color:var(--gold);}
+.nav-item-ico.green{background:rgba(29,185,84,0.12);color:var(--green);}
+.nav-item-ico.blue{background:rgba(59,130,246,0.12);color:var(--blue);}
+.nav-item-ico.red{background:rgba(224,82,82,0.1);color:var(--red);}
+.nav-item-ico.gray{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.4);}
+.nav-item-label{font-size:13px;font-weight:500;color:rgba(255,255,255,0.5);flex:1;}
+.nav-item.active .nav-item-label{color:rgba(255,255,255,0.85);}
+.nav-item-badge{font-size:10px;font-weight:700;background:var(--red);color:#fff;border-radius:10px;padding:2px 7px;font-family:var(--font-h);}
+.nav-item-badge.gold{background:var(--gold);}
+.sidebar-footer{padding:14px 12px;border-top:0.5px solid rgba(255,255,255,0.07);}
+.sidebar-user{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,0.04);}
+.sidebar-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-l));display:flex;align-items:center;justify-content:center;font-family:var(--font-h);font-size:12px;font-weight:800;color:#fff;flex-shrink:0;}
+.sidebar-user-name{font-size:12px;font-weight:600;color:rgba(255,255,255,0.7);}
+.sidebar-user-role{font-size:10px;color:rgba(255,255,255,0.3);}
+
+/* TOPBAR */
+.topbar{background:#fff;border-bottom:0.5px solid var(--border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5;}
+.topbar-title{font-family:var(--font-h);font-size:18px;font-weight:700;color:var(--ink);}
+.topbar-right{display:flex;align-items:center;gap:12px;}
+.topbar-btn{padding:8px 16px;border-radius:10px;font-family:var(--font-h);font-size:12px;font-weight:700;cursor:pointer;border:none;}
+.topbar-btn.outline{background:transparent;border:0.5px solid var(--border);color:var(--muted);}
+.topbar-btn.primary{background:var(--ink);color:#fff;}
+.topbar-btn.gold{background:linear-gradient(135deg,var(--gold),var(--gold-l));color:#fff;}
+
+/* PAGE CONTENT */
+.page{padding:24px 28px;display:none;}
+.page.active{display:block;}
+
+/* STAT CARDS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
+.stat-card{background:#fff;border-radius:16px;padding:18px;border:0.5px solid var(--border);}
+.stat-label{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;font-family:var(--font-h);font-weight:700;margin-bottom:8px;}
+.stat-value{font-family:var(--font-h);font-size:28px;font-weight:800;color:var(--ink);line-height:1;margin-bottom:4px;}
+.stat-value.gold{color:var(--gold);}
+.stat-value.green{color:var(--green);}
+.stat-value.red{color:var(--red);}
+.stat-sub{font-size:12px;color:var(--muted);}
+.stat-trend{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;}
+.stat-trend.up{color:var(--green);}
+.stat-trend.down{color:var(--red);}
+
+/* SECTION CARDS */
+.sec-card{background:#fff;border-radius:16px;border:0.5px solid var(--border);overflow:hidden;margin-bottom:20px;}
+.sec-card-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:0.5px solid var(--border);}
+.sec-card-title{font-family:var(--font-h);font-size:15px;font-weight:700;color:var(--ink);}
+.sec-card-action{font-size:12px;color:var(--gold);font-weight:600;cursor:pointer;}
+
+/* RATE SETTER */
+.rate-row{display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:0.5px solid var(--border);}
+.rate-row:last-child{border-bottom:none;}
+.rate-ico{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.rate-info{flex:1;}
+.rate-name{font-size:13px;font-weight:500;color:var(--ink);}
+.rate-desc{font-size:11px;color:var(--muted);margin-top:1px;}
+.rate-input-wrap{display:flex;align-items:center;gap:8px;}
+.rate-prefix{font-family:var(--font-h);font-size:13px;font-weight:700;color:var(--muted2);}
+.rate-input{width:110px;background:var(--off);border:0.5px solid var(--border);border-radius:10px;padding:8px 12px;font-family:var(--font-h);font-size:16px;font-weight:800;color:var(--ink);outline:none;text-align:right;}
+.rate-save-btn{padding:8px 16px;background:var(--ink);color:#fff;border:none;border-radius:10px;font-family:var(--font-h);font-size:12px;font-weight:700;cursor:pointer;}
+.rate-save-btn.gold{background:linear-gradient(135deg,var(--gold),var(--gold-l));}
+
+/* TOGGLE */
+.toggle-row{display:flex;align-items:center;gap:14px;padding:16px 20px;border-bottom:0.5px solid var(--border);}
+.toggle-row:last-child{border-bottom:none;}
+.toggle-info{flex:1;}
+.toggle-label{font-size:14px;font-weight:600;color:var(--ink);}
+.toggle-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.toggle-switch{position:relative;width:52px;height:28px;flex-shrink:0;}
+.toggle-switch input{opacity:0;width:0;height:0;}
+.toggle-track{position:absolute;cursor:pointer;inset:0;background:#ddd;border-radius:14px;transition:.3s;}
+.toggle-track.on{background:var(--green);}
+.toggle-thumb{position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.3s;box-shadow:0 1px 4px rgba(0,0,0,.15);}
+.toggle-track.on .toggle-thumb{left:27px;}
+
+/* ORDER TABLE */
+.orders-table{width:100%;border-collapse:collapse;}
+.orders-table th{font-family:var(--font-h);font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;padding:10px 16px;border-bottom:1px solid var(--border);text-align:left;background:var(--off);}
+.orders-table td{padding:14px 16px;border-bottom:0.5px solid var(--border);font-size:13px;color:var(--ink);vertical-align:middle;}
+.orders-table tr:last-child td{border-bottom:none;}
+.orders-table tr:hover td{background:#FAFAF8;}
+.order-user{display:flex;align-items:center;gap:10px;}
+.order-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-l));display:flex;align-items:center;justify-content:center;font-family:var(--font-h);font-size:11px;font-weight:800;color:#fff;flex-shrink:0;}
+.order-name{font-size:13px;font-weight:500;color:var(--ink);}
+.order-email{font-size:11px;color:var(--muted);}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;font-family:var(--font-h);}
+.badge.buy{background:rgba(29,185,84,.1);color:var(--green);}
+.badge.sell{background:rgba(200,151,63,.1);color:var(--gold);}
+.badge.pending{background:rgba(59,130,246,.08);color:var(--blue);}
+.badge.proof{background:rgba(200,151,63,.1);color:var(--gold);}
+.badge.verifying{background:rgba(200,151,63,.1);color:var(--gold);}
+.badge.complete{background:rgba(29,185,84,.08);color:var(--green);}
+.badge.expired{background:rgba(224,82,82,.08);color:var(--red);}
+.action-btns{display:flex;gap:6px;}
+.act-btn{padding:6px 12px;border-radius:8px;font-size:11px;font-weight:700;font-family:var(--font-h);cursor:pointer;border:none;}
+.act-btn.approve{background:rgba(29,185,84,.1);color:var(--green);}
+.act-btn.complete{background:var(--ink);color:#fff;}
+.act-btn.cancel{background:rgba(224,82,82,.08);color:var(--red);}
+.act-btn.view{background:var(--off);color:var(--muted2);}
+.timer-cell{font-family:var(--font-h);font-size:13px;font-weight:700;}
+.timer-cell.urgent{color:var(--red);}
+.timer-cell.ok{color:var(--green);}
+.timer-cell.warn{color:var(--gold);}
+
+/* GRID LAYOUT */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+
+/* INSIGHT EDITOR */
+.editor-area{padding:20px;}
+.editor-lbl{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;font-family:var(--font-h);}
+.editor-input{width:100%;background:var(--off);border:0.5px solid var(--border);border-radius:12px;padding:12px 14px;font-family:var(--font-h);font-size:15px;font-weight:700;color:var(--ink);outline:none;margin-bottom:14px;}
+.editor-textarea{width:100%;background:var(--off);border:0.5px solid var(--border);border-radius:12px;padding:14px;font-family:var(--font-b);font-size:14px;color:var(--ink);outline:none;resize:vertical;min-height:140px;line-height:1.6;margin-bottom:14px;}
+.editor-select{background:var(--off);border:0.5px solid var(--border);border-radius:10px;padding:10px 14px;font-family:var(--font-b);font-size:13px;color:var(--ink);outline:none;width:100%;margin-bottom:14px;}
+.editor-tag-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.editor-tag{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;font-family:var(--font-h);cursor:pointer;border:1.5px solid transparent;}
+.editor-tag.gold-t{background:rgba(200,151,63,.1);color:var(--gold);border-color:transparent;}
+.editor-tag.gold-t.sel{border-color:var(--gold);}
+.editor-tag.green-t{background:rgba(29,185,84,.08);color:var(--green);}
+.editor-tag.green-t.sel{border-color:var(--green);}
+.editor-tag.gray-t{background:var(--off);color:var(--muted2);}
+.editor-tag.gray-t.sel{border-color:var(--muted2);}
+.tier-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;}
+.tier-opt{padding:10px;border-radius:12px;border:1.5px solid var(--border);text-align:center;cursor:pointer;}
+.tier-opt.sel{border-color:var(--gold);background:rgba(200,151,63,.06);}
+.tier-opt-name{font-family:var(--font-h);font-size:12px;font-weight:700;color:var(--ink);}
+.tier-opt-price{font-size:11px;color:var(--muted);}
+.publish-row{display:flex;gap:10px;align-items:center;}
+.publish-btn{flex:1;padding:14px;background:var(--ink);color:#fff;border:none;border-radius:12px;font-family:var(--font-h);font-size:14px;font-weight:700;cursor:pointer;}
+.schedule-btn{padding:14px 18px;background:var(--off);border:0.5px solid var(--border);color:var(--muted2);border-radius:12px;font-family:var(--font-h);font-size:14px;font-weight:700;cursor:pointer;}
+
+/* POST LIST */
+.post-row{display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:0.5px solid var(--border);}
+.post-row:last-child{border-bottom:none;}
+.post-tag{padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;font-family:var(--font-h);flex-shrink:0;}
+.post-tag.gold{background:rgba(200,151,63,.1);color:var(--gold);}
+.post-tag.green{background:rgba(29,185,84,.08);color:var(--green);}
+.post-tag.gray{background:var(--off);color:var(--muted);}
+.post-title{font-size:13px;font-weight:600;color:var(--ink);flex:1;line-height:1.3;}
+.post-meta{font-size:11px;color:var(--muted);margin-top:2px;}
+.post-actions{display:flex;gap:6px;flex-shrink:0;}
+
+/* USERS TABLE */
+.users-table{width:100%;border-collapse:collapse;}
+.users-table th{font-family:var(--font-h);font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;padding:10px 16px;border-bottom:1px solid var(--border);text-align:left;background:var(--off);}
+.users-table td{padding:12px 16px;border-bottom:0.5px solid var(--border);font-size:13px;color:var(--ink);vertical-align:middle;}
+.users-table tr:hover td{background:#FAFAF8;}
+.plan-badge{display:inline-flex;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;font-family:var(--font-h);}
+.plan-badge.basic{background:var(--off);color:var(--muted2);}
+.plan-badge.business{background:rgba(200,151,63,.1);color:var(--gold);}
+.plan-badge.institutional{background:var(--ink);color:var(--gold);}
+.plan-badge.none{background:var(--off);color:var(--muted);}
+
+/* SETTINGS */
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+
+/* SECTION LABEL */
+.page-section-lbl{font-family:var(--font-h);font-size:11px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin:0 0 12px;}
+
+/* SEARCH */
+.search-bar{display:flex;align-items:center;gap:10px;background:var(--off);border:0.5px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:16px;}
+.search-ico{font-size:14px;color:var(--muted);}
+.search-input{background:transparent;border:none;outline:none;font-family:var(--font-b);font-size:14px;color:var(--ink);flex:1;}
+.search-input::placeholder{color:var(--muted);}
+
+/* ORDER DETAIL PANEL */
+.detail-panel{background:#fff;border-radius:16px;border:0.5px solid var(--border);padding:20px;}
+.dp-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px;padding-bottom:18px;border-bottom:0.5px solid var(--border);}
+.dp-amount{font-family:var(--font-h);font-size:32px;font-weight:800;color:var(--ink);letter-spacing:-1px;}
+.dp-sub{font-size:13px;color:var(--muted);margin-top:3px;}
+.dp-rows{display:flex;flex-direction:column;gap:0;}
+.dp-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:0.5px solid var(--border);}
+.dp-row:last-child{border-bottom:none;}
+.dp-k{font-size:12px;color:var(--muted);}
+.dp-v{font-size:13px;font-weight:500;color:var(--ink);}
+.dp-v.green{color:var(--green);}
+.dp-v.gold{color:var(--gold);}
+.dp-v.mono{font-family:monospace;font-size:11px;}
+.proof-img{width:100%;border-radius:10px;background:var(--off);border:0.5px solid var(--border);height:100px;display:flex;align-items:center;justify-content:center;font-size:28px;margin:12px 0;color:var(--muted);}
+.dp-actions{display:flex;gap:8px;margin-top:16px;}
+.dp-act{flex:1;padding:12px;border:none;border-radius:12px;font-family:var(--font-h);font-size:13px;font-weight:700;cursor:pointer;}
+.dp-act.approve{background:var(--ink);color:#fff;}
+.dp-act.complete{background:var(--green);color:#fff;}
+.dp-act.cancel{background:rgba(224,82,82,.1);color:var(--red);}
+</style>
+</head>
+<body>
+
+<div class="admin-shell">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-text">Liquid.</div>
+      <div class="sidebar-logo-sub">Admin Panel</div>
+    </div>
+
+    <div class="sidebar-nav">
+      <div class="nav-group-lbl">Main</div>
+      <div class="nav-item active" onclick="showPage('dashboard')">
+        <div class="nav-item-ico gold">▦</div>
+        <div class="nav-item-label">Dashboard</div>
+      </div>
+      <div class="nav-item" onclick="showPage('orders')">
+        <div class="nav-item-ico gold">⇄</div>
+        <div class="nav-item-label">Orders</div>
+        <div class="nav-item-badge">3</div>
+      </div>
+
+      <div class="nav-group-lbl" style="margin-top:8px;">Intelligence</div>
+      <div class="nav-item" onclick="showPage('new-post')">
+        <div class="nav-item-ico green">✎</div>
+        <div class="nav-item-label">New Post</div>
+      </div>
+      <div class="nav-item" onclick="showPage('posts')">
+        <div class="nav-item-ico gray">◈</div>
+        <div class="nav-item-label">All Posts</div>
+      </div>
+
+      <div class="nav-group-lbl" style="margin-top:8px;">Management</div>
+      <div class="nav-item" onclick="showPage('users')">
+        <div class="nav-item-ico blue">👤</div>
+        <div class="nav-item-label">Users</div>
+      </div>
+      <div class="nav-item" onclick="showPage('settings')">
+        <div class="nav-item-ico gray">⚙</div>
+        <div class="nav-item-label">Settings</div>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">AD</div>
+        <div>
+          <div class="sidebar-user-name">Admin</div>
+          <div class="sidebar-user-role">Liquid Owner</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main">
+
+    <!-- ══════════ DASHBOARD ══════════ -->
+    <div class="page active" id="page-dashboard">
+      <div class="topbar">
+        <div class="topbar-title">Dashboard</div>
+        <div class="topbar-right">
+          <div style="font-size:12px;color:var(--muted);" id="live-clock">9:41 AM</div>
+          <div style="display:flex;align-items:center;gap:5px;padding:6px 12px;background:rgba(29,185,84,.1);border:0.5px solid rgba(29,185,84,.2);border-radius:20px;font-size:12px;color:var(--green);font-weight:700;font-family:'Syne',sans-serif;">
+            <div style="width:5px;height:5px;border-radius:50%;background:var(--green);"></div>Exchange Open
+          </div>
+        </div>
+      </div>
+      <div style="padding:24px 28px;">
+
+        <!-- Stats -->
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-label">Today's Volume</div>
+            <div class="stat-value gold">₦2.3M</div>
+            <div class="stat-sub"><span class="stat-trend up">▲ 18%</span> vs yesterday</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Spread Earned Today</div>
+            <div class="stat-value green">₦41,400</div>
+            <div class="stat-sub">14 orders processed</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Active Subscribers</div>
+            <div class="stat-value">28</div>
+            <div class="stat-sub"><span class="stat-trend up">▲ 3</span> new this month</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Subscription Revenue</div>
+            <div class="stat-value gold">₦810K</div>
+            <div class="stat-sub">Monthly recurring</div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+
+          <!-- Live Rate Setter -->
+          <div class="sec-card">
+            <div class="sec-card-header">
+              <div class="sec-card-title">Exchange Rates</div>
+              <div style="font-size:11px;color:var(--muted);">Update daily from Bitget</div>
+            </div>
+            <div class="rate-row">
+              <div class="rate-ico" style="background:rgba(29,185,84,.1);">↓</div>
+              <div class="rate-info">
+                <div class="rate-name">Buy Rate (users pay per USDT)</div>
+                <div class="rate-desc">Set this higher than your Bitget buy price</div>
+              </div>
+              <div class="rate-input-wrap">
+                <div class="rate-prefix">₦</div>
+                <input class="rate-input" type="number" value="1538" id="buy-rate"/>
+                <button class="rate-save-btn gold" onclick="saveRate('buy')">Save</button>
+              </div>
+            </div>
+            <div class="rate-row">
+              <div class="rate-ico" style="background:rgba(200,151,63,.1);">↑</div>
+              <div class="rate-info">
+                <div class="rate-name">Sell Rate (users receive per USDT)</div>
+                <div class="rate-desc">Set this lower than your Bitget sell price</div>
+              </div>
+              <div class="rate-input-wrap">
+                <div class="rate-prefix">₦</div>
+                <input class="rate-input" type="number" value="1520" id="sell-rate"/>
+                <button class="rate-save-btn gold" onclick="saveRate('sell')">Save</button>
+              </div>
+            </div>
+            <div class="rate-row" style="border-top:1px solid var(--border);margin-top:4px;">
+              <div class="rate-ico" style="background:rgba(59,130,246,.1);">📊</div>
+              <div class="rate-info">
+                <div class="rate-name">Your spread per USDT</div>
+                <div class="rate-desc">Buy–Sell difference = your profit margin</div>
+              </div>
+              <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--green);" id="spread-display">₦18</div>
+            </div>
+          </div>
+
+          <!-- Pending Orders Quick View -->
+          <div class="sec-card">
+            <div class="sec-card-header">
+              <div class="sec-card-title">Pending Orders</div>
+              <div class="sec-card-action" onclick="showPage('orders')">View all →</div>
+            </div>
+            <!-- Order 1 -->
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:0.5px solid var(--border);">
+              <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-l));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:11px;font-weight:800;color:#fff;flex-shrink:0;">CA</div>
+              <div style="flex:1;">
+                <div style="font-size:13px;font-weight:500;color:var(--ink);">Chioma A. — Buy 500 USDT</div>
+                <div style="font-size:11px;color:var(--muted);margin-top:1px;">₦769,000 · Proof uploaded ✓</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+                <div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--green);" class="timer-cell ok">17:42</div>
+                <div style="display:flex;gap:4px;">
+                  <button class="act-btn approve" onclick="showPage('orders')">Approve</button>
+                </div>
+              </div>
+            </div>
+            <!-- Order 2 -->
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:0.5px solid var(--border);">
+              <div style="width:36px;height:36px;border-radius:50%;background:var(--ink);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:11px;font-weight:800;color:var(--gold);flex-shrink:0;">EO</div>
+              <div style="flex:1;">
+                <div style="font-size:13px;font-weight:500;color:var(--ink);">Emeka O. — Sell 200 USDT</div>
+                <div style="font-size:11px;color:var(--muted);">Awaiting USDT transfer</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+                <div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--gold);" class="timer-cell warn">08:15</div>
+                <div style="display:flex;gap:4px;"><button class="act-btn view">View</button></div>
+              </div>
+            </div>
+            <!-- Order 3 -->
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 18px;">
+              <div style="width:36px;height:36px;border-radius:50%;background:rgba(224,82,82,.1);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:11px;font-weight:800;color:var(--red);flex-shrink:0;">TB</div>
+              <div style="flex:1;">
+                <div style="font-size:13px;font-weight:500;color:var(--ink);">Tunde B. — Buy 100 USDT</div>
+                <div style="font-size:11px;color:var(--red);margin-top:1px;">⏰ Timer expired — no proof</div>
+              </div>
+              <div style="display:flex;gap:4px;">
+                <button class="act-btn cancel">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Exchange Controls -->
+        <div class="sec-card">
+          <div class="sec-card-header"><div class="sec-card-title">Exchange Controls</div></div>
+          <div class="toggle-row">
+            <div class="rate-ico" style="background:rgba(29,185,84,.1);">🔛</div>
+            <div class="toggle-info">
+              <div class="toggle-label">Exchange Status</div>
+              <div class="toggle-sub">Toggle to open or close the exchange for all users. Users will see your message when closed.</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="font-size:13px;font-weight:600;color:var(--green);" id="exchange-status-lbl">OPEN</div>
+              <div style="position:relative;width:52px;height:28px;cursor:pointer;" onclick="toggleExchange()">
+                <div class="toggle-track on" id="exchange-toggle"><div class="toggle-thumb"></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="toggle-row">
+            <div class="rate-ico" style="background:rgba(59,130,246,.1);">📢</div>
+            <div class="toggle-info">
+              <div class="toggle-label">Closed Message (shown to users)</div>
+              <div class="toggle-sub">This message shows on the Exchange screen when you toggle it off.</div>
+            </div>
+            <input style="flex:1;max-width:320px;background:var(--off);border:0.5px solid var(--border);border-radius:10px;padding:8px 12px;font-family:'Inter',sans-serif;font-size:13px;color:var(--ink);outline:none;" value="Back online Monday 9am. Happy weekend! 🙏"/>
+          </div>
+          <div class="toggle-row">
+            <div class="rate-ico" style="background:rgba(200,151,63,.1);">⚡</div>
+            <div class="toggle-info">
+              <div class="toggle-label">Order Limits</div>
+              <div class="toggle-sub">Min and max USDT per order. Protects your liquidity.</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="font-size:12px;color:var(--muted);">Min</span>
+              <input style="width:70px;background:var(--off);border:0.5px solid var(--border);border-radius:10px;padding:7px 10px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--ink);outline:none;text-align:center;" value="50"/>
+              <span style="font-size:12px;color:var(--muted);">Max</span>
+              <input style="width:80px;background:var(--off);border:0.5px solid var(--border);border-radius:10px;padding:7px 10px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--ink);outline:none;text-align:center;" value="2000"/>
+              <span style="font-size:12px;color:var(--muted);">USDT</span>
+              <button class="rate-save-btn gold">Save</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══════════ ORDERS ══════════ -->
+    <div class="page" id="page-orders">
+      <div class="topbar">
+        <div class="topbar-title">Orders</div>
+        <div class="topbar-right">
+          <div style="display:flex;gap:8px;">
+            <div style="padding:7px 14px;background:var(--off);border:0.5px solid var(--gold);border-radius:20px;font-size:12px;color:var(--gold);font-weight:700;font-family:'Syne',sans-serif;cursor:pointer;">Pending (3)</div>
+            <div style="padding:7px 14px;background:var(--off);border:0.5px solid var(--border);border-radius:20px;font-size:12px;color:var(--muted);cursor:pointer;">All</div>
+            <div style="padding:7px 14px;background:var(--off);border:0.5px solid var(--border);border-radius:20px;font-size:12px;color:var(--muted);cursor:pointer;">Completed</div>
+          </div>
+        </div>
+      </div>
+      <div style="padding:24px 28px;">
+        <div class="grid-2">
+          <!-- Order table -->
+          <div style="grid-column:1/3;">
+            <div class="sec-card">
+              <div class="sec-card-header"><div class="sec-card-title">All Pending Orders</div></div>
+              <div style="overflow-x:auto;">
+                <table class="orders-table">
+                  <thead>
+                    <tr><th>User</th><th>Type</th><th>Amount</th><th>Naira</th><th>Status</th><th>Timer</th><th>Actions</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><div class="order-user"><div class="order-avatar">CA</div><div><div class="order-name">Chioma Adeyemi</div><div class="order-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="204348494f4d4160454d41494c0e434f4d">[email&#160;protected]</a></div></div></div></td>
+                      <td><span class="badge buy">↓ Buy</span></td>
+                      <td><strong>500 USDT</strong></td>
+                      <td>₦769,000</td>
+                      <td><span class="badge proof">Proof Uploaded</span></td>
+                      <td><span class="timer-cell ok">17:42</span></td>
+                      <td><div class="action-btns"><button class="act-btn view" onclick="showOrderDetail()">View</button><button class="act-btn approve">Approve ✓</button><button class="act-btn cancel">Cancel</button></div></td>
+                    </tr>
+                    <tr>
+                      <td><div class="order-user"><div class="order-avatar" style="background:var(--ink);color:var(--gold);">EO</div><div><div class="order-name">Emeka Okafor</div><div class="order-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3c595159575d7c59515d5550125f5351">[email&#160;protected]</a></div></div></div></td>
+                      <td><span class="badge sell">↑ Sell</span></td>
+                      <td><strong>200 USDT</strong></td>
+                      <td>₦304,000</td>
+                      <td><span class="badge pending">Awaiting USDT</span></td>
+                      <td><span class="timer-cell warn">08:15</span></td>
+                      <td><div class="action-btns"><button class="act-btn view">View</button><button class="act-btn complete">Mark Complete</button></div></td>
+                    </tr>
+                    <tr>
+                      <td><div class="order-user"><div class="order-avatar" style="background:rgba(224,82,82,.15);color:var(--red);">TB</div><div><div class="order-name">Tunde Bello</div><div class="order-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2357564d474663464e424a4f0d404c4e">[email&#160;protected]</a></div></div></div></td>
+                      <td><span class="badge buy">↓ Buy</span></td>
+                      <td><strong>100 USDT</strong></td>
+                      <td>₦153,800</td>
+                      <td><span class="badge expired">Expired</span></td>
+                      <td><span class="timer-cell urgent">00:00</span></td>
+                      <td><div class="action-btns"><button class="act-btn cancel">Cancel</button></div></td>
+                    </tr>
+                    <tr style="opacity:.55;">
+                      <td><div class="order-user"><div class="order-avatar" style="background:rgba(29,185,84,.15);color:var(--green);">AN</div><div><div class="order-name">Ada Nwosu</div><div class="order-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8eefeaefceebe3efe7e2a0ede1e3">[email&#160;protected]</a></div></div></div></td>
+                      <td><span class="badge buy">↓ Buy</span></td>
+                      <td><strong>1,000 USDT</strong></td>
+                      <td>₦1,538,000</td>
+                      <td><span class="badge complete">Completed ✓</span></td>
+                      <td style="color:var(--muted);">—</td>
+                      <td><div class="action-btns"><button class="act-btn view">View</button></div></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Detail Panel (shown when View clicked) -->
+        <div id="order-detail" style="display:none;">
+          <div class="page-section-lbl">Order Detail</div>
+          <div class="grid-2">
+            <div class="detail-panel">
+              <div class="dp-header">
+                <div><div class="dp-amount">500 USDT</div><div class="dp-sub">Order #LQ-2025-0848 · Buy · Today 09:40 AM</div></div>
+                <span class="badge proof">Proof Uploaded</span>
+              </div>
+              <div class="dp-rows">
+                <div class="dp-row"><span class="dp-k">User</span><span class="dp-v">Chioma Adeyemi</span></div>
+                <div class="dp-row"><span class="dp-k">Email</span><span class="dp-v"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="92f1fafbfdfff3d2f7fff3fbfebcf1fdff">[email&#160;protected]</a></span></div>
+                <div class="dp-row"><span class="dp-k">Naira amount</span><span class="dp-v green">₦769,000</span></div>
+                <div class="dp-row"><span class="dp-k">Rate applied</span><span class="dp-v">₦1,538 / USDT</span></div>
+                <div class="dp-row"><span class="dp-k">USDT wallet (send to)</span><span class="dp-v mono">TRx9K...4mBc</span></div>
+              </div>
+              <div class="proof-img">📎 Payment Screenshot</div>
+              <div class="dp-actions">
+                <button class="dp-act approve" onclick="document.getElementById('order-detail').style.display='none'">Approve ✓</button>
+                <button class="dp-act cancel" onclick="document.getElementById('order-detail').style.display='none'">Cancel ✕</button>
+              </div>
+            </div>
+            <div>
+              <div class="detail-panel" style="margin-bottom:14px;">
+                <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Admin Notes</div>
+                <textarea style="width:100%;background:var(--off);border:0.5px solid var(--border);border-radius:10px;padding:12px;font-family:'Inter',sans-serif;font-size:13px;color:var(--ink);outline:none;resize:none;height:80px;" placeholder="Add notes about this order..."></textarea>
+                <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:1px;margin:12px 0 8px;">Bitget Transaction ID (after sending)</div>
+                <input style="width:100%;background:var(--off);border:0.5px solid var(--border);border-radius:10px;padding:10px 12px;font-family:monospace;font-size:12px;color:var(--ink);outline:none;" placeholder="Paste TxID here after sending USDT"/>
+                <button class="dp-act complete" style="width:100%;margin-top:10px;padding:12px;" onclick="document.getElementById('order-detail').style.display='none'">Mark as Complete ✓</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ NEW POST ══════════ -->
+    <div class="page" id="page-new-post">
+      <div class="topbar">
+        <div class="topbar-title">New Intelligence Post</div>
+        <div class="topbar-right">
+          <button class="topbar-btn outline">Save Draft</button>
+          <button class="topbar-btn gold">Publish Now</button>
+        </div>
+      </div>
+      <div style="padding:24px 28px;">
+        <div class="grid-2">
+          <div>
+            <div class="sec-card" style="margin-bottom:20px;">
+              <div class="sec-card-header"><div class="sec-card-title">Post Content</div></div>
+              <div class="editor-area">
+                <div class="editor-lbl">Post Title</div>
+                <input class="editor-input" type="text" placeholder="e.g. BTC liquidity conditions — what to expect in Q2" value="Liquidity conditions signal a risk-on shift entering Q2 2025"/>
+                <div class="editor-lbl">Content</div>
+                <textarea class="editor-textarea" placeholder="Write your market outlook here...">Global M2 expansion is accelerating. Historical patterns suggest capital rotation into digital assets may begin within 6–8 weeks as dollar liquidity improves.
+
+Key data points to watch:
+— US M2 YoY growth turning positive
+— Fed balance sheet stabilising
+— Crypto market dominance shifting
+
+For Business subscribers: full allocation framework in next section.</textarea>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="sec-card" style="margin-bottom:14px;">
+              <div class="sec-card-header"><div class="sec-card-title">Post Settings</div></div>
+              <div class="editor-area">
+                <div class="editor-lbl">Category Tag</div>
+                <div class="editor-tag-row">
+                  <div class="editor-tag gold-t sel">Macro Outlook</div>
+                  <div class="editor-tag green-t">Allocation Strategy</div>
+                  <div class="editor-tag gray-t">Private Strategy</div>
+                  <div class="editor-tag gold-t">Liquidity Insights</div>
+                </div>
+
+                <div class="editor-lbl">Access Tier</div>
+                <div class="tier-row">
+                  <div class="tier-opt"><div class="tier-opt-name">Basic</div><div class="tier-opt-price">₦15K/mo</div></div>
+                  <div class="tier-opt sel"><div class="tier-opt-name">Business</div><div class="tier-opt-price">₦45K/mo</div></div>
+                  <div class="tier-opt"><div class="tier-opt-name">Institutional</div><div class="tier-opt-price">₦120K/mo</div></div>
+                </div>
+
+                <div class="editor-lbl">Publish Time</div>
+                <select class="editor-select">
+                  <option>Publish immediately</option>
+                  <option>Schedule for later</option>
+                </select>
+
+                <div class="publish-row">
+                  <button class="publish-btn">Publish Post →</button>
+                  <button class="schedule-btn">🕐</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Preview card -->
+            <div style="background:var(--ink);border-radius:16px;padding:18px;border:0.5px solid rgba(255,255,255,.08);">
+              <div style="font-size:10px;color:rgba(255,255,255,.3);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;font-family:'Syne',sans-serif;">Preview — how users see it</div>
+              <div style="display:inline-flex;padding:3px 10px;border-radius:20px;background:rgba(200,151,63,.1);color:var(--gold);font-size:10px;font-weight:700;font-family:'Syne',sans-serif;margin-bottom:9px;text-transform:uppercase;">Macro Outlook</div>
+              <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:#fff;line-height:1.3;margin-bottom:7px;">Liquidity conditions signal a risk-on shift entering Q2 2025</div>
+              <div style="font-size:12px;color:rgba(255,255,255,.4);line-height:1.6;margin-bottom:10px;">Global M2 expansion is accelerating. Historical patterns suggest capital rotation into digital assets...</div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.3);">
+                <span>Mar 18, 2025</span>
+                <span style="background:rgba(255,255,255,.05);border-radius:20px;padding:2px 9px;">◈ Business & above</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ POSTS LIST ══════════ -->
+    <div class="page" id="page-posts">
+      <div class="topbar">
+        <div class="topbar-title">Intelligence Posts</div>
+        <div class="topbar-right">
+          <button class="topbar-btn gold" onclick="showPage('new-post')">+ New Post</button>
+        </div>
+      </div>
+      <div style="padding:24px 28px;">
+        <div class="sec-card">
+          <div class="sec-card-header"><div class="sec-card-title">Published</div></div>
+          <div class="post-row">
+            <div class="post-tag gold">Macro Outlook</div>
+            <div style="flex:1;"><div class="post-title">Liquidity conditions signal a risk-on shift entering Q2 2025</div><div class="post-meta">Business & above · Mar 17, 2025 · 142 views</div></div>
+            <div class="post-actions"><button class="act-btn view">Edit</button><button class="act-btn cancel">Delete</button></div>
+          </div>
+          <div class="post-row">
+            <div class="post-tag green">Allocation Strategy</div>
+            <div style="flex:1;"><div class="post-title">Defensive positioning with asymmetric upside — the current framework</div><div class="post-meta">Business & above · Mar 15, 2025 · 98 views</div></div>
+            <div class="post-actions"><button class="act-btn view">Edit</button><button class="act-btn cancel">Delete</button></div>
+          </div>
+          <div class="post-row">
+            <div class="post-tag gold">Liquidity Insights</div>
+            <div style="flex:1;"><div class="post-title">Weekly market outlook — week of Mar 10</div><div class="post-meta">Basic & above · Mar 10, 2025 · 201 views</div></div>
+            <div class="post-actions"><button class="act-btn view">Edit</button><button class="act-btn cancel">Delete</button></div>
+          </div>
+          <div class="post-row">
+            <div class="post-tag gray">Private Strategy</div>
+            <div style="flex:1;"><div class="post-title">Institutional capital flow briefing — March 2025</div><div class="post-meta">Institutional only · Mar 5, 2025 · 12 views</div></div>
+            <div class="post-actions"><button class="act-btn view">Edit</button><button class="act-btn cancel">Delete</button></div>
+          </div>
+        </div>
+        <div class="sec-card">
+          <div class="sec-card-header"><div class="sec-card-title">Drafts</div></div>
+          <div class="post-row">
+            <div class="post-tag" style="background:var(--off);color:var(--muted);">Draft</div>
+            <div style="flex:1;"><div class="post-title" style="color:var(--muted);">BTC halving impact on liquidity — analysis in progress</div><div class="post-meta">Not published · Last edited today</div></div>
+            <div class="post-actions"><button class="act-btn view">Edit</button><button class="act-btn approve" onclick="showPage('new-post')">Publish</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ USERS ══════════ -->
+    <div class="page" id="page-users">
+      <div class="topbar">
+        <div class="topbar-title">Users</div>
+        <div class="topbar-right">
+          <div style="font-size:13px;color:var(--muted);">28 total · 3 new this month</div>
+        </div>
+      </div>
+      <div style="padding:24px 28px;">
+        <div class="search-bar">
+          <div class="search-ico">🔍</div>
+          <input class="search-input" placeholder="Search by name or email..."/>
+        </div>
+        <div class="sec-card">
+          <table class="users-table">
+            <thead><tr><th>User</th><th>Plan</th><th>Orders</th><th>Joined</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td><div class="order-user"><div class="order-avatar">CA</div><div><div class="order-name">Chioma Adeyemi</div><div class="order-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="75161d1c1a1814351018141c195b161a18">[email&#160;protected]</a></div></div></div></td><td><span class="plan-badge business">Business</span></td><td>14</td><td>Jan 5, 2025</td><td><div class="action-btns"><button class="act-btn view">View</button><select style="border:0.5px solid var(--border);border-radius:8px;padding:5px 8px;font-size:11px;color:var(--ink);background:var(--off);cursor:pointer;"><option>Business</option><option>Basic</option><option>Institutional</option><option>None</option></select></div></td></tr>
+              <tr><td><div class="order-user"><div class="order-avatar" style="background:var(--ink);color:var(--gold);">EO</div><div><div class="order-name">Emeka Okafor</div><div class="order-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f3969e969892b3969e929a9fdd909c9e">[email&#160;protected]</a></div></div></div></td><td><span class="plan-badge institutional">Institutional</span></td><td>7</td><td>Feb 12, 2025</td><td><div class="action-btns"><button class="act-btn view">View</button><select style="border:0.5px solid var(--border);border-radius:8px;padding:5px 8px;font-size:11px;color:var(--ink);background:var(--off);cursor:pointer;"><option>Institutional</option><option>Business</option><option>Basic</option><option>None</option></select></div></td></tr>
+              <tr><td><div class="order-user"><div class="order-avatar" style="background:rgba(29,185,84,.15);color:var(--green);">AN</div><div><div class="order-name">Ada Nwosu</div><div class="order-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5a3b3e3b1a3f373b333674393537">[email&#160;protected]</a></div></div></div></td><td><span class="plan-badge basic">Basic</span></td><td>3</td><td>Mar 1, 2025</td><td><div class="action-btns"><button class="act-btn view">View</button><select style="border:0.5px solid var(--border);border-radius:8px;padding:5px 8px;font-size:11px;color:var(--ink);background:var(--off);cursor:pointer;"><option>Basic</option><option>Business</option><option>Institutional</option><option>None</option></select></div></td></tr>
+              <tr><td><div class="order-user"><div class="order-avatar" style="background:rgba(224,82,82,.12);color:var(--red);">TB</div><div><div class="order-name">Tunde Bello</div><div class="order-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1b6f6e757f7e5b7e767a727735787476">[email&#160;protected]</a></div></div></div></td><td><span class="plan-badge none">No plan</span></td><td>1</td><td>Mar 15, 2025</td><td><div class="action-btns"><button class="act-btn view">View</button><select style="border:0.5px solid var(--border);border-radius:8px;padding:5px 8px;font-size:11px;color:var(--ink);background:var(--off);cursor:pointer;"><option>None</option><option>Basic</option><option>Business</option><option>Institutional</option></select></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ SETTINGS ══════════ -->
+    <div class="page" id="page-settings">
+      <div class="topbar"><div class="topbar-title">Settings</div></div>
+      <div style="padding:24px 28px;">
+        <div class="settings-grid">
+          <div>
+            <div class="sec-card" style="margin-bottom:20px;">
+              <div class="sec-card-header"><div class="sec-card-title">Announcement Banner</div></div>
+              <div class="editor-area">
+                <div class="editor-lbl">Message (shown at top of user app)</div>
+                <input class="editor-input" type="text" placeholder="Leave blank to hide banner" value="Rates update daily at 9am WAT. Exchange closes weekends."/>
+                <div style="display:flex;gap:8px;margin-top:-4px;">
+                  <button style="flex:1;padding:12px;background:var(--ink);color:#fff;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">Publish Banner</button>
+                  <button style="padding:12px 16px;background:var(--off);border:0.5px solid var(--border);border-radius:12px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;">Clear</button>
+                </div>
+              </div>
+            </div>
+            <div class="sec-card">
+              <div class="sec-card-header"><div class="sec-card-title">Admin Account</div></div>
+              <div class="editor-area">
+                <div class="editor-lbl">Admin Email</div>
+                <input class="editor-input" type="email" value="admin@liquidng.com"/>
+                <div class="editor-lbl">Change Password</div>
+                <input class="editor-input" type="password" placeholder="New password"/>
+                <button style="width:100%;padding:12px;background:var(--ink);color:#fff;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-top:-4px;">Save Changes</button>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="sec-card" style="margin-bottom:20px;">
+              <div class="sec-card-header"><div class="sec-card-title">Telegram Notifications</div></div>
+              <div class="editor-area">
+                <div class="editor-lbl">Telegram Bot Token</div>
+                <input class="editor-input" type="text" placeholder="7412345678:AAF..." style="font-family:monospace;font-size:13px;"/>
+                <div class="editor-lbl">Your Telegram Chat ID</div>
+                <input class="editor-input" type="text" placeholder="123456789"/>
+                <div style="background:rgba(29,185,84,.06);border:0.5px solid rgba(29,185,84,.2);border-radius:12px;padding:12px;margin-bottom:14px;font-size:12px;color:rgba(0,0,0,.6);line-height:1.5;">Get your Chat ID from <strong>@userinfobot</strong> on Telegram. You'll get a message with your ID.</div>
+                <button style="width:100%;padding:12px;background:var(--ink);color:#fff;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">Save & Test Notification</button>
+              </div>
+            </div>
+            <div class="sec-card">
+              <div class="sec-card-header"><div class="sec-card-title">Notification Triggers</div></div>
+              <div class="toggle-row"><div class="toggle-info"><div class="toggle-label" style="font-size:13px;">New order placed</div></div><div class="toggle-track on" style="position:relative;width:44px;height:24px;border-radius:12px;cursor:pointer;"><div style="position:absolute;top:3px;left:21px;width:18px;height:18px;border-radius:50%;background:#fff;"></div></div></div>
+              <div class="toggle-row"><div class="toggle-info"><div class="toggle-label" style="font-size:13px;">Proof uploaded</div></div><div class="toggle-track on" style="position:relative;width:44px;height:24px;border-radius:12px;cursor:pointer;"><div style="position:absolute;top:3px;left:21px;width:18px;height:18px;border-radius:50%;background:#fff;"></div></div></div>
+              <div class="toggle-row"><div class="toggle-info"><div class="toggle-label" style="font-size:13px;">Order expired (no action)</div></div><div class="toggle-track" style="background:#ddd;position:relative;width:44px;height:24px;border-radius:12px;cursor:pointer;"><div style="position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;"></div></div></div>
+              <div class="toggle-row" style="border-bottom:none;"><div class="toggle-info"><div class="toggle-label" style="font-size:13px;">New subscriber</div></div><div class="toggle-track on" style="position:relative;width:44px;height:24px;border-radius:12px;cursor:pointer;"><div style="position:absolute;top:3px;left:21px;width:18px;height:18px;border-radius:50%;background:#fff;"></div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /shell -->
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- ADMIN MISSING SCREENS — shown as standalone previews  -->
+<!-- below the main shell for reference                    -->
+<!-- ══════════════════════════════════════════════════════ -->
+
+<div style="background:#0A0A0A;padding:40px 0;">
+  <div style="text-align:center;font-family:var(--font-h);font-size:10px;font-weight:700;letter-spacing:3px;color:rgba(255,255,255,0.15);text-transform:uppercase;margin-bottom:40px;">Additional Admin States &amp; Panels</div>
+
+  <!-- ══ ADMIN STATE 1: USER DETAIL PANEL ══ -->
+  <div style="max-width:1100px;margin:0 auto 48px;padding:0 28px;">
+    <div style="font-family:var(--font-h);font-size:11px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,0.25);text-transform:uppercase;margin-bottom:16px;">Admin State · Users → View User Detail Panel</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+
+      <!-- Left: Users table (same as existing, user row highlighted) -->
+      <div style="background:#fff;border-radius:16px;border:0.5px solid var(--border);overflow:hidden;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:0.5px solid var(--border);">
+          <div style="font-family:var(--font-h);font-size:15px;font-weight:700;color:var(--ink);">Users</div>
+          <div style="font-size:12px;color:var(--muted);">28 total</div>
+        </div>
+        <table style="width:100%;border-collapse:collapse;">
+          <thead><tr>
+            <th style="font-family:var(--font-h);font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;padding:10px 16px;border-bottom:1px solid var(--border);text-align:left;background:var(--off);">User</th>
+            <th style="font-family:var(--font-h);font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;padding:10px 16px;border-bottom:1px solid var(--border);text-align:left;background:var(--off);">Plan</th>
+            <th style="font-family:var(--font-h);font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;padding:10px 16px;border-bottom:1px solid var(--border);text-align:left;background:var(--off);">Orders</th>
+          </tr></thead>
+          <tbody>
+            <!-- Highlighted active row -->
+            <tr style="background:rgba(200,151,63,0.04);border-left:2px solid var(--gold);">
+              <td style="padding:12px 16px;font-size:13px;color:var(--ink);border-bottom:0.5px solid var(--border);">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-l));display:flex;align-items:center;justify-content:center;font-family:var(--font-h);font-size:11px;font-weight:800;color:#fff;">CA</div>
+                  <div><div style="font-size:13px;font-weight:500;">Chioma Adeyemi</div><div style="font-size:11px;color:var(--muted);"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="35565d5c5a5854755058545c591b565a58">[email&#160;protected]</a></div></div>
+                </div>
+              </td>
+              <td style="padding:12px 16px;border-bottom:0.5px solid var(--border);"><span class="plan-badge business">Business</span></td>
+              <td style="padding:12px 16px;border-bottom:0.5px solid var(--border);">14</td>
+            </tr>
+            <tr style="opacity:0.5;"><td style="padding:12px 16px;font-size:13px;border-bottom:0.5px solid var(--border);"><div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:50%;background:var(--ink);display:flex;align-items:center;justify-content:center;font-family:var(--font-h);font-size:11px;font-weight:800;color:var(--gold);">EO</div><div><div>Emeka Okafor</div><div style="font-size:11px;color:var(--muted);"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9df8f0f8f6fcddf8f0fcf4f1b3fef2f0">[email&#160;protected]</a></div></div></div></td><td style="padding:12px 16px;border-bottom:0.5px solid var(--border);"><span class="plan-badge institutional">Institutional</span></td><td style="padding:12px 16px;border-bottom:0.5px solid var(--border);">7</td></tr>
+            <tr style="opacity:0.5;"><td style="padding:12px 16px;font-size:13px;"><div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:50%;background:rgba(29,185,84,.15);display:flex;align-items:center;justify-content:center;font-family:var(--font-h);font-size:11px;font-weight:800;color:var(--green);">AN</div><div><div>Ada Nwosu</div><div style="font-size:11px;color:var(--muted);"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5c3d383d1c39313d3530723f3331">[email&#160;protected]</a></div></div></div></td><td style="padding:12px 16px;"><span class="plan-badge basic">Basic</span></td><td style="padding:12px 16px;">3</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Right: User Detail Panel slides in -->
+      <div style="background:#fff;border-radius:16px;border:1.5px solid var(--gold);overflow:hidden;">
+        <!-- Panel header -->
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:0.5px solid var(--border);">
+          <div style="font-family:var(--font-h);font-size:15px;font-weight:700;color:var(--ink);">User Detail</div>
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--off);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;color:var(--muted);">✕</div>
+        </div>
+        <!-- Profile -->
+        <div style="padding:20px;border-bottom:0.5px solid var(--border);">
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+            <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-l));display:flex;align-items:center;justify-content:center;font-family:var(--font-h);font-size:18px;font-weight:800;color:#fff;">CA</div>
+            <div>
+              <div style="font-family:var(--font-h);font-size:17px;font-weight:700;color:var(--ink);">Chioma Adeyemi</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:2px;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b1d2d9d8dedcd0f1d4dcd0d8dd9fd2dedc">[email&#160;protected]</a> · 08031234567</div>
+              <div style="margin-top:6px;display:inline-flex;"><span class="plan-badge business">Business Plan</span></div>
+            </div>
+          </div>
+          <!-- Stats row -->
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+            <div style="background:var(--off);border-radius:10px;padding:10px;text-align:center;">
+              <div style="font-family:var(--font-h);font-size:18px;font-weight:800;color:var(--ink);">14</div>
+              <div style="font-size:11px;color:var(--muted);">Total Orders</div>
+            </div>
+            <div style="background:var(--off);border-radius:10px;padding:10px;text-align:center;">
+              <div style="font-family:var(--font-h);font-size:18px;font-weight:800;color:var(--green);">₦2.8M</div>
+              <div style="font-size:11px;color:var(--muted);">Total Volume</div>
+            </div>
+            <div style="background:var(--off);border-radius:10px;padding:10px;text-align:center;">
+              <div style="font-family:var(--font-h);font-size:18px;font-weight:800;color:var(--ink);">Jan 5</div>
+              <div style="font-size:11px;color:var(--muted);">Joined</div>
+            </div>
+          </div>
+        </div>
+        <!-- Plan change -->
+        <div style="padding:16px 20px;border-bottom:0.5px solid var(--border);">
+          <div style="font-family:var(--font-h);font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Change Plan</div>
+          <div style="display:flex;gap:8px;">
+            <select style="flex:1;background:var(--off);border:0.5px solid var(--border);border-radius:10px;padding:9px 12px;font-family:var(--font-b);font-size:13px;color:var(--ink);outline:none;">
+              <option>Business (current)</option><option>Basic</option><option>Institutional</option><option>None</option>
+            </select>
+            <button style="padding:9px 16px;background:var(--ink);color:#fff;border:none;border-radius:10px;font-family:var(--font-h);font-size:12px;font-weight:700;cursor:pointer;">Update</button>
+          </div>
+        </div>
+        <!-- Recent orders -->
+        <div style="padding:16px 20px;">
+          <div style="font-family:var(--font-h);font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;">Recent Orders</div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:0.5px solid var(--border);font-size:12px;"><span style="color:var(--muted);">#LQ-0848 · Buy 200 USDT</span><span style="color:var(--green);font-weight:600;">Completed</span></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:0.5px solid var(--border);font-size:12px;"><span style="color:var(--muted);">#LQ-0844 · Sell 500 USDT</span><span style="color:var(--green);font-weight:600;">Completed</span></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0;font-size:12px;"><span style="color:var(--muted);">#LQ-0839 · Buy 1,000 USDT</span><span style="color:var(--green);font-weight:600;">Completed</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ADMIN STATE 2: EDIT POST MODE ══ -->
+  <div style="max-width:1100px;margin:0 auto 48px;padding:0 28px;">
+    <div style="font-family:var(--font-h);font-size:11px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,0.25);text-transform:uppercase;margin-bottom:16px;">Admin State · All Posts → Edit Post (pre-filled form)</div>
+    <div style="background:#fff;border-radius:16px;border:0.5px solid var(--border);overflow:hidden;">
+      <!-- Topbar in edit mode -->
+      <div style="background:#fff;border-bottom:0.5px solid var(--border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="font-family:var(--font-h);font-size:18px;font-weight:700;color:var(--ink);">Edit Post</div>
+          <!-- Edit mode indicator badge -->
+          <div style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;background:rgba(200,151,63,0.1);border:0.5px solid rgba(200,151,63,0.2);border-radius:20px;font-size:11px;color:var(--gold);font-family:var(--font-h);font-weight:700;">✎ Editing existing post</div>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button style="padding:8px 16px;border-radius:10px;font-family:var(--font-h);font-size:12px;font-weight:700;cursor:pointer;border:none;background:transparent;border:0.5px solid var(--border);color:var(--muted);">Discard Changes</button>
+          <button style="padding:8px 16px;border-radius:10px;font-family:var(--font-h);font-size:12px;font-weight:700;cursor:pointer;border:none;background:var(--ink);color:#fff;">Update Post ✓</button>
+        </div>
+      </div>
+      <div style="padding:24px 28px;">
+        <div style="display:grid;grid-template-columns:1fr 380px;gap:24px;">
+          <!-- Left: Editor pre-filled -->
+          <div>
+            <div class="editor-lbl">Post Title</div>
+            <input class="editor-input" type="text" value="Liquidity conditions signal a risk-on shift in Q2 2025"/>
+            <div class="editor-lbl">Content</div>
+            <textarea class="editor-textarea" style="height:180px;">Global M2 expansion is accelerating across major central bank balance sheets. The Fed's net reserve position has begun expanding for the first time since Q3 2023, and historical precedent suggests capital rotation into risk assets follows within a 6–8 week lag.
+
+What this means for your portfolio: BTC dominance is likely to compress from current levels as altcoin liquidity improves.</textarea>
+            <!-- Last edited info -->
+            <div style="font-size:12px;color:var(--muted);margin-top:4px;">Last edited: Today at 2:14 PM · Originally published: Mar 17, 2025</div>
+          </div>
+          <!-- Right: Settings pre-filled -->
+          <div>
+            <div style="background:var(--off);border-radius:14px;padding:18px;margin-bottom:14px;">
+              <div class="editor-lbl">Category Tag</div>
+              <div class="editor-tag-row">
+                <div class="editor-tag gold-t sel">Macro Outlook</div>
+                <div class="editor-tag green-t">Allocation Strategy</div>
+                <div class="editor-tag gray-t">Private Strategy</div>
+              </div>
+              <div class="editor-lbl">Access Tier</div>
+              <div class="tier-row">
+                <div class="tier-opt sel"><div class="tier-opt-name">Basic</div><div class="tier-opt-price">& above</div></div>
+                <div class="tier-opt"><div class="tier-opt-name">Business</div><div class="tier-opt-price">& above</div></div>
+                <div class="tier-opt"><div class="tier-opt-name">Institutional</div><div class="tier-opt-price">only</div></div>
+              </div>
+              <!-- Published status toggle -->
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-top:0.5px solid var(--border);margin-top:4px;">
+                <div>
+                  <div style="font-size:13px;font-weight:500;color:var(--ink);">Published</div>
+                  <div style="font-size:11px;color:var(--muted);margin-top:1px;">Visible to users right now</div>
+                </div>
+                <div class="toggle-track on" style="position:relative;width:44px;height:24px;border-radius:12px;cursor:pointer;">
+                  <div style="position:absolute;top:3px;left:21px;width:18px;height:18px;border-radius:50%;background:#fff;"></div>
+                </div>
+              </div>
+            </div>
+            <!-- Live preview -->
+            <div style="font-family:var(--font-h);font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Preview (user sees this)</div>
+            <div style="background:var(--ink);border-radius:14px;padding:14px;">
+              <div style="display:inline-flex;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;font-family:var(--font-h);background:rgba(200,151,63,0.1);color:var(--gold);margin-bottom:8px;">Macro Outlook</div>
+              <div style="font-family:var(--font-h);font-size:13px;font-weight:700;color:#fff;line-height:1.35;margin-bottom:6px;">Liquidity conditions signal a risk-on shift in Q2 2025</div>
+              <div style="font-size:11px;color:rgba(255,255,255,0.45);line-height:1.6;margin-bottom:8px;">Global M2 expansion is accelerating across major central bank balance sheets...</div>
+              <div style="display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,0.3);">
+                <span>Mar 17, 2025</span><span style="background:rgba(255,255,255,0.06);border-radius:20px;padding:2px 8px;">◈ Basic &amp; above</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ADMIN STATE 3: DASHBOARD EMPTY STATE ══ -->
+  <div style="max-width:1100px;margin:0 auto 48px;padding:0 28px;">
+    <div style="font-family:var(--font-h);font-size:11px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,0.25);text-transform:uppercase;margin-bottom:16px;">Admin State · Dashboard → No Pending Orders (All Clear)</div>
+    <div style="background:#fff;border-radius:16px;border:0.5px solid var(--border);overflow:hidden;">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:0.5px solid var(--border);">
+        <div style="font-family:var(--font-h);font-size:15px;font-weight:700;color:var(--ink);">Pending Orders</div>
+        <div style="font-size:12px;color:var(--muted);">Today</div>
+      </div>
+      <!-- Empty state content -->
+      <div style="padding:56px 28px;text-align:center;">
+        <!-- Green checkmark circle -->
+        <div style="width:72px;height:72px;border-radius:50%;background:rgba(29,185,84,0.1);border:0.5px solid rgba(29,185,84,0.25);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 18px;">✓</div>
+        <div style="font-family:var(--font-h);font-size:20px;font-weight:700;color:var(--ink);margin-bottom:8px;">All clear</div>
+        <div style="font-size:14px;color:var(--muted);margin-bottom:24px;max-width:320px;margin-left:auto;margin-right:auto;line-height:1.6;">No pending orders right now. New orders will appear here as soon as users submit them.</div>
+        <!-- Stats still showing -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:420px;margin:0 auto;">
+          <div style="background:var(--off);border-radius:12px;padding:14px;text-align:center;">
+            <div style="font-family:var(--font-h);font-size:20px;font-weight:800;color:var(--green);">12</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Completed today</div>
+          </div>
+          <div style="background:var(--off);border-radius:12px;padding:14px;text-align:center;">
+            <div style="font-family:var(--font-h);font-size:20px;font-weight:800;color:var(--ink);">0</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Pending</div>
+          </div>
+          <div style="background:var(--off);border-radius:12px;padding:14px;text-align:center;">
+            <div style="font-family:var(--font-h);font-size:20px;font-weight:800;color:var(--gold);">₦18.4M</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Today's volume</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /additional states -->
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  const map={'dashboard':0,'orders':1,'new-post':2,'posts':3,'users':4,'settings':5};
+  document.querySelectorAll('.nav-item')[map[id]]?.classList.add('active');
+  const titles={'dashboard':'Dashboard','orders':'Orders','new-post':'New Post','posts':'Intelligence Posts','users':'Users','settings':'Settings'};
+  const topbar=document.querySelector('.topbar-title');
+  if(topbar) topbar.textContent=titles[id]||'';
+  // hide order detail when switching pages
+  const od=document.getElementById('order-detail');
+  if(od) od.style.display='none';
+}
+function showOrderDetail(){
+  const od=document.getElementById('order-detail');
+  if(od) od.style.display='block';
+  od.scrollIntoView({behavior:'smooth',block:'start'});
+}
+</script>
+</body>
+</html>

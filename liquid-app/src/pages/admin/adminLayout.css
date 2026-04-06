@@ -1,0 +1,180 @@
+.adminLayoutRoot {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  overflow: hidden;
+  background: #f0efed;
+}
+
+.adminSidebar {
+  width: 220px;
+  flex: 0 0 220px;
+  background: #1a1a1a;
+  color: rgba(255, 255, 255, 0.85);
+  display: flex;
+  flex-direction: column;
+  padding: 18px 14px;
+  gap: 18px;
+  overflow: auto;
+}
+
+.adminBrand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.adminBrandLogo {
+  font-family: var(--font-h);
+  font-weight: 900;
+  font-size: 22px;
+  letter-spacing: -0.4px;
+  background: linear-gradient(135deg, #8B2FE0, #A855F7);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.adminBrandSub {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.52);
+  letter-spacing: 0.2px;
+}
+
+.logoDot {
+  background: linear-gradient(135deg, #8B2FE0, #A855F7);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.adminNav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.adminNavItem {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.5);
+  border-left: 2px solid transparent;
+  border-radius: 10px;
+  padding: 12px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background 120ms ease, border-left-color 120ms ease, color 120ms ease;
+}
+
+.adminNavItem:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.adminNavItemActive {
+  background: rgba(103, 0, 175, 0.12);
+  border-left-color: #6700af;
+  color: #A855F7;
+}
+
+.adminNavIcon {
+  width: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.adminNavItemActive .adminNavIcon {
+  color: #A855F7;
+}
+
+.adminNavLabel {
+  font-size: 14px;
+  font-weight: 800;
+  flex: 1;
+  text-align: left;
+  color: inherit;
+}
+
+.adminNavRight {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.adminOrdersBadge {
+  min-width: 22px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: rgba(224, 82, 82, 0.95);
+  border: 1px solid rgba(224, 82, 82, 0.6);
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 12px;
+  font-weight: 900;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.adminSidebarBottom {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 10px;
+}
+
+.adminAvatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #6700af, #8B2FE0);
+  color: rgba(12, 12, 12, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-family: var(--font-h);
+  letter-spacing: -0.6px;
+}
+
+.adminSidebarUserName {
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14px;
+}
+
+.adminSidebarUserSub {
+  margin-top: 3px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.52);
+}
+
+.adminMain {
+  flex: 1;
+  background: #f0efed;
+  overflow: auto;
+  text-align: left;
+  padding: 18px 18px 96px;
+}
+
+@media (max-width: 520px) {
+  .adminSidebar {
+    padding: 14px 10px;
+  }
+  .adminNavItem {
+    padding: 10px 10px;
+    gap: 8px;
+  }
+  .adminMain {
+    padding: 14px 14px 96px;
+  }
+}
+

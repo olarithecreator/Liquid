@@ -1,0 +1,2575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Liquid – Cursor Build Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --ink:#0C0C0C;--ink2:#1A1A1A;
+  --gold:#C8973F;--gold-l:#E8B865;
+  --green:#1DB954;--red:#DC2626;--blue:#2563EB;--purple:#7C3AED;
+  --bg:#F9F8F6;--surface:#fff;--border:#E5E4E0;
+  --muted:#888;--muted2:#555;
+  --font-h:'Syne',sans-serif;--font-b:'Inter',sans-serif;
+}
+body{background:var(--bg);font-family:var(--font-b);color:var(--ink);line-height:1.7;}
+
+/* COVER */
+.cover{background:var(--ink);min-height:100vh;display:flex;flex-direction:column;padding:56px;}
+.cover-logo{font-family:var(--font-h);font-size:26px;font-weight:800;background:linear-gradient(135deg,var(--gold),var(--gold-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:auto;}
+.cover-main{padding:56px 0 48px;}
+.cover-eye{font-size:11px;color:rgba(255,255,255,.28);letter-spacing:3px;text-transform:uppercase;font-family:var(--font-h);margin-bottom:18px;}
+.cover-h1{font-family:var(--font-h);font-size:50px;font-weight:800;color:#fff;line-height:1.0;letter-spacing:-1.5px;margin-bottom:20px;}
+.cover-h1 em{color:var(--gold);font-style:normal;}
+.cover-desc{font-size:16px;color:rgba(255,255,255,.38);line-height:1.7;max-width:560px;}
+.cover-chips{display:flex;gap:10px;flex-wrap:wrap;padding-top:40px;border-top:0.5px solid rgba(255,255,255,.08);}
+.chip{background:rgba(255,255,255,.05);border:0.5px solid rgba(255,255,255,.1);border-radius:20px;padding:5px 14px;font-size:11px;color:rgba(255,255,255,.4);font-family:var(--font-h);font-weight:600;}
+
+/* DOC */
+.doc{max-width:960px;margin:0 auto;padding:64px 40px;}
+
+/* PHASE */
+.phase-eye{font-family:var(--font-h);font-size:11px;font-weight:700;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:10px;}
+.phase-title{font-family:var(--font-h);font-size:34px;font-weight:800;color:var(--ink);letter-spacing:-0.5px;margin-bottom:8px;line-height:1.1;}
+.phase-sub{font-size:15px;color:var(--muted2);margin-bottom:32px;line-height:1.65;max-width:700px;}
+.phase{margin-bottom:72px;}
+.hr{height:0.5px;background:var(--border);margin:56px 0;}
+
+/* STEP */
+.steps{display:flex;flex-direction:column;gap:0;}
+.step{display:flex;gap:22px;padding-bottom:32px;}
+.step:last-child{padding-bottom:0;}
+.step-l{display:flex;flex-direction:column;align-items:center;width:44px;flex-shrink:0;}
+.step-n{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-h);font-size:15px;font-weight:700;flex-shrink:0;}
+.step-n.g{background:linear-gradient(135deg,var(--gold),var(--gold-l));color:#fff;}
+.step-n.d{background:var(--ink);color:#fff;}
+.step-n.gr{background:var(--green);color:#fff;}
+.step-n.b{background:var(--blue);color:#fff;}
+.step-n.p{background:var(--purple);color:#fff;}
+.step-vl{flex:1;width:1px;background:var(--border);margin:5px 0;}
+.step-body{padding-top:10px;flex:1;}
+.step-title{font-family:var(--font-h);font-size:18px;font-weight:700;color:var(--ink);margin-bottom:8px;}
+.step-text{font-size:14px;color:var(--muted2);line-height:1.7;}
+.step-text p{margin-bottom:10px;}
+.step-text p:last-child{margin-bottom:0;}
+
+/* CODE */
+.code-lbl{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;font-family:var(--font-h);font-weight:600;margin-top:14px;}
+.code{background:#0C0C0C;border-radius:14px;padding:18px 20px;overflow-x:auto;margin-bottom:14px;}
+.code pre{font-family:'Courier New',monospace;font-size:13px;color:#E0E0E0;line-height:1.75;white-space:pre;}
+.code .c{color:#555;}
+.code .k{color:var(--gold-l);}
+.code .s{color:#86EFAC;}
+.code .v{color:#93C5FD;}
+.code .cmd{color:#F9A8D4;}
+
+/* CURSOR PROMPT BOX */
+.cursor-prompt{background:rgba(124,58,237,.04);border:0.5px solid rgba(124,58,237,.2);border-radius:14px;padding:18px 20px;margin:14px 0;}
+.cursor-prompt-label{font-family:var(--font-h);font-size:11px;font-weight:700;color:var(--purple);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.cursor-prompt-label::before{content:'◉';font-size:14px;}
+.cursor-prompt pre{font-family:'Courier New',monospace;font-size:13px;color:var(--ink);line-height:1.75;white-space:pre-wrap;word-break:break-word;}
+
+/* ALERT */
+.alert{display:flex;gap:12px;border-radius:12px;padding:14px 16px;margin:14px 0;}
+.alert-ico{font-size:18px;flex-shrink:0;line-height:1.3;}
+.alert-body{font-size:13px;line-height:1.6;color:var(--muted2);}
+.alert-body strong{color:var(--ink);font-weight:600;}
+.alert.note{background:rgba(200,151,63,.05);border:0.5px solid rgba(200,151,63,.18);}
+.alert.warn{background:rgba(220,38,38,.04);border:0.5px solid rgba(220,38,38,.15);}
+.alert.tip{background:rgba(29,185,84,.04);border:0.5px solid rgba(29,185,84,.15);}
+.alert.info{background:rgba(37,99,235,.04);border:0.5px solid rgba(37,99,235,.15);}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;}
+.tbl th{font-family:var(--font-h);font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;padding:9px 14px;border-bottom:1px solid var(--border);text-align:left;background:var(--bg);}
+.tbl td{padding:11px 14px;border-bottom:0.5px solid var(--border);vertical-align:top;}
+.tbl tr:last-child td{border-bottom:none;}
+
+/* FILE TREE */
+.tree{background:#0C0C0C;border-radius:14px;padding:18px 20px;margin:14px 0;font-family:'Courier New',monospace;font-size:13px;line-height:1.9;color:#E0E0E0;}
+.tree .dir{color:var(--gold-l);}
+.tree .file{color:#93C5FD;}
+.tree .comment{color:#555;}
+
+/* TOC */
+.toc{background:var(--ink);border-radius:20px;padding:32px;margin-bottom:56px;}
+.toc-h{font-family:var(--font-h);font-size:12px;font-weight:700;color:rgba(255,255,255,.3);letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;}
+.toc-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:0.5px solid rgba(255,255,255,.07);}
+.toc-row:last-child{border-bottom:none;}
+.toc-left{display:flex;align-items:center;gap:16px;}
+.toc-num{font-family:var(--font-h);font-size:11px;font-weight:700;color:var(--gold);min-width:28px;}
+.toc-name{font-size:14px;font-weight:500;color:rgba(255,255,255,.75);}
+.toc-est{font-size:12px;color:rgba(255,255,255,.25);}
+
+/* PHASE BADGE */
+.pbadge{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:20px;font-family:var(--font-h);font-size:11px;font-weight:700;margin-bottom:14px;}
+.pbadge.user{background:rgba(29,185,84,.1);color:var(--green);}
+.pbadge.admin{background:rgba(200,151,63,.1);color:var(--gold);}
+.pbadge.both{background:rgba(37,99,235,.08);color:var(--blue);}
+.pbadge.setup{background:rgba(124,58,237,.08);color:var(--purple);}
+
+/* SECTION SUBHEAD */
+.subh{font-family:var(--font-h);font-size:20px;font-weight:700;color:var(--ink);margin:32px 0 12px;letter-spacing:-0.3px;}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-logo">Liquid.</div>
+  <div class="cover-main">
+    <div class="cover-eye">Cursor Build Guide · Zero to Production</div>
+    <div class="cover-h1">Build <em>Liquid</em><br>step by step<br>in Cursor.</div>
+    <div class="cover-desc">Every terminal command, every file to create, every Cursor chat prompt — including full Supabase MCP direct connection so Cursor builds your entire database through plain English. Nothing assumed. Zero copy-paste SQL.</div>
+  </div>
+  <div class="cover-chips">
+    <div class="chip">React + Vite</div>
+    <div class="chip">TypeScript</div>
+    <div class="chip">Tailwind CSS</div>
+    <div class="chip">Supabase MCP Direct</div>
+    <div class="chip">React Router</div>
+    <div class="chip">Paystack</div>
+    <div class="chip">Resend Email</div>
+    <div class="chip">Telegram Bot</div>
+    <div class="chip">Vercel Deploy</div>
+  </div>
+</div>
+
+<div class="doc">
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-h">Build Phases</div>
+  <div class="toc-row"><div class="toc-left"><span class="toc-num">00</span><span class="toc-name">Install tools + create project</span></div><span class="toc-est">30 min</span></div>
+  <div class="toc-row"><div class="toc-left"><span class="toc-num">01</span><span class="toc-name">Project structure + global styles</span></div><span class="toc-est">30 min</span></div>
+  <div class="toc-row"><div class="toc-left"><span class="toc-num">02</span><span class="toc-name">Supabase — MCP direct connection + all 5 tables built by Cursor</span></div><span class="toc-est">45 min</span></div>
+  <div class="toc-row"><div class="toc-left"><span class="toc-num">03</span><span class="toc-name">Auth — Splash, Onboarding, Sign In, Sign Up, Password Reset, Admin Sign In</span></div><span class="toc-est">3 hrs</span></div>
+  <div class="toc-row"><div class="toc-left"><span class="toc-num">04</span><span class="toc-name">User App — Home screen</span></div><span class="toc-est">1.5 hrs</span></div>
+  <div class="toc-row"><div class="toc-left"><span class="toc-num">05</span><span class="toc-name">User App — Exchange flow (Buy + Sell + Timer)</span></div><span class="toc-est">3 hrs</span></div>
+  <div class="toc-row"><div class="toc-left"><span class="toc-num">06</span><span class="toc-name">User App — Order Status + States</span></div><span class="toc-est">2 hrs</span></div>
+  <div class="toc-row"><div class="toc-left"><span class="toc-num">07</span><span class="toc-name">User App — Intelligence + Plans + Paystack</span></div><span class="toc-est">2.5 hrs</span></div>
+  <div class="toc-row"><div class="toc-left"><span class="toc-num">08</span><span class="toc-name">User App — Portfolio, History, Notifications, Account</span></div><span class="toc-est">2 hrs</span></div>
+  <div class="toc-row"><div class="toc-left"><span class="toc-num">09</span><span class="toc-name">Admin App — Shell + Dashboard + Rate Setter</span></div><span class="toc-est">2.5 hrs</span></div>
+  <div class="toc-row"><div class="toc-left"><span class="toc-num">10</span><span class="toc-name">Admin App — Orders + Intelligence Editor + Users</span></div><span class="toc-est">3 hrs</span></div>
+  <div class="toc-row"><div class="toc-left"><span class="toc-num">11</span><span class="toc-name">Notifications — Email (Resend) + Telegram</span></div><span class="toc-est">1.5 hrs</span></div>
+  <div class="toc-row"><div class="toc-left"><span class="toc-num">12</span><span class="toc-name">Deploy to Vercel + custom domain</span></div><span class="toc-est">1 hr</span></div>
+</div>
+
+<!-- ════════════════════════════════════ -->
+<!-- PHASE 00 — INSTALL & PROJECT SETUP -->
+<!-- ════════════════════════════════════ -->
+<div class="phase">
+  <div class="pbadge setup">◉ Setup</div>
+  <div class="phase-eye">Phase 00</div>
+  <div class="phase-title">Install Tools &amp; Create Project</div>
+  <div class="phase-sub">Do this once. Every command runs in your computer's Terminal (Mac) or Command Prompt (Windows).</div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-l"><div class="step-n d">1</div><div class="step-vl"></div></div>
+      <div class="step-body">
+        <div class="step-title">Install Node.js</div>
+        <div class="step-text"><p>Go to <strong>nodejs.org</strong> → download the LTS version → install it. This is what runs JavaScript on your computer. After installing, open Terminal and verify:</p></div>
+        <div class="code-lbl">Terminal — verify installation</div>
+        <div class="code"><pre>node --version
+<span class="c"># Should print: v20.x.x or higher</span>
+
+npm --version
+<span class="c"># Should print: 10.x.x or higher</span></pre></div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-l"><div class="step-n d">2</div><div class="step-vl"></div></div>
+      <div class="step-body">
+        <div class="step-title">Install Cursor</div>
+        <div class="step-text"><p>Go to <strong>cursor.com</strong> → download → install. Open Cursor. Sign in (free account is fine to start). Cursor is VS Code with AI built in — the AI can read and write your entire codebase at once.</p></div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-l"><div class="step-n d">3</div><div class="step-vl"></div></div>
+      <div class="step-body">
+        <div class="step-title">Create the project</div>
+        <div class="step-text"><p>In Terminal, navigate to where you want to create the project folder, then run:</p></div>
+        <div class="code-lbl">Terminal — create project</div>
+        <div class="code"><pre><span class="c"># Navigate to your projects folder (example)</span>
+cd ~/Desktop
+
+<span class="c"># Create the React + TypeScript + Vite project</span>
+npm create vite@latest liquid-app -- --template react-ts
+
+<span class="c"># Move into the new folder</span>
+cd liquid-app
+
+<span class="c"># Install base dependencies</span>
+npm install
+
+<span class="c"># Install all the libraries Liquid needs</span>
+npm install @supabase/supabase-js react-router-dom @tanstack/react-query
+npm install lucide-react clsx date-fns
+npm install -D tailwindcss postcss autoprefixer @types/node
+
+<span class="c"># Set up Tailwind CSS</span>
+npx tailwindcss init -p</pre></div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-l"><div class="step-n d">4</div><div class="step-vl"></div></div>
+      <div class="step-body">
+        <div class="step-title">Open project in Cursor</div>
+        <div class="step-text"><p>In Terminal, while inside the liquid-app folder:</p></div>
+        <div class="code-lbl">Terminal</div>
+        <div class="code"><pre>cursor .</pre></div>
+        <div class="step-text"><p>This opens the whole project in Cursor. You will see all your files on the left sidebar. From now on, you work inside Cursor — not in the Terminal except when instructed.</p></div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-l"><div class="step-n d">5</div><div class="step-vl"></div></div>
+      <div class="step-body">
+        <div class="step-title">Configure Tailwind + environment file</div>
+        <div class="step-text"><p>In Cursor, open the file <strong>tailwind.config.js</strong> and replace everything with:</p></div>
+        <div class="code-lbl">tailwind.config.js</div>
+        <div class="code"><pre><span class="k">export default</span> {
+  content: [<span class="s">'./index.html'</span>, <span class="s">'./src/**/*.{js,ts,jsx,tsx}'</span>],
+  theme: {
+    extend: {
+      <span class="k">colors</span>: {
+        gold: <span class="s">'#C8973F'</span>,
+        <span class="s">'gold-light'</span>: <span class="s">'#E8B865'</span>,
+        ink: <span class="s">'#0C0C0C'</span>,
+        <span class="s">'ink-2'</span>: <span class="s">'#1A1A1A'</span>,
+      },
+      <span class="k">fontFamily</span>: {
+        heading: [<span class="s">'Syne'</span>, <span class="s">'sans-serif'</span>],
+        body: [<span class="s">'Inter'</span>, <span class="s">'sans-serif'</span>],
+      },
+    },
+  },
+  plugins: [],
+}</pre></div>
+
+        <div class="step-text"><p>Now create a file called <strong>.env.local</strong> in the root of your project (same level as package.json). This file stores your secret keys — it is never shared or uploaded to GitHub:</p></div>
+        <div class="code-lbl">.env.local — create this file</div>
+        <div class="code"><pre>VITE_SUPABASE_URL=your_supabase_url_here
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key_here
+<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="54021d00110b1510191d1a0b1119151d18692d3b21260b3139353d38143339353d387a373b39">[email&#160;protected]</a>
+VITE_PAYSTACK_PUBLIC_KEY=pk_test_xxxx
+VITE_RESEND_API_KEY=re_xxxx</pre></div>
+        <div class="alert warn"><div class="alert-ico">⚠️</div><div class="alert-body"><strong>Never commit .env.local to GitHub.</strong> Cursor automatically adds it to .gitignore — verify this is the case. Your real keys must never appear in your code files.</div></div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-l"><div class="step-n d">6</div></div>
+      <div class="step-body">
+        <div class="step-title">Test that the project runs</div>
+        <div class="code-lbl">Cursor Terminal (use the terminal inside Cursor: View → Terminal)</div>
+        <div class="code"><pre>npm run dev</pre></div>
+        <div class="step-text"><p>Open your browser and go to <strong>http://localhost:5173</strong>. You should see a basic Vite + React page. If you see it → setup is working. Press Ctrl+C in terminal to stop it.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="hr"></div>
+
+<!-- ════════════════════════════════════ -->
+<!-- PHASE 01 — PROJECT STRUCTURE -->
+<!-- ════════════════════════════════════ -->
+<div class="phase">
+  <div class="pbadge setup">◉ Setup</div>
+  <div class="phase-eye">Phase 01</div>
+  <div class="phase-title">Project Structure &amp; Global Styles</div>
+  <div class="phase-sub">Before writing any screens, tell Cursor to set up the entire folder structure. This is where the AI is most powerful — it can create 20 files at once.</div>
+
+  <div class="subh">How to use Cursor's AI chat</div>
+  <div class="alert info"><div class="alert-ico">ℹ️</div><div class="alert-body"><strong>Cursor Chat vs Cursor Composer:</strong> Press <strong>Cmd+L</strong> (Mac) or <strong>Ctrl+L</strong> (Windows) to open the chat panel on the right. Press <strong>Cmd+I</strong> to open Composer (which edits multiple files at once). For building Liquid, use Composer for most tasks — it's more powerful. The purple boxes below are what you paste into Composer.</div></div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 01-A — Folder Structure</div>
+    <pre>Set up the complete folder structure for the Liquid app.
+Create all these empty files and folders:
+
+src/
+├── components/
+│   ├── ui/
+│   │   ├── Button.tsx
+│   │   ├── Input.tsx
+│   │   ├── Toast.tsx
+│   │   ├── Modal.tsx
+│   │   ├── BottomSheet.tsx
+│   │   ├── Skeleton.tsx
+│   │   └── BottomNav.tsx
+│   ├── exchange/
+│   │   ├── TimerBlock.tsx
+│   │   ├── RateBar.tsx
+│   │   └── OrderStepTracker.tsx
+│   └── layout/
+│       └── PageWrapper.tsx
+├── pages/
+│   ├── entry/
+│   │   ├── SplashScreen.tsx
+│   │   ├── OnboardingScreen.tsx
+│   │   ├── SignInScreen.tsx
+│   │   ├── SignUpScreen.tsx
+│   │   ├── ForgotPasswordScreen.tsx
+│   │   ├── ResetLinkSentScreen.tsx
+│   │   ├── NewPasswordScreen.tsx
+│   │   └── PasswordUpdatedScreen.tsx
+│   ├── home/
+│   │   └── HomeScreen.tsx
+│   ├── exchange/
+│   │   ├── AcquireScreen.tsx
+│   │   ├── SellStep1Screen.tsx
+│   │   ├── SellStep2Screen.tsx
+│   │   ├── OrderStatusScreen.tsx
+│   │   ├── OrderCompleteScreen.tsx
+│   │   ├── OrderExpiredScreen.tsx
+│   │   └── ExchangeClosedScreen.tsx
+│   ├── intelligence/
+│   │   ├── IntelligenceScreen.tsx
+│   │   ├── PostDetailScreen.tsx
+│   │   └── PlansScreen.tsx
+│   ├── portfolio/
+│   │   ├── PortfolioScreen.tsx
+│   │   ├── TransactionHistoryScreen.tsx
+│   │   ├── NotificationsScreen.tsx
+│   │   ├── AccountScreen.tsx
+│   │   └── SavedBanksScreen.tsx
+│   └── admin/
+│       ├── AdminSignInScreen.tsx
+│       ├── AdminLayout.tsx
+│       ├── AdminDashboard.tsx
+│       ├── AdminOrders.tsx
+│       ├── AdminNewPost.tsx
+│       ├── AdminPosts.tsx
+│       ├── AdminUsers.tsx
+│       └── AdminSettings.tsx
+├── lib/
+│   ├── supabase.ts
+│   ├── constants.ts
+│   ├── helpers.ts
+│   └── notifications.ts
+├── hooks/
+│   ├── useAuth.ts
+│   ├── useAppSettings.ts
+│   └── useOrders.ts
+├── types/
+│   └── index.ts
+└── styles/
+    └── globals.css
+
+Create each file with just a comment: // [filename] - to be built
+Do not add any logic yet.</pre>
+  </div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 01-B — Global Styles + Fonts</div>
+    <pre>Update src/styles/globals.css with the complete Liquid design system.
+Also update src/index.css to import globals.css.
+Also update index.html to add the Google Fonts import in the head.
+
+The design system uses:
+- Syne font (weights 400, 600, 700, 800) for headings
+- Inter font (weights 300, 400, 500, 600) for body text
+- Color palette defined as CSS variables:
+  --ink: #0C0C0C
+  --ink-2: #1A1A1A
+  --off: #F7F6F4
+  --card: #FFFFFF
+  --muted: #888888
+  --muted-2: #555555
+  --border: #E8E8E8
+  --gold: #C8973F
+  --gold-light: #E8B865
+  --green: #1DB954
+  --red: #E05252
+
+Base body style: background #0C0C0C, font-family Inter
+All screens are mobile-width (max-width 430px, centered on desktop)
+No default margins or padding on elements</pre>
+  </div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 01-C — Types + Constants + Supabase client</div>
+    <pre>Set up three foundation files:
+
+1. src/types/index.ts — define these TypeScript interfaces:
+   - User: id, email, full_name, phone, subscription_plan, usdt_wallet_address
+   - Order: id, user_id, type ('buy'|'sell'), amount_usdt, amount_ngn, rate,
+     status ('awaiting_payment'|'proof_uploaded'|'verifying'|'completed'|'cancelled'|'expired'),
+     user_bank_name, user_bank_account, user_bank_holder, user_wallet_address,
+     payment_proof_url, tx_hash, admin_notes, created_at, completed_at
+   - Insight: id, title, content, tag, tier_access, is_published, published_at
+   - Notification: id, user_id, title, message, type, is_read, created_at
+   - AppSettings: key, value
+
+2. src/lib/constants.ts:
+   - ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL
+   - MIN_ORDER_USDT = 50 (default, overridden by app_settings)
+   - MAX_ORDER_USDT = 2000 (default)
+   - ORDER_TIMER_MINUTES = 20
+
+3. src/lib/supabase.ts:
+   - Create and export the Supabase client using:
+     url = import.meta.env.VITE_SUPABASE_URL
+     key = import.meta.env.VITE_SUPABASE_ANON_KEY
+   - Export a typed supabase client</pre>
+  </div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 01-D — React Router setup + App.tsx</div>
+    <pre>Set up React Router in src/App.tsx with all routes.
+
+Route structure:
+/ → redirect logic (check auth, check onboarding, route accordingly)
+/splash → SplashScreen
+/onboarding → OnboardingScreen
+/signin → SignInScreen
+/signup → SignUpScreen
+/forgot-password → ForgotPasswordScreen
+/forgot-password/sent → ResetLinkSentScreen
+/reset-password → NewPasswordScreen
+/reset-password/success → PasswordUpdatedScreen
+
+Protected routes (require auth):
+/home → HomeScreen
+/exchange/buy → AcquireScreen
+/exchange/sell/step1 → SellStep1Screen
+/exchange/sell/step2 → SellStep2Screen
+/exchange/order/:orderId → OrderStatusScreen
+/exchange/complete/:orderId → OrderCompleteScreen
+/exchange/expired/:orderId → OrderExpiredScreen
+/exchange/closed → ExchangeClosedScreen
+/intelligence → IntelligenceScreen
+/intelligence/post/:postId → PostDetailScreen
+/plans → PlansScreen
+/portfolio → PortfolioScreen
+/history → TransactionHistoryScreen
+/notifications → NotificationsScreen
+/account → AccountScreen
+/account/banks → SavedBanksScreen
+
+Admin routes (require admin email):
+/admin/login → AdminSignInScreen (NO auth guard — this IS the login)
+/admin → AdminDashboard (wrapped in AdminLayout)
+/admin/orders → AdminOrders
+/admin/post/new → AdminNewPost
+/admin/post/:id/edit → AdminNewPost (edit mode)
+/admin/posts → AdminPosts
+/admin/users → AdminUsers
+/admin/settings → AdminSettings
+
+PROTECTED ROUTE LOGIC:
+Create a ProtectedRoute component that:
+- Checks Supabase auth session
+- If no session → redirects to /signin
+- If session but route starts with /admin and email !== ADMIN_EMAIL → redirects to /admin/login
+- If session → renders the page
+
+ADMIN ROUTE GUARD:
+/admin/login is public (no auth check)
+All other /admin/* routes use ProtectedRoute with the admin email check.
+If someone is logged in as a regular user and tries /admin/dashboard,
+they go to /admin/login (not /signin — this is intentional).
+
+Wrap the whole app in React Query's QueryClientProvider.</pre>
+  </div>
+</div>
+
+<div class="hr"></div>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- PHASE 02 — SUPABASE + MCP DIRECT CONNECTION  -->
+<!-- ════════════════════════════════════════════════ -->
+<div class="phase">
+  <div class="pbadge both">◉ Database</div>
+  <div class="phase-eye">Phase 02</div>
+  <div class="phase-title">Supabase — MCP Direct Connection</div>
+  <div class="phase-sub">Cursor connects directly to your Supabase project through MCP. Once connected, you type plain English and Cursor creates every table, every policy, every trigger — no copy-pasting SQL, no switching between apps. This phase has four parts: create your Supabase account, get your API keys, connect MCP to Cursor, then let Cursor build the entire database.</div>
+
+  <!-- ─── PART A: Create Supabase Account ─── -->
+  <div class="subh">Part A — Create your Supabase account (do this in your browser)</div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-l"><div class="step-n d">1</div><div class="step-vl"></div></div>
+      <div class="step-body">
+        <div class="step-title">Sign up at supabase.com</div>
+        <div class="step-text"><p>Open your browser → go to <strong>supabase.com</strong> → click <strong>"Start your project"</strong> → click <strong>"Continue with GitHub"</strong>. Log in to GitHub and click Authorize. This links both accounts — no separate passwords needed.</p></div>
+        <div class="alert info"><div class="alert-ico">ℹ️</div><div class="alert-body"><strong>No GitHub yet?</strong> Go to github.com first → sign up free → then come back to supabase.com and sign up with GitHub.</div></div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-l"><div class="step-n d">2</div><div class="step-vl"></div></div>
+      <div class="step-body">
+        <div class="step-title">Create your project</div>
+        <div class="step-text">
+          <p>After signing in, click <strong>"New project"</strong>. Fill in exactly:</p>
+          <p><strong>Project name:</strong> liquid-app</p>
+          <p><strong>Database password:</strong> click "Generate a password" → copy it and save it in your phone Notes app. You will need it later.</p>
+          <p><strong>Region:</strong> West EU (Ireland) — fastest connection from Nigeria.</p>
+          <p><strong>Plan:</strong> Free.</p>
+          <p>Click <strong>"Create new project"</strong>. Wait 2 minutes while Supabase sets up. You'll see a loading screen then your project dashboard.</p>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-l"><div class="step-n d">3</div></div>
+      <div class="step-body">
+        <div class="step-title">Copy your API keys into .env.local</div>
+        <div class="step-text"><p>In your Supabase project → click <strong>Settings</strong> (gear icon, bottom of left sidebar) → click <strong>API</strong>. You will see two values. Copy both:</p>
+        <p><strong>Project URL</strong> — looks like: https://abcdefgh.supabase.co</p>
+        <p><strong>anon public key</strong> — a long string starting with eyJ</p>
+        <p>Now open your <code>.env.local</code> file in Cursor and fill them in:</p></div>
+        <div class="code-lbl">.env.local — paste your real values</div>
+        <div class="code"><pre>VITE_SUPABASE_URL=https://your-project-id.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJhbGc...your-full-key-here
+<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d1879885948e90959c989f8e949c90989deca8bea4a3b4bcb0b8bd91b6bcb0b8bdffb2bebc">[email&#160;protected]</a>
+VITE_PAYSTACK_PUBLIC_KEY=pk_test_xxxx
+VITE_RESEND_API_KEY=re_xxxx</pre></div>
+        <div class="alert warn"><div class="alert-ico">⚠️</div><div class="alert-body"><strong>Never share .env.local.</strong> Never post these values anywhere. Never push this file to GitHub. These keys give full access to your database.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── PART B: Get MCP Access Token ─── -->
+  <div class="subh" style="margin-top:40px;">Part B — Get your Supabase MCP Access Token</div>
+  <div class="step-text" style="margin-bottom:20px;"><p>This is a special key that lets Cursor talk to Supabase directly. It is different from your API key. You only need to do this once.</p></div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-l"><div class="step-n g">1</div><div class="step-vl"></div></div>
+      <div class="step-body">
+        <div class="step-title">Go to your Supabase account settings</div>
+        <div class="step-text"><p>In the Supabase dashboard → click your <strong>profile picture or avatar</strong> in the very top right corner of the page → click <strong>"Account"</strong> from the dropdown menu. This takes you to your personal account settings, not the project settings.</p></div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-l"><div class="step-n g">2</div><div class="step-vl"></div></div>
+      <div class="step-body">
+        <div class="step-title">Generate a new access token</div>
+        <div class="step-text"><p>In Account settings → look in the left sidebar for <strong>"Access Tokens"</strong> → click it → click the <strong>"Generate new token"</strong> button → in the name field type <strong>cursor-liquid</strong> → click <strong>Generate token</strong>.</p>
+        <p>A long token appears on screen. <strong>Copy it immediately</strong> — this is the only time you will ever see it. Once you close this dialog it is gone forever. If you lose it, you generate a new one.</p></div>
+        <div class="alert warn"><div class="alert-ico">⚠️</div><div class="alert-body"><strong>Copy the token RIGHT NOW before closing the dialog.</strong> Paste it into your Notes app immediately. You cannot view it again after closing.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── PART C: Connect MCP to Cursor ─── -->
+  <div class="subh" style="margin-top:40px;">Part C — Connect Supabase MCP inside Cursor</div>
+  <div class="step-text" style="margin-bottom:20px;"><p>You do this once. After this, Cursor can read and write your database directly whenever you ask it to.</p></div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-l"><div class="step-n p">1</div><div class="step-vl"></div></div>
+      <div class="step-body">
+        <div class="step-title">Open Cursor Settings</div>
+        <div class="step-text">
+          <p><strong>On Mac:</strong> In the top menu bar click <strong>Cursor</strong> → click <strong>Settings</strong> → click <strong>Cursor Settings</strong>.</p>
+          <p><strong>On Windows:</strong> Click <strong>File</strong> in the top menu → click <strong>Preferences</strong> → click <strong>Cursor Settings</strong>.</p>
+          <p>A settings panel opens on the right side of Cursor.</p>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-l"><div class="step-n p">2</div><div class="step-vl"></div></div>
+      <div class="step-body">
+        <div class="step-title">Find the MCP section</div>
+        <div class="step-text"><p>In the settings panel, scroll down until you see a section called <strong>"MCP"</strong> or <strong>"Model Context Protocol"</strong>. Click <strong>"Add new MCP server"</strong> or click <strong>"Edit MCP config"</strong> — either option works, both open the same JSON config file.</p></div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-l"><div class="step-n p">3</div><div class="step-vl"></div></div>
+      <div class="step-body">
+        <div class="step-title">Paste the MCP configuration</div>
+        <div class="step-text"><p>A file called <strong>mcp.json</strong> opens. It might be empty or have existing content. Replace everything in it with this (paste your actual Supabase access token where shown):</p></div>
+        <div class="code-lbl">mcp.json — paste this entire block</div>
+        <div class="code"><pre>{
+  <span class="s">"mcpServers"</span>: {
+    <span class="s">"supabase"</span>: {
+      <span class="s">"command"</span>: <span class="s">"npx"</span>,
+      <span class="s">"args"</span>: [
+        <span class="s">"-y"</span>,
+        <span class="s">"@supabase/mcp-server-supabase@latest"</span>,
+        <span class="s">"--access-token"</span>,
+        <span class="s">"PASTE_YOUR_SUPABASE_ACCESS_TOKEN_HERE"</span>
+      ]
+    }
+  }
+}</pre></div>
+        <div class="step-text"><p>Replace <code>PASTE_YOUR_SUPABASE_ACCESS_TOKEN_HERE</code> with the token you copied in Part B. Save the file (Cmd+S or Ctrl+S).</p></div>
+        <div class="alert warn"><div class="alert-ico">⚠️</div><div class="alert-body"><strong>The token goes inside the quotes.</strong> The final line should look like: <code>"sbp_abc123yourtokenhere"</code> — with the token inside the quotes, replacing the placeholder text.</div></div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-l"><div class="step-n p">4</div><div class="step-vl"></div></div>
+      <div class="step-body">
+        <div class="step-title">Verify the connection works</div>
+        <div class="step-text"><p>After saving mcp.json, Cursor restarts its MCP connection automatically. To confirm it worked: press <strong>Cmd+I</strong> (Mac) or <strong>Ctrl+I</strong> (Windows) to open Cursor Composer. In the bottom of the Composer panel look for a tools icon or a "supabase" label — it should show as connected.</p>
+        <p>Test it by typing this in Composer and pressing Enter:</p></div>
+        <div class="cursor-prompt">
+          <div class="cursor-prompt-label">Test prompt — verify MCP is working</div>
+          <pre>Using the Supabase MCP tool, list all projects in my Supabase account 
+and tell me the name and ID of the liquid-app project.</pre>
+        </div>
+        <div class="step-text"><p>Cursor will call Supabase directly and show you your project details. If you see your <strong>liquid-app</strong> project listed — MCP is connected and working. If you see an error, go back to Part B, generate a new token, and replace it in mcp.json.</p></div>
+        <div class="alert tip"><div class="alert-ico">✓</div><div class="alert-body"><strong>Connection confirmed.</strong> From this point on, every time you ask Cursor to do something with your database, it does it directly — no switching to the Supabase website, no copy-pasting SQL.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── PART D: Build the full database ─── -->
+  <div class="subh" style="margin-top:40px;">Part D — Let Cursor build your entire database</div>
+  <div class="step-text" style="margin-bottom:20px;"><p>Now paste each prompt below into Cursor Composer in order. Cursor talks to Supabase directly and builds everything for you. Watch the Composer output to confirm each step succeeds before moving to the next.</p></div>
+
+  <div class="alert note"><div class="alert-ico">💡</div><div class="alert-body"><strong>How to use these prompts:</strong> Press Cmd+I to open Composer. Paste the prompt. Press Enter. Read the output. When Cursor says it succeeded or shows you the created table — move to the next prompt. Run them one at a time, in order.</div></div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 02-A — Create the users table</div>
+    <pre>Using the Supabase MCP tool, connect to my liquid-app project and 
+create the following table exactly:
+
+TABLE NAME: users (in the public schema)
+
+COLUMNS:
+- id: uuid, primary key, references auth.users(id) on delete cascade
+- email: text, unique, not null
+- full_name: text, nullable
+- phone: text, nullable
+- subscription_plan: text, default 'none'
+- usdt_wallet_address: text, nullable
+- notification_prefs: jsonb, default '{"order_updates": true, "new_posts": true}'
+- portfolio_value: numeric, default 0
+- created_at: timestamptz, default now()
+
+After creating the table:
+1. Enable Row Level Security on it
+2. Create policy: "Users can view own profile" — select, using (auth.uid() = id)
+3. Create policy: "Users can update own profile" — update, using (auth.uid() = id)
+4. Create policy: "Users can insert own profile" — insert, with check (auth.uid() = id)
+
+Then create a trigger function called handle_new_user that automatically
+inserts a row into this users table whenever someone signs up.
+The function should copy id, email, full_name (from raw_user_meta_data),
+and phone (from raw_user_meta_data) into the new row.
+Attach this trigger to auth.users AFTER INSERT.
+
+Confirm when all of this is done and show me the table structure.</pre>
+  </div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 02-B — Create the orders table</div>
+    <pre>Using the Supabase MCP tool, create the following table in my liquid-app project:
+
+TABLE NAME: orders (in the public schema)
+
+COLUMNS:
+- id: uuid, primary key, default gen_random_uuid()
+- user_id: uuid, references public.users(id) on delete cascade, not null
+- type: text, not null — only allows values 'buy' or 'sell' (add a check constraint)
+- amount_usdt: numeric, not null
+- amount_ngn: numeric, not null
+- rate: numeric, not null
+- status: text, default 'awaiting_payment'
+  — only allows these exact values (check constraint):
+  'awaiting_payment', 'proof_uploaded', 'verifying', 
+  'completed', 'cancelled', 'expired'
+- user_bank_name: text, nullable
+- user_bank_account: text, nullable
+- user_bank_holder: text, nullable
+- user_wallet_address: text, nullable
+- payment_proof_url: text, nullable
+- tx_hash: text, nullable
+- admin_notes: text, nullable
+- created_at: timestamptz, default now()
+- completed_at: timestamptz, nullable
+
+After creating the table:
+1. Enable Row Level Security
+2. Create policy: "Users can view own orders" — select, using (auth.uid() = user_id)
+3. Create policy: "Users can create orders" — insert, with check (auth.uid() = user_id)
+4. Create policy: "Users can update own orders" — update, using (auth.uid() = user_id)
+
+Confirm when done and show me the full table structure.</pre>
+  </div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 02-C — Create the app_settings table + seed all data</div>
+    <pre>Using the Supabase MCP tool, create the following table in my liquid-app project:
+
+TABLE NAME: app_settings (in the public schema)
+
+COLUMNS:
+- key: text, primary key
+- value: text, not null
+
+After creating the table:
+1. Enable Row Level Security
+2. Create policy: "Settings readable by authenticated users" — select, 
+   using (auth.role() = 'authenticated')
+3. Create policy: "Admin can update settings" — update and insert,
+   using (true) — the admin check is handled in the app code
+
+Then INSERT these exact rows into app_settings (these are the default values
+the app reads on startup — do not skip any):
+
+key='buy_rate',          value='1538'
+key='sell_rate',         value='1520'
+key='exchange_open',     value='true'
+key='exchange_message',  value='Exchange is currently closed. Check back soon.'
+key='min_order_usdt',    value='50'
+key='max_order_usdt',    value='2000'
+key='announcement',      value=''
+key='telegram_token',    value=''
+key='telegram_chat_id',  value=''
+key='alloc_stable',      value='40'
+key='alloc_btc',         value='35'
+key='alloc_eth',         value='25'
+key='notify_new_order',  value='true'
+key='notify_proof',      value='true'
+key='notify_expired',    value='false'
+key='notify_subscriber', value='true'
+
+Show me all the inserted rows to confirm everything is there.</pre>
+  </div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 02-D — Create the insights table</div>
+    <pre>Using the Supabase MCP tool, create the following table in my liquid-app project:
+
+TABLE NAME: insights (in the public schema)
+
+COLUMNS:
+- id: uuid, primary key, default gen_random_uuid()
+- title: text, not null
+- content: text, not null
+- tag: text, nullable
+  (tag values will be: 'Macro Outlook', 'Allocation Strategy', 
+   'Private Strategy', 'Liquidity Insights')
+- tier_access: text, default 'all'
+  — only allows: 'all', 'basic', 'business', 'institutional' (check constraint)
+- is_published: boolean, default false
+- published_at: timestamptz, nullable
+- created_at: timestamptz, default now()
+
+After creating:
+1. Enable Row Level Security
+2. Create policy: "Published insights visible to authenticated users"
+   — select, using (is_published = true AND auth.role() = 'authenticated')
+3. Create policy: "Admin can do everything"
+   — all operations (select, insert, update, delete), using (true)
+   This policy allows the admin service role key to manage all posts.
+
+Then insert 2 sample posts to test (both as drafts, is_published=false):
+Post 1: title='BTC Liquidity Conditions — March 2025', 
+        tag='Macro Outlook', tier_access='basic'
+Post 2: title='Institutional Capital Flow Briefing', 
+        tag='Private Strategy', tier_access='institutional'
+
+Confirm the table was created and show me the sample rows.</pre>
+  </div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 02-E — Create the notifications table</div>
+    <pre>Using the Supabase MCP tool, create the following table in my liquid-app project:
+
+TABLE NAME: notifications (in the public schema)
+
+COLUMNS:
+- id: uuid, primary key, default gen_random_uuid()
+- user_id: uuid, references public.users(id) on delete cascade, not null
+- title: text, not null
+- message: text, not null
+- type: text, not null
+  — only allows: 'order', 'insight', 'subscription' (check constraint)
+- order_id: uuid, nullable, references public.orders(id) on delete set null
+- is_read: boolean, default false
+- created_at: timestamptz, default now()
+
+After creating:
+1. Enable Row Level Security
+2. Create policy: "Users can view own notifications"
+   — select, using (auth.uid() = user_id)
+3. Create policy: "Users can update own notifications" (for marking as read)
+   — update, using (auth.uid() = user_id)
+4. Create policy: "Service role can insert notifications"
+   — insert, with check (true)
+   This allows the app backend to create notifications for any user.
+
+Confirm the table is created correctly.</pre>
+  </div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 02-F — Auto-expire orders (pg_cron)</div>
+    <pre>Using the Supabase MCP tool, do the following in my liquid-app project:
+
+STEP 1: Enable the pg_cron extension.
+In Supabase this is done via: CREATE EXTENSION IF NOT EXISTS pg_cron;
+Run this in my project.
+
+STEP 2: Create a function called expire_old_orders that:
+- Updates the orders table
+- Sets status = 'expired'
+- WHERE status = 'awaiting_payment'
+- AND created_at is older than 20 minutes from now
+- Make it a security definer function
+
+STEP 3: Schedule this function to run automatically every single minute:
+SELECT cron.schedule(
+  'expire-orders',
+  '* * * * *',
+  'SELECT expire_old_orders()'
+);
+
+STEP 4: Verify the cron job was scheduled by querying cron.job table 
+and showing me the result.
+
+This background job means orders automatically expire without any 
+manual action needed. Confirm all three steps worked.</pre>
+  </div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 02-G — Storage bucket for payment proofs</div>
+    <pre>Using the Supabase MCP tool, set up file storage in my liquid-app project:
+
+STEP 1: Create a storage bucket called 'payment-proofs' with these settings:
+- Private bucket (not public)
+- File size limit: 5MB (5242880 bytes)
+- Allowed MIME types: image/jpeg, image/png, image/webp, application/pdf
+
+STEP 2: Create storage policies:
+Policy 1: "Authenticated users can upload proofs"
+- Operation: INSERT
+- Condition: bucket_id = 'payment-proofs' AND auth.role() = 'authenticated'
+
+Policy 2: "Users can view their own proofs"  
+- Operation: SELECT
+- Condition: bucket_id = 'payment-proofs' AND 
+  auth.uid()::text = (storage.foldername(name))[1]
+
+Policy 3: "Service role has full access"
+- Operation: ALL
+- Condition: true
+(This allows admin to view all proofs from the admin panel)
+
+STEP 3: Confirm the bucket was created and show me all storage policies.</pre>
+  </div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 02-H — Verify the entire database</div>
+    <pre>Using the Supabase MCP tool, do a complete verification of my liquid-app 
+database and confirm everything is set up correctly.
+
+Check and report:
+1. List all tables in the public schema — should be: users, orders, app_settings, insights, notifications
+2. For each table show: column names, data types, constraints
+3. List all RLS policies for each table
+4. Show all rows in app_settings (confirm all 16 rows are there)
+5. Confirm the expire_old_orders function exists
+6. Confirm the pg_cron job 'expire-orders' is scheduled
+7. Confirm the payment-proofs storage bucket exists
+8. Confirm the handle_new_user trigger exists on auth.users
+
+If anything is missing from this checklist, fix it now and report what you fixed.</pre>
+  </div>
+
+  <div class="alert tip"><div class="alert-ico">✓</div><div class="alert-body"><strong>Database complete.</strong> After Prompt 02-H comes back clean, your entire Liquid database is live in Supabase. Every table, every policy, every trigger, every cron job — built through Cursor with no manual SQL. You are ready to build screens.</div></div>
+
+  <!-- ─── PART E: Ongoing MCP commands ─── -->
+  <div class="subh" style="margin-top:40px;">Part E — Ongoing database commands (use anytime)</div>
+  <div class="step-text" style="margin-bottom:16px;"><p>With MCP connected, you can manage your database through plain English at any point during development. Here are the commands you will use most often:</p></div>
+
+  <table class="tbl">
+    <tr><th>What you want to do</th><th>What to type in Cursor Composer</th></tr>
+    <tr><td>Check your current rates</td><td>"Using Supabase MCP, show me all rows in app_settings"</td></tr>
+    <tr><td>Change the buy rate to 1545</td><td>"Using Supabase MCP, update app_settings set value='1545' where key='buy_rate'"</td></tr>
+    <tr><td>Open or close the exchange</td><td>"Using Supabase MCP, set exchange_open to 'false' in app_settings"</td></tr>
+    <tr><td>See all orders</td><td>"Using Supabase MCP, show me the last 10 rows in the orders table with user_id and status"</td></tr>
+    <tr><td>See all users</td><td>"Using Supabase MCP, show me all users with their email and subscription_plan"</td></tr>
+    <tr><td>Manually upgrade a user's plan</td><td>"Using Supabase MCP, update users set subscription_plan='business' where email='<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="84f1f7e1f6c4e1e9e5ede8aae7ebe9">[email&#160;protected]</a>'"</td></tr>
+    <tr><td>Delete test data</td><td>"Using Supabase MCP, delete all orders where user_id = '[test user id]'"</td></tr>
+    <tr><td>Check if cron is running</td><td>"Using Supabase MCP, show me cron.job_run_details limit 5"</td></tr>
+    <tr><td>Add a new column later</td><td>"Using Supabase MCP, add a column called verified_at (timestamptz, nullable) to the users table"</td></tr>
+    <tr><td>Fix an RLS error</td><td>"Using Supabase MCP, show me all RLS policies on the orders table and check if they are correct"</td></tr>
+  </table>
+</div>
+
+<div class="hr"></div>
+
+<!-- ════════════════════════════════════ -->
+<!-- PHASE 03 — AUTH SCREENS -->
+<!-- ════════════════════════════════════ -->
+<div class="phase">
+  <div class="pbadge user">◉ User App</div>
+  <div class="phase-eye">Phase 03</div>
+  <div class="phase-title">Authentication Screens</div>
+  <div class="phase-sub">Give Cursor the exact UI reference HTML file alongside these prompts. Open your liquid_complete_user_screens.html in a browser, screenshot the screens, and drag them into the Cursor chat as visual references.</div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 03-A — useAuth hook</div>
+    <pre>Create src/hooks/useAuth.ts
+
+This hook manages all authentication state for the app.
+It should:
+1. Subscribe to Supabase auth state changes (supabase.auth.onAuthStateChange)
+2. Export: user, session, loading, isAdmin
+3. isAdmin = user?.email === ADMIN_EMAIL constant
+4. On sign out, clear all cached data
+
+Also create src/lib/helpers.ts with these utility functions:
+- formatNaira(amount: number): string — formats as ₦1,538,000
+- formatUsdt(amount: number): string — formats as 1,000 USDT
+- getTimerRemaining(createdAt: string): number — returns seconds remaining
+  (calculates: created_at + 20 minutes - now, returns 0 if negative)
+- getInitials(name: string): string — returns first letters of first+last name</pre>
+  </div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 03-B — Splash + Onboarding</div>
+    <pre>Build src/pages/entry/SplashScreen.tsx and OnboardingScreen.tsx.
+
+Reference screenshots: screens 01, A1, A2, A3 from liquid_complete_user_screens.html
+Attach those screenshots when sending this prompt.
+
+━━━ VISUAL DESIGN ━━━
+Dark background #0C0C0C throughout. Syne font for headings, Inter for body.
+Geometric shape art area fills top 60% of screen.
+Progress dots below art — active dot is gold and wider than inactive.
+Each onboarding slide: icon (💧 / ⇄ / ◈), tag uppercase, title with one word
+in gold italic, body text, button, skip link.
+
+━━━ SPLASH (SplashScreen.tsx at /splash) ━━━
+ON MOUNT:
+- Check localStorage key 'liquid_onboarded'
+- If value is 'true': immediately navigate('/signin') — do not show splash
+- If not set: show splash screen for exactly 1.5 seconds using setTimeout
+- After 1.5 seconds: navigate('/onboarding')
+
+━━━ ONBOARDING (OnboardingScreen.tsx at /onboarding) ━━━
+3 slides with smooth horizontal CSS transform transitions.
+
+Slide 1 — "Get Started" button: advance to slide 2
+Slide 2 — "Next" button: advance to slide 3
+Slide 3 — "Create Account" button:
+  set localStorage 'liquid_onboarded' = 'true'
+  navigate('/signup')
+
+"Already have an account? Sign in" (slide 1) and "Skip intro" (slides 2+3):
+  set localStorage 'liquid_onboarded' = 'true'
+  navigate('/signin')
+
+Swipe left/right must also advance/go back slides.
+Active progress dot: gold colour, wider than inactive dots.
+
+━━━ UX RULES ━━━
+- If user revisits /splash after completing onboarding: redirect to /signin immediately
+- If user revisits /onboarding after completing onboarding: redirect to /signin
+- No network requests on these screens — everything is localStorage only
+- Back button on device during onboarding: go to previous slide, not previous route
+
+━━━ STORAGE (localStorage only — no Supabase on these screens) ━━━
+Key: 'liquid_onboarded'
+Write: localStorage.setItem('liquid_onboarded', 'true')
+Read:  localStorage.getItem('liquid_onboarded') === 'true'
+This is the only persistent storage used on splash and onboarding screens.
+Do NOT call Supabase or make any network request here.</pre>
+  </div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 03-C — Sign In Screen</div>
+    <pre>Build src/pages/entry/SignInScreen.tsx
+
+Reference screenshot: screen "02 · Sign In" from liquid_complete_user_screens.html
+
+Design: dark background, "Liquid." logo in gold gradient text,
+"Welcome back" heading, grey subtitle.
+
+FUNCTIONALITY:
+1. Email field + password field with show/hide toggle (👁 icon on right)
+2. "Forgot password?" gold link right-aligned → navigate('/forgot-password')
+3. White "Sign In" button — full width:
+   - Loading spinner inside button while submitting
+   - Button disabled during load
+   - Calls supabase.auth.signInWithPassword({ email, password })
+   - On success: if user.email === ADMIN_EMAIL → navigate('/admin')
+     else → navigate('/home')
+   - On error: red toast "Incorrect email or password". Fields keep their values.
+4. Divider: "or continue with"
+5. Google button → supabase.auth.signInWithOAuth({ provider: 'google' })
+6. Footer link: "Don't have an account? Create one" → navigate('/signup')
+
+VALIDATION (runs before API call):
+- Email empty → red border + "Enter your email" below field
+- Password empty → red border + "Enter your password" below field
+- Do not fire API if either is empty</pre>
+  </div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 03-D — Sign Up Screen</div>
+    <pre>Build src/pages/entry/SignUpScreen.tsx
+
+Reference screenshot: screen "E1 · Sign Up" from liquid_complete_user_screens.html
+
+Same dark style as Sign In. Match reference exactly.
+
+FIELDS (in this order):
+1. Full Name (text input)
+2. Email Address (email input)
+3. Phone Number — two parts side by side:
+   Left: flag + "+234" prefix box (non-editable, dark surface)
+   Right: number input (tel type, placeholder "08012345678")
+4. Password (password type) with 👁 show/hide toggle on right
+   Hint text below: "At least 8 characters"
+5. Checkbox row: gold checkbox (checked state = gold bg + white ✓)
+   Text: "I agree to the Terms of Service and Privacy Policy"
+   "Terms of Service" and "Privacy Policy" are gold coloured links
+
+VALIDATION:
+- All 4 fields required — show inline error below each empty field
+- Password &lt; 8 chars → "Password must be at least 8 characters"
+- Phone not 11 digits → "Enter a valid 11-digit phone number"
+- Checkbox unchecked → checkbox pulses + "Please accept the terms"
+- Button stays disabled if any validation fails
+
+ON SUBMIT (all valid):
+1. Loading spinner in button, button disabled
+2. Call: supabase.auth.signUp({
+     email, password,
+     options: { data: { full_name: fullName, phone: '+234' + phoneNumber } }
+   })
+3. On success: navigate('/home')
+4. On error "User already registered": toast "Account exists — sign in instead?"
+   with gold "Sign In" link in the toast
+5. Any other error: red toast with the error message</pre>
+  </div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 03-E — Full Password Reset Flow (4 screens)</div>
+    <pre>Build the complete password reset flow. 4 screens total.
+Reference screenshots: E2, E3, E4, E5 from liquid_complete_user_screens.html
+
+Route: /forgot-password → /forgot-password/sent → /reset-password → /reset-password/success
+
+━━━ SCREEN E2: ForgotPasswordScreen.tsx (/forgot-password) ━━━
+- Back arrow ← top left + "Liquid." logo beside it
+- 🔑 icon in gold-tinted rounded box
+- "Reset password" heading
+- "Enter your email and we'll send you a link" subtitle
+- Email field
+- "Send Reset Link" white button (full width, loading state)
+- "Back to Sign In" gold link at bottom
+
+ON SUBMIT:
+  await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + '/reset-password'
+  })
+  On success: navigate('/forgot-password/sent')
+  On error: red toast with message
+
+━━━ SCREEN E3: ResetLinkSentScreen.tsx (/forgot-password/sent) ━━━
+- Large 📧 icon in green circle (80px, rounded-full)
+- "Check your email" heading
+- "We sent a reset link to" subtitle + user's email in white below
+- Info card (dark surface): "Check your spam folder. Link expires in 1 hour."
+- "Open Email App" white button — calls window.open('mailto:')
+- "Didn't receive it? Resend link" at bottom → calls resetPasswordForEmail again
+  Show "Sent!" confirmation for 3 seconds after resend
+
+━━━ SCREEN E4: NewPasswordScreen.tsx (/reset-password) ━━━
+This screen is opened from the email link (Supabase redirects here with token).
+On mount: call supabase.auth.getSession() — if no session, redirect to /signin.
+
+- "Liquid." logo
+- 🔒 icon in green-tinted rounded box  
+- "New password" heading
+- "Must be 8+ characters, different from previous" subtitle
+- "New Password" field with show/hide toggle
+- "Confirm New Password" field with show/hide toggle
+- Password strength bar: 4 segments, fill green as strength increases
+  Strength logic: length &lt;8 = 1 bar, 8-10 = 2 bars, 11-14 = 3 bars, 15+ = 4 bars
+  Label: "Weak" / "Fair" / "Strong" / "Very strong"
+- "Set New Password" white button
+
+VALIDATION:
+- Both fields required
+- Passwords must match → "Passwords do not match" below confirm field
+- Minimum 8 chars
+
+ON SUBMIT:
+  await supabase.auth.updateUser({ password: newPassword })
+  On success: navigate('/reset-password/success')
+  On error: red toast
+
+━━━ SCREEN E5: PasswordUpdatedScreen.tsx (/reset-password/success) ━━━
+- Large ✓ in green circle (80px)
+- "Password updated!" heading
+- "Your password has been changed. You can now sign in." subtitle
+- "Back to Sign In" white button → navigate('/signin')</pre>
+  </div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 03-F — Admin Sign In Screen</div>
+    <pre>Build src/pages/admin/AdminSignInScreen.tsx at route /admin/login
+
+This is a SEPARATE sign in screen only for the admin.
+It must NOT be accessible to regular users.
+Reference screenshot: "G1 · Admin Sign In" from liquid_complete_user_screens.html
+
+DESIGN (same dark base as user sign in but with admin branding):
+- "Liquid." logo in gold gradient
+- "Admin Panel" gold badge pill below the logo
+- "Admin access" heading
+- "Sign in with your admin credentials. This area is restricted." subtitle
+- Admin email field
+- Password field with show/hide toggle
+- Red security notice card: "Only authorised email addresses can access the
+  admin panel. Unauthorised attempts are logged."
+- Gold gradient "Sign In to Admin Panel" button (NOT white like user login)
+  Use: background: linear-gradient(135deg, #C8973F, #E8B865)
+
+FUNCTIONALITY:
+- Calls supabase.auth.signInWithPassword({ email, password })
+- On success: check if email === ADMIN_EMAIL
+  - If YES → navigate('/admin')
+  - If NO → immediately sign out + show red toast:
+    "Access denied. This account does not have admin privileges."
+- On wrong credentials: red toast "Incorrect credentials"
+- No Google OAuth button (admin must use email/password only)
+- No "Create account" link
+
+ROUTING:
+- If user is already logged in as admin when visiting /admin/login,
+  redirect immediately to /admin
+- Regular users who visit /admin (not /admin/login) get redirected to /admin/login,
+  not to /home</pre>
+  </div>
+</div>
+
+<div class="hr"></div>
+
+<!-- ════════════════════════════════════ -->
+<!-- PHASE 04 — HOME SCREEN -->
+<!-- ════════════════════════════════════ -->
+<div class="phase">
+  <div class="pbadge user">◉ User App</div>
+  <div class="phase-eye">Phase 04</div>
+  <div class="phase-title">Home Screen</div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 04-A — useAppSettings hook</div>
+    <pre>Create src/hooks/useAppSettings.ts
+
+This hook fetches the app_settings table from Supabase and returns all settings as typed values.
+Use React Query (useQuery) to cache the results.
+Re-fetch every 30 seconds to keep rates current.
+
+Return an object with these typed properties:
+- buyRate: number
+- sellRate: number
+- exchangeOpen: boolean
+- exchangeMessage: string
+- minOrderUsdt: number
+- maxOrderUsdt: number
+- announcement: string
+- allocStable: number
+- allocBtc: number
+- allocEth: number
+
+Export as: const { buyRate, exchangeOpen, ... } = useAppSettings()</pre>
+  </div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 04-B — Home Screen (all 3 states)</div>
+    <pre>Build src/pages/home/HomeScreen.tsx
+
+References: screens "03 · Home", "03B · Home — Exchange Closed",
+"03C · Home — Announcement Banner" from liquid_complete_user_screens.html
+
+LAYOUT (from reference — match exactly):
+- Top row: "Good morning, [first name]" muted + bold / settings ⚙ icon right
+- "Portfolio Value" label uppercase small
+- Big Naira balance in Syne 42px bold
+- "≈ X USDT" + green "▲ 12.4%" row
+- Rate bar (dark pill): green dot · "Live USDT rate" · rate from app_settings
+- 2-column white action cards grid: Acquire (↓ green) / Liquidate (↑ gold)
+- White rounded panel (28px top radius): "Recent Activity" · "View all"
+  Last 4 orders grouped by date label (Today / Yesterday / Mar 15)
+
+═══ STATE 1: NORMAL (exchange_open = true, no announcement) ═══
+Full opacity action cards. No status bars.
+
+═══ STATE 2: EXCHANGE CLOSED (exchange_open = false) ═══
+Show red status bar BETWEEN the rate bar and action cards:
+  [red dot] "Exchange currently closed — [exchange_message from app_settings]"
+  Background: rgba(224,82,82,0.08), border: rgba(224,82,82,0.2)
+Action cards: opacity 0.6 (dimmed, still visible)
+Tapping either card → navigate('/exchange/closed') NOT to buy/sell
+
+═══ STATE 3: ANNOUNCEMENT BANNER ═══
+If app_settings key='announcement' has a non-empty value:
+Show a gold banner as the VERY FIRST element on the screen, above everything:
+  [📢 icon] [announcement text] [✕ dismiss button]
+  Background: rgba(200,151,63,0.12), border-bottom: rgba(200,151,63,0.25)
+Tapping ✕ hides the banner for this session only (store dismissed=true in 
+component state, NOT in localStorage — shows again on next app open)
+
+═══ PENDING ORDER BANNER ═══
+If user has any order with status in ['awaiting_payment','proof_uploaded','verifying']:
+Show a gold clickable row at the top of the Recent Activity section:
+  [⏱] "You have a pending order →"
+  Background: rgba(200,151,63,0.06), border-radius: 10px
+  Tapping it → navigate('/exchange/order/[that order's id]')
+
+DATA:
+- Rate: from useAppSettings().buyRate (re-fetches every 30 seconds)
+- Portfolio value: calculate from completed orders in this user's orders table
+- Recent activity: last 4 orders for this user, newest first
+- User name: first word of users.full_name from useAuth()
+- Pending order: check orders WHERE user_id = current user AND 
+  status IN ['awaiting_payment','proof_uploaded','verifying'] LIMIT 1
+
+━━━ UX RULES (from UX flows doc) ━━━
+ON MOUNT — fetch in parallel:
+  (1) app_settings: buy_rate, announcement, exchange_open, exchange_message
+  (2) user's 4 most recent orders (newest first)
+  (3) check if user has any order with status IN ('awaiting_payment','proof_uploaded','verifying')
+Show grey skeleton blocks while loading. Replace with real data on success.
+
+ANNOUNCEMENT BANNER (if announcement value is not empty):
+  Gold top banner above everything. 📢 icon + text + ✕ dismiss button.
+  Tapping ✕: hide banner in component state only (NOT localStorage).
+  Banner reappears on next app open if announcement still set in DB.
+
+EXCHANGE OPEN/CLOSED:
+  exchange_open = true  → normal. Cards full opacity.
+  exchange_open = false → show red status bar between rate bar and cards:
+    red dot + "Exchange currently closed — [exchange_message]"
+    Action cards at opacity 0.6.
+    Tapping Acquire or Liquidate → navigate('/exchange/closed') NOT /exchange/buy
+
+PENDING ORDER BANNER:
+  If user has active order (awaiting/proof/verifying):
+    Show gold clickable row at top of Recent Activity:
+    ⏱ "You have a pending order →"
+    Tapping it → navigate('/exchange/order/[that orderId]')
+
+NAVIGATION:
+  ⚙ icon top right → navigate('/account')
+  "View all" → navigate('/history')
+  Any activity row → navigate('/exchange/order/[orderId]')
+  Acquire card (open) → navigate('/exchange/buy')
+  Liquidate card (open) → navigate('/exchange/sell/step1')
+
+NAV BAR: white background. ⌂ Home active.</pre>
+  </div>
+</div>
+
+<div class="hr"></div>
+
+<!-- ════════════════════════════════════ -->
+<!-- PHASE 05 — EXCHANGE FLOW -->
+<!-- ════════════════════════════════════ -->
+<div class="phase">
+  <div class="pbadge user">◉ User App</div>
+  <div class="phase-eye">Phase 05</div>
+  <div class="phase-title">Exchange Flow</div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 05-A — TimerBlock component</div>
+    <pre>Create src/components/exchange/TimerBlock.tsx
+
+This is the 20-minute countdown timer shown on exchange screens.
+It receives: createdAt (ISO string) or null, onExpire (callback function)
+
+BEHAVIOUR (critical — read carefully):
+- Calculate remaining seconds: (createdAt + 20 minutes) - now()
+- If remaining <= 0: immediately call onExpire()
+- Count down every second using setInterval
+- Display as MM:SS format
+- Colour changes:
+  - 20:00 to 10:01 → gold (#C8973F)
+  - 10:00 to 3:01 → orange (#D97706)  
+  - 3:00 to 0:01 → red (#E05252) with CSS pulse animation
+  - 0:00 → expired state
+- Progress bar depletes from 100% to 0% over 1200 seconds
+  Same colour transitions as the number
+- Label above: "Order Window" or "Transfer Window" (prop)
+- Sub-label: "Complete payment before expiry" (prop)
+- Clean up interval on unmount
+
+If createdAt is null (order not yet created): do NOT show timer.
+Timer only shows AFTER the order exists in the database.
+
+━━━ UX RULES ━━━
+- Timer is the source of truth for the user's payment window
+- If the user closes the app and reopens: timer resumes from correct time
+  (it calculates from created_at + 20min - now(), not from a stored countdown)
+- When timer hits 0:00 — call onExpire() immediately
+- onExpire() should: navigate to /exchange/expired/[orderId]
+- If proof is uploaded before timer hits 0: parent hides the timer component
+- Do not use setInterval alone — always derive time from created_at timestamp
+  so the timer stays accurate even if the tab was in the background
+
+NOTE: TimerBlock is a pure UI component. It does NOT call Supabase directly.
+The parent screen (OrderStatusScreen, AcquireScreen, SellStep2Screen) fetches
+the order from Supabase and passes created_at as the createdAt prop.
+TimerBlock only calculates and displays — all DB interaction is in the parent.</pre>
+  </div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 05-B — Acquire USDT Screen</div>
+    <pre>Build src/pages/exchange/AcquireScreen.tsx
+
+Reference screenshot attached. Match exactly.
+
+DATA FLOW:
+- Get buyRate, minOrderUsdt, maxOrderUsdt from useAppSettings
+- Get current user from useAuth
+
+UI STATE:
+- usdtAmount: string (controlled input)
+- ngnAmount: computed = parseFloat(usdtAmount) * buyRate
+- walletAddress: string
+- proofFile: File | null
+- loading: boolean
+- error: string | null
+- activeOrder: Order | null (check if user already has awaiting/proof order)
+
+ON MOUNT:
+- Check if user has existing active order (status = awaiting_payment or proof_uploaded)
+- If yes: show that order's details with running timer instead of input form
+- If exchange closed: redirect to /exchange/closed
+
+USDT INPUT:
+- Large input in Syne font (see reference)
+- As user types: instantly compute ngnAmount = input * buyRate
+- "USDT" currency tag on left of input
+- Below: "You pay: ₦[ngnAmount]" — updates live
+- Validation on every change (but don't show error until they try to submit):
+  below min → error, above max → error
+
+CONFIRM ORDER BUTTON — tap sequence:
+1. Validate: amount not empty AND within limits
+2. Validate: walletAddress not empty AND starts with 'T' AND 34 chars
+3. If any fail: show error messages, stop
+4. Set loading = true, disable button
+5. Insert into orders table:
+   { type: 'buy', amount_usdt, amount_ngn: ngnAmount, rate: buyRate,
+     user_id: user.id, status: 'awaiting_payment',
+     user_wallet_address: walletAddress }
+6. If proofFile selected: upload to Supabase Storage path: orderId/proof.ext
+   Update order payment_proof_url, set status = 'proof_uploaded'
+7. Trigger Telegram notification (call edge function or API)
+8. Trigger confirmation email
+9. Navigate to /exchange/order/[newOrderId]
+
+BACK BUTTON behaviour:
+- If no active order: go back to /home
+- If active order exists: show confirm dialog "Leave? Your order is still active"</pre>
+  </div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 05-C — Sell Step 1 + Step 2</div>
+    <pre>Build src/pages/exchange/SellStep1Screen.tsx and SellStep2Screen.tsx
+
+These are two screens in a single sell flow. Bank details entered in Step 1
+must be passed to Step 2 via React Router state (navigate('/exchange/sell/step2', { state: bankDetails })).
+
+STEP 1 (SellStep1Screen.tsx) — Reference screenshot attached:
+- Step indicator: 3 dots (Bank active gold, Amount grey, Send grey)
+- "Where should we send your Naira?" heading
+- Bank dropdown: list of 15 Nigerian banks (Opay, Access Bank, GTBank, 
+  Zenith Bank, First Bank, UBA, Kuda Bank, PalmPay, Sterling Bank, 
+  Wema Bank, Stanbic IBTC, FCMB, Fidelity Bank, Polaris Bank, Union Bank)
+- Account number input (numeric, maxLength=10)
+- When account number reaches exactly 10 digits:
+  → Show loading for 1 second (setTimout)
+  → Show green "✓ [name] — Account verified" badge
+  → Auto-fill account name field with a simulated name
+    (for now: use first word of bank name + " Account Holder")
+  → Account name field becomes visible and editable
+- "Continue to Amount →" gold button
+  Validates: bank selected + 10 digit account + name not empty
+  On success: navigate to /exchange/sell/step2 passing { bankName, bankAccount, bankHolder }
+
+STEP 2 (SellStep2Screen.tsx) — Reference screenshot attached:
+- Step indicator: Step 1 done, Step 2 active gold, Step 3 grey
+- Rate bar with GOLD dot (not green) showing sellRate
+- USDT amount input (same style as buy screen)
+- Below: "You receive: ₦[amount]" + "to [bankName] ••[last4]"
+- 20-min timer (TimerBlock component) — but only shown AFTER order creation
+  Before order: show "Order window starts when you submit"
+- White wallet card: your wallet address + TRC-20 badge + copy button
+  Copy button: copies address, changes to "✓ Copied" for 2s
+- Upload zone
+- "Submit for Verification" gold button
+  Same logic as buy: validate → create order (type='sell') with bank details from step 1 state
+  → navigate to /exchange/order/[newOrderId]
+- Back button → /exchange/sell/step1 (bank details retained in router state)
+
+━━━ UX RULES — SELL STEP 1 ━━━
+ON MOUNT:
+  If exchange_open = false → redirect to /exchange/closed immediately
+  If user has existing active order → show that order's timer and status instead of form
+
+BANK VERIFICATION:
+  After user types 10-digit account number:
+  Show loading spinner for 1 second, then show green "✓ [Account Holder Name] — [Bank]"
+  This simulates Paystack account verification (use a hardcoded lookup or mock for now)
+  "Continue" button only activates after the green verification badge appears
+
+ON CONTINUE:
+  Save { bank_name, account_number, account_holder } to component state / router state
+  Navigate to /exchange/sell/step2 — carry bank details forward
+
+━━━ UX RULES — SELL STEP 2 ━━━
+ON MOUNT:
+  Read bank details from router state passed from Step 1
+  If bank details missing (user navigated directly): redirect to /exchange/sell/step1
+  Display the Liquid USDT wallet address (TRC-20) for user to send to
+  Show copy button — tapping it copies address, shows "✓ Copied" for 2 seconds
+
+AMOUNT INPUT:
+  As user types USDT amount: instantly compute NGN = amount × sell_rate
+  Show live "You receive: ₦[amount]" below input
+  Validate on submit: amount ≥ min_order_usdt AND ≤ max_order_usdt
+
+WALLET ADDRESS FIELD:
+  User enters their USDT wallet address (where they're sending FROM) — this goes in order record
+  Required before submitting
+
+ON SUBMIT ("Submit for Verification"):
+  Validate amount + wallet address
+  Insert into orders: { type: 'sell', amount_usdt, amount_ngn, rate: sell_rate,
+    user_bank_name, user_bank_account, user_bank_holder, user_wallet_address,
+    status: 'awaiting_payment' }
+  Send Telegram: "🔔 NEW SELL ORDER\n[amount] USDT\nUser: [name]\n₦[ngn]\n..."
+  Send email to user: order confirmation
+  Navigate to /exchange/order/[newOrderId]</pre>
+  </div>
+</div>
+
+<div class="hr"></div>
+
+<!-- ════════════════════════════════════ -->
+<!-- PHASE 06 — ORDER STATUS + STATES -->
+<!-- ════════════════════════════════════ -->
+<div class="phase">
+  <div class="pbadge user">◉ User App</div>
+  <div class="phase-eye">Phase 06</div>
+  <div class="phase-title">Order Status + All State Screens</div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 06 — All Order State Screens</div>
+    <pre>Build all order state screens. References: screens 06, 06B, C1, C2, C3, C3B
+from liquid_complete_user_screens.html
+
+━━━ OrderStatusScreen.tsx (/exchange/order/:orderId) ━━━
+
+On mount: fetch the order by id. Subscribe to Supabase realtime updates
+so status changes appear instantly without page refresh.
+
+STEP TRACKER (4 steps, white card):
+Step 1 "Order Created" → always green ✓
+Step 2 "Payment Proof Uploaded" → green ✓ if status = proof_uploaded/verifying/completed
+Step 3 "Admin Verification" → gold ⏱ with CSS pulse if status = verifying
+Step 4 "Order Complete" → grey ○ until status = completed, then green ✓
+
+STATUS PILL COLOURS:
+awaiting_payment → blue pill "Awaiting Payment"
+proof_uploaded → gold pill "Proof Uploaded — Pending Review"
+verifying → gold pill "Admin Verification"
+completed → green pill "Completed ✓"
+expired → auto-navigate to /exchange/expired/[id]
+cancelled → red pill "Order Cancelled", show "Back to Home" button
+
+AWAITING PAYMENT STATE (screen 06B — status = awaiting_payment, no proof yet):
+Show a gold upload prompt card ABOVE the step tracker:
+  Title: "Upload your payment proof"
+  Body: "You have not uploaded proof yet. Upload your payment screenshot..."
+  Upload zone (dashed, same style as Acquire screen)
+  On file upload: upload to Supabase storage, update order status to proof_uploaded,
+  update payment_proof_url, hide this card
+
+ON STATUS CHANGE TO COMPLETED:
+All 4 steps go green. Status pill turns green. 
+Auto-navigate to /exchange/complete/[orderId] after 1.5 seconds.
+Trigger completion email and in-app notification.
+
+━━━ OrderCompleteScreen.tsx (/exchange/complete/:orderId) ━━━
+Reference screenshots: C3 (buy) and C3B (sell)
+
+Fetch the order by id on mount to determine type (buy or sell).
+
+LAYOUT:
+- Large green ✓ circle (80px)
+- "Order Complete" heading (buy) OR "Naira Sent" heading (sell)
+- DIFFERENT BODY TEXT based on order type:
+  type='buy': "Your USDT has been sent successfully. Check your wallet."
+  type='sell': "₦[formatNaira(amount_ngn)] has been sent to your 
+               [user_bank_name] account ••[last4 of user_bank_account]"
+- White details card:
+  Buy shows: Amount sent (X USDT), Naira paid, Rate, Reference, Status ✓
+  Sell shows: USDT received (X USDT), Naira sent to (BankName ••xxxx),
+              Amount (₦X), Rate, Reference, Status ✓
+- Gold email confirmation bar: "📧 Confirmation sent to [user email]"
+- "Back to Home" white button
+
+━━━ OrderExpiredScreen.tsx (/exchange/expired/:orderId) ━━━
+- ⏰ icon in gold-tinted box
+- "00:00" in large faded gold Syne font
+- "Order Expired" heading
+- Explanation: "Your 20-minute window passed. No payment detected.
+  Order auto-cancelled. No funds were deducted."
+- Dark card: cancelled order amount + reference + time
+- "Try Again" white button:
+  if order.type = 'buy' → navigate('/exchange/buy')
+  if order.type = 'sell' → navigate('/exchange/sell/step1')
+- "Back to Home" outline button
+
+━━━ ExchangeClosedScreen.tsx (/exchange/closed) ━━━
+- Back arrow + "Exchange" title
+- 🔒 icon in red-tinted box (80px)
+- "Exchange is currently closed" heading
+- Body: "Our exchange operates within set hours."
+- Operating hours badge (hardcoded): Mon–Fri 9am–8pm · Sat 10am–4pm
+- Admin message badge: show app_settings key='exchange_message' value
+  If empty → hide this badge entirely
+- "Browse Intelligence →" outline button → navigate('/intelligence')</pre>
+  </div>
+</div>
+
+<div class="hr"></div>
+
+<!-- ════════════════════════════════════ -->
+<!-- PHASE 07 — INTELLIGENCE + PLANS -->
+<!-- ════════════════════════════════════ -->
+<div class="phase">
+  <div class="pbadge user">◉ User App</div>
+  <div class="phase-eye">Phase 07</div>
+  <div class="phase-title">Intelligence, Plans &amp; Paystack</div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 07-A — Intelligence Screen</div>
+    <pre>Build src/pages/intelligence/IntelligenceScreen.tsx
+
+Reference screenshot attached.
+
+DATA:
+- User's subscription_plan from useAuth (then users table)
+- Published insights: query insights WHERE is_published=true ORDER BY published_at DESC
+- Allocation percentages from useAppSettings (allocStable, allocBtc, allocEth)
+
+TIER LOCK LOGIC (implement exactly):
+const canView = (tier: string, userPlan: string): boolean => {
+  if (tier === 'all') return true
+  if (tier === 'basic') return ['basic','business','institutional'].includes(userPlan)
+  if (tier === 'business') return ['business','institutional'].includes(userPlan)
+  if (tier === 'institutional') return userPlan === 'institutional'
+  return false
+}
+
+LOCKED POST BEHAVIOUR:
+- Card shows at 45% opacity
+- No body text shown
+- "🔒 [Tier] only" badge on bottom right
+- Tapping locked card → navigate to /plans
+- Cannot expand
+
+UNLOCKED POST BEHAVIOUR:
+- Full opacity, tap to expand
+- When expanded: show full content text, card border changes to gold
+- Second tap collapses
+
+HEADER:
+- User's plan badge top right (tap → /plans)
+- If subscription_plan = 'none': show yellow subscription prompt banner
+
+ALLOCATION BLOCK:
+- Use percentages from app_settings
+- Coloured bar: green for stable, gold for btc, grey for eth
+- 3 rows with dot + label + percentage
+
+━━━ UX RULES ━━━
+ON MOUNT:
+  Fetch user.subscription_plan from users table
+  Fetch all insights WHERE is_published = true ORDER BY published_at DESC
+  Apply canView() to each post
+
+TIER LOCK:
+  plan = 'none'     → ALL posts locked. Show gold subscribe banner above feed.
+                      Tapping any post → navigate('/plans')
+  plan = 'basic'    → unlocked: tier_access IN ('all','basic'). locked: business/institutional
+  plan = 'business' → unlocked: all/basic/business. locked: institutional only
+  plan = 'institutional' → everything unlocked
+
+LOCKED POST CARD:
+  Show at 45% opacity. Title visible. No body text. 🔒 badge bottom right.
+  Tapping → navigate('/plans')
+
+UNLOCKED POST CARD:
+  Full opacity. Tap card → navigate('/intelligence/post/[postId]')
+
+PLAN BADGE (top right of header):
+  Shows user's current plan (e.g. "Business")
+  Tapping → navigate('/plans')
+
+NAV: dark background. ◈ Insights active.</pre>
+  </div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 07-A2 — Post Detail Screen (unlocked + locked)</div>
+    <pre>Build src/pages/intelligence/PostDetailScreen.tsx at route /intelligence/post/:postId
+
+References: screens "F1 · Post Detail — Unlocked" and "F2 · Post Detail — Locked"
+from liquid_complete_user_screens.html
+
+On mount: fetch the post by id from insights table.
+Check canView(post.tier_access, user.subscription_plan) to determine if locked.
+
+LAYOUT (both states share the same header):
+- Back arrow ← + "Intelligence" title in screen nav
+- Category tag pill (gold/green/grey matching the tag)
+- Date top right (published_at formatted as "Mar 17, 2025")
+- Post title in Syne font, bold, large
+- Tier badge pill (green "◈ Basic & above" / gold "🔒 Institutional only")
+- Horizontal divider line
+
+UNLOCKED STATE (F1):
+- Full article body text in readable font-size 14px, line-height 1.8
+- Pull quote block: gold left border (2px), gold-tinted background,
+  italic text inside
+- Multiple paragraphs with section headings if post has them
+- Dark nav with ◈ Insights active
+
+LOCKED STATE (F2):
+- Show 2 blurred paragraphs (filter:blur(5px), opacity:0.35, pointer-events:none)
+  These are just the first ~100 chars of content, blurred, not the real content
+- Lock overlay centred on top of the blur:
+  - 🔒 icon in gold-tinted box
+  - "[Tier] access only" heading
+  - "Upgrade your plan to unlock..." body
+  - Gold gradient "Upgrade to [Tier] →" button → navigate('/plans')
+  - "View all plans" muted link → navigate('/plans')
+
+NAVIGATION:
+- Tapping back → navigate('/intelligence')
+- The locked overlay upgrade button and "View all plans" both go to /plans
+
+━━━ UX RULES ━━━
+ON MOUNT:
+  Fetch post by id from insights table WHERE id = postId AND is_published = true
+  If post not found → show "Post not found" and back button
+  Run canView(post.tier_access, user.subscription_plan)
+  If canView = true → render unlocked (F1)
+  If canView = false → render locked (F2)
+  If user arrived from a notification (check query param or router state):
+    DB: update notifications.is_read = true for that notification
+
+UNLOCKED (F1):
+  Render full article. Pull quote with gold left border.
+  No truncation — show entire content field from insights table.
+
+LOCKED (F2):
+  Show only title + tier badge. Body is blurred (filter:blur(5px) opacity:0.35).
+  Lock overlay sits on top: 🔒 icon, "[Tier] access only" heading, upgrade button.
+  Tapping "Upgrade to [Tier] →" → navigate('/plans')
+  Tapping "View all plans" → navigate('/plans')
+  Tapping back → navigate('/intelligence')
+
+NAV: dark background. ◈ Insights active.</pre>
+  </div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 07-B — Plans + Paystack</div>
+    <pre>Build src/pages/intelligence/PlansScreen.tsx
+
+Install Paystack: npm install @paystack/inline-js
+
+Reference screenshot attached. Three plan cards.
+
+PLAN DATA:
+const plans = [
+  { id: 'basic', name: 'Basic', price: 15000, priceKobo: 1500000,
+    desc: 'Weekly market outlook for the individual building their portfolio.',
+    features: ['Weekly macro outlook', 'Portfolio allocation guidance', 'Market direction signals'] },
+  { id: 'business', name: 'Business', price: 45000, priceKobo: 4500000, popular: true,
+    desc: 'Institutional-level analysis and liquidity insights.',
+    features: ['Everything in Basic', 'Liquidity flow analysis', 'Cycle positioning strategy', 'Priority support'] },
+  { id: 'institutional', name: 'Institutional', price: 120000, priceKobo: 12000000,
+    desc: 'Private briefings and capital allocation frameworks.',
+    features: ['Everything in Business', 'Private strategy briefings', '1-on-1 consultation'] }
+]
+
+BUTTON STATES per card:
+- User is on this plan → green "Current Plan ✓" label (no button)
+- User is on lower plan → "Upgrade" button
+- User has no plan → "Subscribe Now" button
+
+PAYSTACK FLOW:
+import PaystackPop from '@paystack/inline-js'
+
+On Subscribe/Upgrade tap:
+const paystack = new PaystackPop()
+paystack.newTransaction({
+  key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
+  email: user.email,
+  amount: plan.priceKobo,
+  currency: 'NGN',
+  metadata: { plan: plan.id, user_id: user.id },
+  onSuccess: async (transaction) => {
+    // Update user's plan in database
+    await supabase.from('users')
+      .update({ subscription_plan: plan.id })
+      .eq('id', user.id)
+    // Create notification
+    await supabase.from('notifications').insert({
+      user_id: user.id,
+      title: 'Subscription Activated',
+      message: `Your ${plan.name} plan is now active`,
+      type: 'subscription'
+    })
+    // Show success toast
+    showToast(`Welcome to ${plan.name} 🎉`, 'success')
+    // Refresh page so buttons update
+    refetch()
+
+━━━ UX RULES ━━━
+ON MOUNT:
+  Read user.subscription_plan from users table
+  For the plan user is currently on → show green "Current Plan ✓" label, NO button
+  For plans ABOVE current → show "Upgrade" button
+  For plans BELOW current → show "Downgrade" button (or hide — your choice)
+  For plan = 'none' → show "Subscribe Now" on all three
+
+PAYSTACK FLOW:
+  Tap Subscribe/Upgrade → Paystack inline popup opens (over this screen)
+  Popup pre-fills user's email automatically
+  On success callback:
+    DB: update users.subscription_plan = plan.id
+    DB: insert into notifications (in-app notification to user)
+    Notify: send Telegram to admin "🎉 NEW SUBSCRIBER [name] → [plan] ₦[price]"
+    Notify: send email to user via Resend "Subscription Activated"
+    Toast: "Welcome to [Plan] 🎉" in green
+    Refetch user plan so buttons update immediately
+
+  On payment cancelled: popup closes, nothing changes, no toast
+
+  On payment failed:
+    Toast: "Payment failed. Please try again." in red
+    No DB changes
+
+BACK NAVIGATION:
+  ← back → navigate(-1) — return to wherever user came from (/intelligence or /account)
+
+EXPLICIT NAVIGATION CALLS:
+  navigate('/intelligence')  — after successful subscribe if came from feed
+  navigate('/plans')         — from locked post upgrade button
+  navigate(-1)               — from back arrow
+
+NAV: dark background. ◎ Plans active.</pre>
+  </div>
+  },
+  onCancel: () => {
+    showToast('Payment cancelled', 'info')
+  }
+})</pre>
+  </div>
+</div>
+
+<div class="hr"></div>
+
+<!-- ════════════════════════════════════ -->
+<!-- PHASE 08 — PORTFOLIO + ACCOUNT -->
+<!-- ════════════════════════════════════ -->
+<div class="phase">
+  <div class="pbadge user">◉ User App</div>
+  <div class="phase-eye">Phase 08</div>
+  <div class="phase-title">Portfolio, History, Notifications &amp; Account</div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 08 — Portfolio, History, Notifications, Account + Sub-screens</div>
+    <pre>Build these screens. References: 09, D1, D2, D3, D4, D5 from liquid_complete_user_screens.html
+
+═══ PortfolioScreen.tsx (/portfolio) ═══
+- Portfolio value: sum all completed buy orders minus completed sell orders × current rate
+- Metrics 2×2 grid (dark tiles): USDT Held, Total Orders, Monthly ROI, Active Since
+- Allocation bar + 3 rows (percentages from app_settings)
+- "Adjust" link → /plans
+- White bottom panel, white bottom nav, ▦ Portfolio active
+
+═══ TransactionHistoryScreen.tsx (/history) ═══
+- Filter pills: All, Acquired (buy), Liquidated (sell), Pending
+  Active pill: gold border + gold text
+- Orders grouped by date, newest first
+- Icons: ↓ green (buy), ↑ gold (sell), ✕ red (expired)
+- Tap row → /exchange/order/[orderId]
+- Empty state if no orders
+
+═══ NotificationsScreen.tsx (/notifications) ═══
+- Fetch for this user, newest first
+- Unread: gold dot right side
+- Tap: mark as read, then navigate based on type:
+  'order' → /exchange/order/[order_id]
+  'insight' → /intelligence
+  'subscription' → /plans
+- "Mark all read" → update all is_read=true for this user
+- Unread count badge on ▦ nav icon (shared via context or prop)
+
+═══ AccountScreen.tsx (/account) ═══
+- Avatar with initials, name, email, plan badge
+- EXCHANGE section:
+  "Saved Bank Accounts" row (shows default bank name ••last4) → navigate('/account/banks')
+  "USDT Wallet Address" row (shows truncated address) → open WalletBottomSheet
+- SUBSCRIPTION section: current plan, renewal date, upgrade button → /plans
+- NOTIFICATIONS section: two toggles → save to users.notification_prefs JSON
+- SUPPORT section: WhatsApp link, Terms link
+- Sign Out → confirm dialog → supabase.auth.signOut() → /signin
+
+═══ SavedBanksScreen.tsx (/account/banks) ═══
+Reference: screen "D4 · Saved Bank Accounts" from liquid_complete_user_screens.html
+
+LAYOUT:
+- Back arrow + "Saved Banks" title + "+ Add Bank" gold pill button top right
+- "YOUR ACCOUNTS" section label
+- Bank rows: each shows bank name, account number, account holder
+  - Default bank has gold "DEFAULT" badge
+  - Non-default: "Set default" gold link + "Remove" grey link
+- Dashed "Add a new bank account" card at bottom — tapping opens AddBankSheet
+
+ADD BANK BOTTOM SHEET:
+- Bank dropdown (same 15 banks as sell flow)
+- Account number field (10 digits)
+- When 10 digits entered: simulate verification badge (same as sell step 1)
+- Account name auto-fill
+- "Save Bank Account" button → insert into saved_banks column of users table
+  (store as JSON array: [{ bank_name, account_number, account_holder, is_default }])
+
+SET DEFAULT: update the is_default flag in the JSON array for this bank, set others to false
+REMOVE: filter out that bank from the JSON array
+
+═══ WalletBottomSheet component ═══
+Reference: screen "D5 · Edit USDT Wallet Address"
+
+This is a bottom sheet modal (slides up from bottom) that appears over AccountScreen.
+NOT a separate route — it's a component rendered conditionally inside AccountScreen.
+
+LAYOUT:
+- Sheet handle (grey pill at top)
+- "USDT Wallet Address" heading
+- Body text explaining TRC-20 requirement
+- "TRC-20 Address" label + text input (monospace font)
+  Gold border when focused
+  If existing address: pre-fill the input
+- After 34 chars entered starting with T:
+  Show green "✓ Valid TRC-20 address" badge below input
+- ✕ clear button inside input on right
+- "Save Address" white button → update users.usdt_wallet_address → close sheet → toast "Address saved ✓"
+- "Cancel" outline button → close sheet without saving
+
+Sheet behaviour:
+- Tapping outside the sheet or pressing ← closes it without saving
+- Background (AccountScreen) is dimmed with overlay when sheet is open</pre>
+  </div>
+</div>
+
+<div class="hr"></div>
+
+<!-- ════════════════════════════════════ -->
+<!-- PHASE 09 — ADMIN APP -->
+<!-- ════════════════════════════════════ -->
+<div class="phase">
+  <div class="pbadge admin">◉ Admin App</div>
+  <div class="phase-eye">Phase 09</div>
+  <div class="phase-title">Admin App — Sign In, Shell, Dashboard &amp; Controls</div>
+  <div class="phase-sub">The admin app is desktop-first with a fixed sidebar. It lives at /admin/* and is only accessible when logged in with your admin email. Reference: liquid_admin_app.html. Build the admin sign in screen first — it is the gate to everything else.</div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 09-A — Admin Sign In Screen</div>
+    <pre>Build src/pages/admin/AdminSignInScreen.tsx at route /admin/login
+
+Reference: screen "G1 · Admin Sign In" from liquid_complete_user_screens.html
+
+This screen is the entry point to the admin panel. It looks like the user
+Sign In screen BUT with these important differences:
+- "Admin Panel" gold badge pill under the "Liquid." logo
+- Heading: "Admin access" (not "Welcome back")
+- Subtitle: "Sign in with your admin credentials. This area is restricted."
+- The sign in button is gold gradient, NOT white:
+  background: linear-gradient(135deg, #C8973F, #E8B865); color: #fff
+  Text: "Sign In to Admin Panel"
+- Red security notice card (below password field, above button):
+  🔒 "Only authorised email addresses can access the admin panel."
+- NO Google OAuth button
+- NO "Create account" link
+
+LOGIC:
+1. Call supabase.auth.signInWithPassword({ email, password })
+2. On success:
+   a. Check if email === ADMIN_EMAIL constant
+   b. If YES → navigate('/admin')
+   c. If NO → call supabase.auth.signOut() then show red toast:
+      "Access denied. This account is not an admin."
+3. On wrong credentials: red toast "Incorrect credentials"
+
+ROUTING GUARD:
+- If visiting /admin/login while already logged in as admin → redirect to /admin
+- If visiting /admin/* while NOT logged in → redirect to /admin/login
+  (This means regular users who try to access /admin go to /admin/login,
+   not to /home — so they hit the access denied wall immediately)</pre>
+  </div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 09-B — Admin Layout + Auth Guard</div>
+    <pre>Build src/pages/admin/AdminLayout.tsx
+
+Reference: liquid_admin_app.html — open it in your browser and screenshot
+the sidebar + topbar area. Attach that screenshot with this prompt.
+
+This is the shell that wraps ALL admin pages. Every /admin/* route renders
+inside this layout. The sidebar is fixed on the left, content fills the right.
+
+━━━ VISUAL DESIGN ━━━
+Sidebar: 220px wide, background #1A1A1A (dark)
+Main content area: background #F0EFED (off-white)
+Logo: "Liquid." in gold gradient, "Admin Panel" subtitle below in grey
+
+SIDEBAR NAVIGATION ITEMS (use Lucide React icons):
+  ▦  Dashboard   → navigate('/admin')          icon: LayoutDashboard
+  ⇄  Orders      → navigate('/admin/orders')   icon: ArrowLeftRight  + red pending badge
+  ✎  New Post    → navigate('/admin/post/new') icon: PenLine
+  ◈  All Posts   → navigate('/admin/posts')    icon: Layers
+  👤 Users       → navigate('/admin/users')    icon: Users
+  ⚙  Settings   → navigate('/admin/settings') icon: Settings
+
+ACTIVE NAV STATE:
+  Use useLocation() to detect current path
+  Active item: rgba(200,151,63,0.12) background + gold left border (2px)
+  Active label: rgba(255,255,255,0.85)
+  Inactive label: rgba(255,255,255,0.5)
+
+PENDING ORDERS BADGE:
+  Query: orders WHERE status IN ('awaiting_payment','proof_uploaded','verifying')
+  Show count in red badge on the Orders nav item
+  Subscribe to orders table realtime → badge updates live without refresh
+
+BOTTOM OF SIDEBAR:
+  Admin avatar circle (gold gradient initials "AD")
+  Name: "Admin", Sub-label: "Liquid Owner"
+
+━━━ AUTH GUARD ━━━
+On mount:
+  Check useAuth().user
+  If no user → navigate('/admin/login')
+  If user.email !== ADMIN_EMAIL → navigate('/admin/login')
+  If admin → render layout with {children}
+
+If admin session expires mid-use → redirect to /admin/login automatically
+
+━━━ NAVIGATION CALLS ━━━
+navigate('/admin')
+navigate('/admin/orders')
+navigate('/admin/post/new')
+navigate('/admin/posts')
+navigate('/admin/users')
+navigate('/admin/settings')
+navigate('/admin/login')   — for failed auth guard</pre>
+  </div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 09-C — Admin Dashboard (with empty state)</div>
+    <pre>Build src/pages/admin/AdminDashboard.tsx
+
+Reference: liquid_admin_app.html dashboard page AND the "All Clear" empty state
+panel at the bottom of that file. Match both states precisely.
+
+TOP STATS ROW (4 cards):
+1. Today's Volume: sum amount_ngn for orders WHERE DATE(created_at) = today
+2. Spread Earned: sum (buy_rate - sell_rate) * amount_usdt for completed today
+3. Active Subscribers: count users WHERE subscription_plan != 'none'
+4. Monthly Revenue: Basic×count + Business×count + Institutional×count
+
+RATE SETTER CARD:
+- Buy rate + sell rate inputs (pre-filled from app_settings)
+- Live spread = buy_rate - sell_rate updates as user types
+- "Save" button per rate → update app_settings → show "Saved ✓" for 2 seconds
+
+EXCHANGE CONTROLS CARD:
+- ON/OFF toggle → update app_settings exchange_open
+  Green "OPEN" label when true, red "CLOSED" when false
+- Exchange message text input → update app_settings exchange_message
+- Min/Max order inputs with Save button
+
+PENDING ORDERS SECTION — TWO STATES:
+STATE 1 (has pending orders): show last 3 orders, each with avatar, name,
+  type badge, amount, countdown timer, "Approve" button
+  "View all →" link → /admin/orders
+
+STATE 2 (zero pending orders — "All Clear"):
+  Large green ✓ circle (72px)
+  "All clear" heading
+  "No pending orders right now" body text
+  Stats row below: Completed today (count), Pending (0), Today's volume
+  This state feels REASSURING not empty — show the good stats proudly
+
+━━━ UX RULES ━━━
+ON MOUNT:
+  Fetch all 4 stat values from orders + users tables
+  Fetch app_settings for current buy_rate, sell_rate, exchange_open, exchange_message
+  Fetch last 3 pending orders for the preview section
+  Subscribe to orders table realtime — pending badge and preview update live
+
+RATE SETTER:
+  User edits buy_rate input → "Spread = ₦[buy-sell]" updates live as they type
+  Tap "Save" button next to buy_rate:
+    DB: update app_settings set value='[newRate]' where key='buy_rate'
+    Show "Saved ✓" green text beside input for 2 seconds, then hide
+  Same flow for sell_rate
+
+EXCHANGE TOGGLE:
+  Toggle ON → DB: set exchange_open='true'. Label turns green "OPEN"
+  Toggle OFF → DB: set exchange_open='false'. Label turns red "CLOSED"
+  Change takes effect immediately — users on the home screen see it within 30 seconds
+  (useAppSettings hook re-fetches every 30 seconds)
+
+EXCHANGE MESSAGE:
+  Text input below toggle
+  "Save" button → DB: update exchange_message value
+  This message appears in the red status bar on the home screen
+
+"VIEW ALL →" LINK:
+  navigate('/admin/orders')</pre>
+  </div>
+</div>
+
+<div class="hr"></div>
+
+<!-- ════════════════════════════════════ -->
+<!-- PHASE 10 — ADMIN ORDERS + POSTS + USERS -->
+<!-- ════════════════════════════════════ -->
+<div class="phase">
+  <div class="pbadge admin">◉ Admin App</div>
+  <div class="phase-eye">Phase 10</div>
+  <div class="phase-title">Admin Orders, Intelligence Editor &amp; Users</div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 10-A — Admin Orders Page</div>
+    <pre>Build src/pages/admin/AdminOrders.tsx
+
+Reference: liquid_admin_app.html orders page.
+
+━━━ UX RULES ━━━
+ON MOUNT:
+  Fetch orders WHERE status IN ('awaiting_payment','proof_uploaded','verifying')
+  Default filter: Pending. Filter pills: Pending / All / Completed
+  Subscribe to orders table realtime — new orders appear instantly without refresh
+
+FILTER PILLS:
+  "Pending (N)" → show only awaiting/proof/verifying
+  "All" → show all orders newest first
+  "Completed" → show only completed orders
+
+TWO-PANEL LAYOUT:
+Left: orders table (takes 60% width)
+Right: order detail panel (40%, slides in when View is clicked, hidden by default)
+
+ORDERS TABLE:
+Columns: User (avatar+name+email), Type (Buy/Sell badge), Amount USDT, 
+Naira, Status badge, Timer, Actions
+
+Subscribe to real-time updates so new orders appear without refresh.
+
+STATUS BADGE COLOURS:
+awaiting_payment → blue
+proof_uploaded → gold
+verifying → gold
+completed → green
+expired → red
+cancelled → red
+
+TIMER COLUMN:
+- Calculate time since created_at
+- If order is expired or completed: show "—"
+- Else: show MM:SS countdown, colour: green < 10min, gold 10-18min, red > 18min
+
+ACTIONS:
+- "View" → opens detail panel with this order highlighted
+- Quick "Approve" button when status = proof_uploaded → update to 'verifying'
+- Quick "Cancel" button → confirm dialog → update to 'cancelled'
+
+ORDER DETAIL PANEL (right side):
+- Order amount large heading
+- Order ID, type, timestamp, status badge
+- Details grid: User name, email, amount, rate
+- For BUY orders: "Send USDT to: [user_wallet_address]"
+- For SELL orders: Bank name, account number, account holder
+- Proof image: if payment_proof_url exists, show image with "Download" button
+  Use Supabase createSignedUrl to get a temporary access URL
+- Admin notes textarea → save to orders.admin_notes on blur
+- TxID input → save to orders.tx_hash on change
+- Action buttons:
+  "Approve ✓" → update status='verifying', notify user
+  "Mark Complete ✓" → confirm dialog → update status='completed', 
+    set completed_at=now(), create user notification, send email
+  "Cancel ✕" → confirm dialog → update status='cancelled', notify user
+
+FILTER TABS: Pending (count), All, Completed, Expired
+
+━━━ UX RULES — ORDER DETAIL PANEL ━━━
+OPEN: Tap "View" on any row → right panel slides in (40% width).
+  Selected row gets a gold left border.
+  Panel shows: order amount (large), reference, status badge, user details,
+  bank/wallet info, payment proof image (tap to open fullscreen), admin notes textarea,
+  TxID input (for buy orders — paste after sending USDT on Bitget), action buttons.
+
+PROOF IMAGE:
+  If payment_proof_url exists: show image. Tap → open fullscreen lightbox.
+  If no proof: show dashed placeholder "No proof uploaded yet"
+
+ADMIN NOTES:
+  Textarea → auto-saves on blur (update orders.admin_notes)
+
+MARK COMPLETE:
+  Show confirm dialog: "Mark this order as complete? This cannot be undone."
+  On confirm:
+    DB: update status='completed', completed_at=now()
+    DB: if buy order — save tx_hash from TxID input field
+    DB: create notification for user (type='order', title='Order Complete')
+    Notify: send email to user via send-email edge function
+    Notify: send Telegram "✅ ORDER COMPLETED #[ref] [amount] USDT"
+    Close detail panel. Row disappears from Pending filter.
+
+CLOSE PANEL:
+  ✕ button or clicking outside panel closes it. Selected row border clears.
+
+NAVIGATION:
+  Sidebar "Dashboard" → navigate('/admin')
+  After marking order complete → row disappears from Pending list, stay on /admin/orders
+  After cancelling order → row disappears from Pending list, stay on /admin/orders</pre>
+  </div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 10-B — Admin Intelligence Editor + Posts</div>
+    <pre>Build AdminNewPost.tsx and AdminPosts.tsx
+
+Reference: liquid_admin_app.html intelligence editor page.
+
+═══ AdminNewPost.tsx (/admin/post/new AND /admin/post/:id/edit) ═══
+
+TWO COLUMN LAYOUT:
+Left (60%): Title input + Content textarea
+Right (40%): Settings + Live preview
+
+LEFT COLUMN:
+- Title: large Syne font input, placeholder "e.g. BTC liquidity conditions..."
+- Content: textarea, min-height 140px, line-height 1.6
+
+RIGHT COLUMN — SETTINGS:
+- Category tag selector (pill buttons, single select):
+  Macro Outlook (gold), Allocation Strategy (green), 
+  Private Strategy (grey), Liquidity Insights (gold)
+  Selected tag has solid border matching its colour
+  
+- Access Tier (3 tile options, single select):
+  Basic / Business / Institutional
+  Selected tile has gold border
+  
+- Publish Time: "Publish immediately" or show date picker for scheduling
+
+- Action buttons:
+  "Publish Post" (dark button) → insert with is_published=true, published_at=now()
+  "Save Draft" (outline) → insert with is_published=false
+  Both validate: title + content + tag + tier all filled
+
+RIGHT COLUMN — LIVE PREVIEW (dark card):
+Shows exactly how post card looks in user app.
+Updates in real-time as you type in title/content.
+Shows tag colour, truncated title, body preview (120 chars), date, tier badge.
+
+EDIT MODE: If route is /admin/post/:id/edit
+Pre-fill all fields from the existing post.
+Publish button says "Update Post" → update existing row instead of insert.
+
+═══ AdminPosts.tsx (/admin/posts) ═══
+Two sections: Published and Drafts
+Each row: tag pill, title, tier badge, date, view count, Edit button, Delete button
+Edit → navigate to /admin/post/[id]/edit
+Delete → confirm dialog → delete from insights table
+
+━━━ UX RULES — NEW POST ━━━
+"Publish Now" button:
+  Validate: title not empty, content not empty, tag selected, tier selected
+  DB: insert into insights { title, content, tag, tier_access, is_published: true, published_at: now() }
+  Toast: "Post published ✓"
+  Navigate to /admin/posts
+
+"Save Draft" button:
+  DB: insert into insights { title, content, tag, tier_access, is_published: false }
+  Toast: "Draft saved"
+  Navigate to /admin/posts
+
+LIVE PREVIEW (right column):
+  Updates in real time as admin types title or content.
+  Shows exactly how the post card looks to users in the intelligence feed.
+  If tier_access = 'institutional': show 🔒 badge on preview.
+
+━━━ UX RULES — ALL POSTS ━━━
+ON MOUNT: fetch all insights ORDER BY created_at DESC
+Two sections: Published (is_published=true) and Drafts (is_published=false)
+
+Each row:
+  "Edit" → navigate('/admin/post/[id]/edit') — loads pre-filled editor
+  "Delete" → confirm dialog "Delete this post? This cannot be undone."
+    DB: delete from insights WHERE id = postId
+    Remove row from list immediately (optimistic update)</pre>
+  </div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 10-C — Admin Users + User Detail Panel + Settings</div>
+    <pre>Build AdminUsers.tsx and AdminSettings.tsx
+
+Reference: liquid_admin_app.html — Users page AND the "User Detail Panel" 
+state shown in the Additional Admin States section at the bottom of that file.
+
+═══ AdminUsers.tsx (/admin/users) ═══
+
+Search bar at top (live filter by name or email as you type)
+
+USERS TABLE:
+Columns: User (avatar+name+email), Plan (coloured badge), 
+Total Orders (count), Joined Date, Actions
+
+Plan badge colours:
+none = grey "No Plan"  
+basic = white/grey "Basic"
+business = gold "Business"
+institutional = dark background + gold text "Institutional"
+
+ACTIONS per row:
+- "View" button → opens User Detail Panel (right column slide-in)
+  Row gets a gold left border when selected
+- Plan dropdown → on change:
+  Update users.subscription_plan
+  Create notification to user: "Your plan has been updated to [plan]"
+  Show green toast: "Plan updated ✓"
+
+USER DETAIL PANEL (slides in from right, occupies 40% of page):
+Reference: "Admin State · Users → View User Detail Panel" in liquid_admin_app.html
+
+- ✕ close button top right → closes panel
+- User avatar (52px, gold gradient initials)
+- Full name, email, phone, joined date
+- Plan badge
+- Stats row (3 tiles): Total Orders, Total Volume (₦), Joined date
+- "Change Plan" section: dropdown + "Update" dark button
+- "Recent Orders" section: last 3 orders, each showing:
+  Order reference + type, status coloured text (Completed/Expired/etc)
+  One order per row separated by border-bottom
+
+The table and detail panel exist side by side in a grid layout.
+When panel is closed: table takes full width.
+When panel is open: table takes 60%, panel takes 40%.
+
+═══ AdminSettings.tsx (/admin/settings) ═══
+Two column grid layout.
+
+LEFT COLUMN:
+1. Announcement Banner card:
+   - Text input (pre-filled with current announcement value)
+   - "Publish Banner" dark button → update app_settings announcement
+   - "Clear" grey button → set announcement to ''
+   - Show preview of how banner looks in user app (gold pill below input)
+
+2. Admin Account card:
+   - Admin email display (read-only)
+   - New password input
+   - "Save Changes" button → supabase.auth.updateUser({ password })
+
+RIGHT COLUMN:
+1. Telegram Notifications card:
+   - Bot Token field (password type, show/hide)
+   - Chat ID field
+   - Hint: "Get your Chat ID from @userinfobot on Telegram"
+   - "Save & Test" button → save to app_settings + call Telegram test message
+     Success: green toast "✓ Test message sent to your Telegram"
+     Error: red toast with the API error
+
+2. Notification Triggers card (4 toggles):
+   New order placed / Proof uploaded / Order expired / New subscriber
+   Each toggle reads/writes to its app_settings key
+
+━━━ UX RULES — USERS TABLE ━━━
+ON MOUNT: fetch all users ORDER BY created_at DESC
+  For each user: join count of their orders from orders table
+
+SEARCH: filters live on every keystroke — no submit button needed
+  Filter by full_name OR email (case insensitive)
+
+PLAN DROPDOWN:
+  On change: DB: update users.subscription_plan = newPlan
+  DB: insert into notifications { user_id, title: 'Plan Updated',
+    message: 'Your plan has been updated to [plan]', type: 'subscription' }
+  Toast: "Plan updated ✓"
+  Row badge updates immediately (optimistic update)
+
+USER DETAIL PANEL:
+  Open: tap "View" on any row → right panel slides in
+  Close: ✕ button or clicking outside
+  Shows: avatar, name, email, phone, joined date, current plan badge,
+    3 stat tiles (orders, volume, joined), Change Plan dropdown + Update button,
+    last 3 orders list
+
+  "Update" button in plan section:
+    DB: update users.subscription_plan = selectedPlan
+    DB: create notification for user
+    Toast: "Plan updated ✓"
+    Close panel. Table row badge updates.
+
+━━━ UX RULES — SETTINGS ━━━
+ANNOUNCEMENT BANNER:
+  "Publish Banner" → DB: update app_settings set value=[text] where key='announcement'
+  "Clear" → DB: set announcement = ''
+  Both: toast "Saved ✓"
+
+TELEGRAM:
+  "Save & Test" → save both token and chat_id to app_settings
+  Then POST to Telegram API with test message: "✅ Liquid admin connected"
+  Success: toast "Test message sent ✓"
+  Failure: toast "Failed — check your token and Chat ID"
+
+ADMIN PASSWORD:
+  "Save Changes" → supabase.auth.updateUser({ password: newPassword })
+  Toast: "Password updated ✓"
+
+NAVIGATION:
+  All admin pages stay within the /admin/* shell (AdminLayout handles routing)
+  Sidebar nav links: navigate('/admin'), navigate('/admin/orders'), etc.
+  After updating user plan → stay on /admin/users, panel closes
+  After publishing banner → stay on /admin/settings</pre>
+  </div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 10-D — Admin Edit Post Mode</div>
+    <pre>Update AdminNewPost.tsx to handle EDIT MODE when route is /admin/post/:id/edit
+
+Reference: "Admin State · All Posts → Edit Post" in liquid_admin_app.html
+
+EDIT MODE DETECTION:
+- If route contains an :id param → fetch that post from insights table
+- Pre-fill: title input, content textarea, selected tag, selected tier, 
+  published toggle (on if is_published = true)
+- Show "Editing existing post" gold badge pill in the topbar next to "Edit Post" title
+- The "Publish Post" button becomes "Update Post ✓" (dark button)
+- Add a "Discard Changes" button (outline, left of Update Post)
+  Tapping it: confirm dialog "Discard changes?" → navigate('/admin/posts') without saving
+
+UPDATE LOGIC:
+- "Update Post ✓" → supabase.from('insights').update({...}).eq('id', postId)
+- If published toggle was OFF and user turns it ON and saves:
+  Set is_published = true AND published_at = now()
+- If published toggle was ON and user turns it OFF and saves:
+  Set is_published = false (post becomes a draft again)
+
+PUBLISHED TOGGLE:
+Show in the right settings column:
+  Label: "Published" + sub-label "Visible to users right now"
+  Toggle: green when on, grey when off
+  This is ONLY shown in edit mode, not in new post mode
+
+After successful update: navigate('/admin/posts') + toast "Post updated ✓"</pre>
+  </div>
+
+<div class="hr"></div>
+
+<!-- ════════════════════════════════════ -->
+<!-- PHASE 11 — NOTIFICATIONS -->
+<!-- ════════════════════════════════════ -->
+<div class="phase">
+  <div class="pbadge both">◉ Both Apps</div>
+  <div class="phase-eye">Phase 11</div>
+  <div class="phase-title">Email &amp; Telegram Notifications</div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 11-A — Supabase Edge Functions</div>
+    <pre>Create two Supabase Edge Functions to handle notifications.
+These run server-side so API keys are never exposed to the browser.
+
+First, install the Supabase CLI in Terminal:
+npm install supabase --save-dev
+npx supabase init
+npx supabase login
+
+Then create the edge functions:
+npx supabase functions new send-email
+npx supabase functions new send-telegram
+
+═══ supabase/functions/send-email/index.ts ═══
+HTTP POST endpoint that accepts:
+{ to: string, subject: string, body: string }
+
+Uses Resend API:
+const res = await fetch('https://api.resend.com/emails', {
+  method: 'POST',
+  headers: {
+    'Authorization': `Bearer ${Deno.env.get('RESEND_API_KEY')}`,
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    from: 'Liquid <noreply@yourdomain.com>',
+    to: [to],
+    subject: subject,
+    html: body
+  })
+})
+
+Email templates to support (passed as 'type' in request body):
+- 'order_created': Order confirmation with payment details
+- 'proof_received': Proof received, verification in progress
+- 'order_completed': Order done, USDT/Naira sent
+- 'subscription_activated': Welcome to [plan]
+
+═══ supabase/functions/send-telegram/index.ts ═══
+HTTP POST endpoint that accepts: { message: string }
+
+Reads token and chat_id from app_settings table.
+Sends to Telegram Bot API:
+await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+  method: 'POST',
+  body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: 'HTML' })
+})
+
+Deploy both functions:
+npx supabase functions deploy send-email
+npx supabase functions deploy send-telegram
+
+Set secrets in Supabase dashboard → Edge Functions → Manage secrets:
+RESEND_API_KEY = your_resend_key</pre>
+  </div>
+
+  <div class="cursor-prompt">
+    <div class="cursor-prompt-label">Cursor Composer Prompt 11-B — Wire notifications into the app</div>
+    <pre>Create src/lib/notifications.ts with helper functions that call the edge functions.
+
+export async function sendEmail(type: string, to: string, data: object) {
+  await supabase.functions.invoke('send-email', { body: { type, to, data } })
+}
+
+export async function sendTelegram(message: string) {
+  await supabase.functions.invoke('send-telegram', { body: { message } })
+}
+
+Now wire these into the relevant screens:
+
+IN AcquireScreen.tsx and SellStep2Screen.tsx — after creating order:
+- sendTelegram(`🔔 NEW ORDER\n${type.toUpperCase()} ${amount} USDT\nUser: ${user.full_name}\n₦${amountNgn}\nID: #${orderId}`)
+- sendEmail('order_created', user.email, { type, amount, orderId, ...paymentDetails })
+
+IN AdminOrders.tsx — after Mark Complete button:
+- sendEmail('order_completed', userEmail, { type, amount, orderId })
+- sendTelegram(`✅ ORDER COMPLETED\nOrder #${orderId}\n${type} ${amount} USDT`)
+
+IN PlansScreen.tsx — after successful Paystack payment:
+- sendEmail('subscription_activated', user.email, { planName, price })
+- sendTelegram(`🎉 NEW SUBSCRIBER\n${user.full_name} → ${planName}\n₦${price}`)
+
+IN AdminOrders.tsx — when uploading proof (status update to proof_uploaded):
+- sendTelegram(`📎 PROOF UPLOADED\nOrder #${orderId}\nUser: ${userName}\n→ Open admin to approve`)</pre>
+  </div>
+</div>
+
+<div class="hr"></div>
+
+<!-- ════════════════════════════════════ -->
+<!-- PHASE 12 — DEPLOY -->
+<!-- ════════════════════════════════════ -->
+<div class="phase">
+  <div class="pbadge both">◉ Deploy</div>
+  <div class="phase-eye">Phase 12</div>
+  <div class="phase-title">Deploy to Vercel</div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-l"><div class="step-n gr">1</div><div class="step-vl"></div></div>
+      <div class="step-body">
+        <div class="step-title">Push code to GitHub</div>
+        <div class="code-lbl">Cursor Terminal</div>
+        <div class="code"><pre><span class="c"># Initialize git (if not already done)</span>
+git init
+git add .
+git commit -m "Initial Liquid app build"
+
+<span class="c"># Create a new repo on github.com first, then:</span>
+git remote add origin https://github.com/YOURUSERNAME/liquid-app.git
+git push -u origin main</pre></div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-l"><div class="step-n gr">2</div><div class="step-vl"></div></div>
+      <div class="step-body">
+        <div class="step-title">Deploy on Vercel</div>
+        <div class="step-text"><p>Go to <strong>vercel.com</strong> → New Project → Import your GitHub repo → Framework: Vite → Root Directory: ./ → Deploy.</p><p>After deploy, go to Project → Settings → Environment Variables. Add all 5 variables from your .env.local file. Then Redeploy.</p></div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-l"><div class="step-n gr">3</div><div class="step-vl"></div></div>
+      <div class="step-body">
+        <div class="step-title">Add domain + update Supabase</div>
+        <div class="step-text"><p>Buy domain on Namecheap → Add in Vercel Settings → Domains. Then in Supabase → Authentication → URL Configuration → add your live domain to Site URL and Redirect URLs (needed for password reset + Google OAuth).</p></div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-l"><div class="step-n gr">4</div></div>
+      <div class="step-body">
+        <div class="step-title">Future updates — how to push changes</div>
+        <div class="code-lbl">After any code changes in Cursor</div>
+        <div class="code"><pre>git add .
+git commit -m "describe what you changed"
+git push</pre></div>
+        <div class="step-text"><p>Vercel automatically redeploys every time you push to GitHub. No manual deploy needed after the first setup.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="hr"></div>
+
+<!-- CURSOR WORKFLOW TIPS -->
+<div class="phase">
+  <div class="phase-eye">Working with Cursor</div>
+  <div class="phase-title">How to get the best results</div>
+
+  <table class="tbl">
+    <tr><th>Situation</th><th>What to do</th></tr>
+    <tr><td><strong>Starting a new screen</strong></td><td>Open Composer (Cmd+I). Drag the reference screenshot from your HTML file into the prompt. Write the prompt. Cursor reads both the image and the text together.</td></tr>
+    <tr><td><strong>Cursor writes wrong UI</strong></td><td>Don't start over. Type in Composer: "The layout doesn't match the reference. The [specific element] should be [exact description]. Fix only that part."</td></tr>
+    <tr><td><strong>A bug appears</strong></td><td>Copy the full error message from the browser console. Paste into Cursor chat (Cmd+L). Say: "Fix this error: [paste error]". Cursor reads the relevant file automatically.</td></tr>
+    <tr><td><strong>Connecting to Supabase isn't working</strong></td><td>Say: "The Supabase query in [filename] is not returning data. Log the response to console and show me what the error is."</td></tr>
+    <tr><td><strong>You want to change the UI slightly</strong></td><td>Click the file in the left sidebar to open it. Then Cmd+L to chat. Say: "In this file, change [X] to [Y]." Cursor already has the file in context.</td></tr>
+    <tr><td><strong>Running out of Cursor tokens</strong></td><td>Start a new Composer session. At the top of the new session paste: "This is the Liquid app, a Nigerian USDT exchange + intelligence platform. I am building [current section]. Here is context: [paste relevant code snippet]"</td></tr>
+    <tr><td><strong>Testing on your phone</strong></td><td>While running npm run dev, find your computer's local IP (run: ipconfig on Windows or ifconfig on Mac). Open http://[your-ip]:5173 on your phone (on same WiFi).</td></tr>
+  </table>
+
+  <div class="alert tip" style="margin-top:20px;">
+    <div class="alert-ico">🚀</div>
+    <div class="alert-body"><strong>The three documents to have open while building:</strong> This guide (what to build and how), the UX Flow document (how each screen behaves), and your liquid_complete_user_screens.html (the visual reference). Together they give Cursor everything it needs to build Liquid exactly right.</div>
+  </div>
+</div>
+
+<div style="text-align:center;padding:40px 0 60px;border-top:0.5px solid var(--border);margin-top:20px;">
+  <div style="font-family:var(--font-h);font-size:26px;font-weight:800;background:linear-gradient(135deg,var(--gold),var(--gold-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;">Liquid.</div>
+  <div style="font-size:13px;color:var(--muted);">Cursor Build Guide &middot; 12 Phases &middot; Supabase MCP Direct &middot; Zero to Production &middot; 2025</div>
+</div>
+
+</div>
+</body>
+</html>

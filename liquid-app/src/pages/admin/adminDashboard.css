@@ -1,0 +1,622 @@
+@keyframes adminCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.adminDashboardRoot {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 8px 4px 56px;
+  color: #151515;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+}
+
+.adminDashHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.adminDashTitleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.adminDashTitle {
+  margin: 0;
+  font-family: var(--font-h);
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: -0.3px;
+  color: #151515;
+}
+
+.adminDashSubtitle {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.adminDashOrdersLink {
+  border: 0;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #252525;
+  background: #ffffff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.03), 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.adminDashTopStats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.adminStatCard {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 14px 14px 12px;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+  border: 1px solid rgba(15, 23, 42, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  animation: adminCardIn 160ms ease-out both;
+}
+
+.adminStatLabel {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: rgba(15, 23, 42, 0.5);
+}
+
+.adminStatValue {
+  font-family: var(--font-h);
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: -0.3px;
+  color: #111827;
+}
+
+.adminStatHint {
+  font-size: 11px;
+  color: rgba(15, 23, 42, 0.5);
+}
+
+.adminDashGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 4fr);
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.adminDashBottom {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr);
+}
+
+.adminPanel {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 16px 18px 16px;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(15, 23, 42, 0.05);
+  animation: adminCardIn 160ms ease-out both;
+}
+
+.adminPanelHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.adminPanelTitle {
+  margin: 0;
+  font-family: var(--font-h);
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: -0.25px;
+  color: #111827;
+}
+
+.adminPanelSub {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  color: rgba(15, 23, 42, 0.55);
+}
+
+.adminRateCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.adminRateRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.adminRateLeft {
+  flex: 1;
+}
+
+.adminRateLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(15, 23, 42, 0.8);
+  margin-bottom: 4px;
+}
+
+.adminRateInputWrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f3f3f0;
+  border-radius: 12px;
+  padding: 8px 10px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+}
+
+.adminRateInputWrap:focus-within {
+  border-color: rgba(103, 0, 175, 0.25);
+  box-shadow: 0 0 0 3px rgba(103, 0, 175, 0.12);
+}
+
+.adminRatePrefix {
+  font-size: 13px;
+  color: rgba(15, 23, 42, 0.6);
+}
+
+.adminRateInput {
+  flex: 1;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.adminRateInput:disabled {
+  opacity: 0.7;
+}
+
+.adminRateRight {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.adminSpreadRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 4px;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(148, 163, 184, 0.6);
+}
+
+.adminSpreadLabel {
+  font-size: 12px;
+  color: rgba(15, 23, 42, 0.7);
+}
+
+.adminSpreadValue {
+  font-size: 13px;
+  font-weight: 700;
+  color: #15803d;
+}
+
+.adminSmallBtn {
+  border-radius: 999px;
+  border: 0;
+  padding: 6px 12px;
+  background: linear-gradient(135deg, #6700af, #8B2FE0);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(103, 0, 175, 0.3);
+}
+
+.adminSmallBtn:disabled {
+  opacity: 0.65;
+  cursor: default;
+  box-shadow: none;
+}
+
+.adminSavedText {
+  font-size: 11px;
+  font-weight: 600;
+  color: #A855F7;
+}
+
+.adminPendingCard {
+  padding-right: 14px;
+}
+
+.adminPendingHeader {
+  margin-bottom: 10px;
+}
+
+.adminLinkBtn {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #A855F7;
+  cursor: pointer;
+}
+
+.adminPendingList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.adminPendingItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 8px;
+  border-radius: 14px;
+  background: #f5f4f1;
+}
+
+.adminPendingLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.adminAvatarCircle {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #0f172a, #111827);
+  color: #f9fafb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.adminPendingName {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.adminPendingMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin-top: 2px;
+}
+
+.adminTypePill {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.adminTypePill.buy {
+  background: rgba(21, 128, 61, 0.12);
+  color: #15803d;
+}
+
+.adminTypePill.sell {
+  background: rgba(59, 130, 246, 0.12);
+  color: #1d4ed8;
+}
+
+.adminPendingAmount {
+  font-size: 11px;
+  color: rgba(15, 23, 42, 0.7);
+}
+
+.adminPendingRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.adminPendingTimer {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(15, 23, 42, 0.65);
+}
+
+.adminApproveBtn {
+  border-radius: 999px;
+  border: 0;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+  background: #16a34a;
+  box-shadow: 0 8px 18px rgba(22, 163, 74, 0.4);
+  cursor: pointer;
+}
+
+.adminApproveBtn:disabled {
+  opacity: 0.7;
+  box-shadow: none;
+}
+
+.adminPendingEmpty {
+  padding: 16px 4px 6px;
+  font-size: 12px;
+  color: rgba(15, 23, 42, 0.6);
+}
+
+.adminAllClear {
+  padding: 18px 6px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+}
+
+.adminAllClearIcon {
+  width: 72px;
+  height: 72px;
+  border-radius: 999px;
+  background: rgba(22, 163, 74, 0.08);
+  border: 2px solid rgba(22, 163, 74, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  color: #16a34a;
+  box-shadow: 0 10px 26px rgba(22, 163, 74, 0.24);
+}
+
+.adminAllClearTitle {
+  margin: 0;
+  font-family: var(--font-h);
+  font-weight: 800;
+  font-size: 17px;
+  color: #15803d;
+}
+
+.adminAllClearBody {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(15, 23, 42, 0.6);
+}
+
+.adminAllClearStats {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+}
+
+.adminAllClearStat {
+  background: #f5f4f1;
+  border-radius: 12px;
+  padding: 8px;
+}
+
+.adminAllClearStatLabel {
+  font-size: 11px;
+  color: rgba(15, 23, 42, 0.6);
+}
+
+.adminAllClearStatValue {
+  margin-top: 2px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.adminControlsCard {
+  margin-top: 2px;
+}
+
+.adminToggleRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.adminToggleLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.adminToggleHint {
+  font-size: 11px;
+  color: rgba(15, 23, 42, 0.65);
+  margin-top: 4px;
+}
+
+.adminToggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 999px;
+  padding: 4px 8px 4px 4px;
+  border: 0;
+  cursor: pointer;
+  min-width: 96px;
+  justify-content: flex-start;
+}
+
+.adminToggle.on {
+  background: rgba(22, 163, 74, 0.12);
+}
+
+.adminToggle.off {
+  background: rgba(220, 38, 38, 0.12);
+}
+
+.adminToggleThumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25);
+}
+
+.adminToggle.on .adminToggleThumb {
+  margin-left: 42px;
+}
+
+.adminToggle.off .adminToggleThumb {
+  margin-right: 42px;
+}
+
+.adminToggleText {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.adminToggle.on .adminToggleText {
+  color: #16a34a;
+}
+
+.adminToggle.off .adminToggleText {
+  color: #dc2626;
+}
+
+.adminFieldBlock {
+  margin-top: 12px;
+}
+
+.adminFieldLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
+.adminTextarea {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  background: #f9fafb;
+  padding: 8px 10px;
+  font-size: 13px;
+  resize: vertical;
+}
+
+.adminFieldActions {
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.adminLimitsRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.adminLimitsInputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.adminLimitInputWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.adminLimitLabel {
+  font-size: 11px;
+  color: rgba(15, 23, 42, 0.7);
+}
+
+.adminLimitInput {
+  width: 96px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  padding: 6px 8px;
+  font-size: 13px;
+}
+
+@media (max-width: 920px) {
+  .adminDashTopStats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .adminDashGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .adminDashHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .adminDashboardRoot {
+    padding: 4px 0 40px;
+  }
+
+  .adminDashTopStats {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .adminDashOrdersLink {
+    align-self: flex-start;
+  }
+
+  .adminDashGrid {
+    gap: 12px;
+  }
+
+  .adminLimitsRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .adminLimitsInputs {
+    justify-content: flex-start;
+  }
+}
+

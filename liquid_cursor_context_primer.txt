@@ -1,0 +1,190 @@
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+LIQUID — PROJECT CONTEXT PRIMER
+Paste this into Cursor Composer ONCE before any other prompt.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+You are helping me build Liquid — a Nigerian digital asset platform
+with two independent engines:
+
+1. USDT EXCHANGE
+Users buy and sell USDT against Naira via a manual P2P process.
+- Buy: user pays Naira to our bank account, we send USDT to their wallet
+- Sell: user sends USDT to our wallet, we pay Naira to their bank
+- Every order has a 20-minute payment window before it auto-expires
+- Admin verifies all transactions manually via a web dashboard
+- No automated blockchain integration — fully manual operator execution
+
+2. PORTFOLIO INTELLIGENCE (subscription)
+Admin publishes market insights. Users subscribe to read them.
+- Three tiers: Basic (₦15,000/mo), Business (₦45,000/mo), Institutional (₦120,000/mo)
+- Posts are tier-locked — each post has a minimum tier to read it
+- Payment via Paystack inline popup
+- Completely independent from the exchange — users can subscribe without
+  ever doing an exchange, and can exchange without subscribing
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TECH STACK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Frontend:   React + Vite + TypeScript
+Styling:    Tailwind CSS
+Routing:    React Router v6
+Data:       Supabase (auth + database + realtime + storage)
+Cache:      React Query (TanStack Query)
+Payments:   Paystack inline JS
+Email:      Resend (via Supabase Edge Functions)
+Alerts:     Telegram Bot API (admin notifications)
+Deploy:     Vercel
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DATABASE — 5 TABLES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+users
+  id, email, full_name, phone,
+  subscription_plan (default 'none' — 'none'|'basic'|'business'|'institutional'),
+  usdt_wallet_address, notification_prefs (jsonb), portfolio_value,
+  created_at
+
+orders
+  id, user_id, type ('buy'|'sell'),
+  amount_usdt, amount_ngn, rate,
+  status ('awaiting_payment'|'proof_uploaded'|'verifying'|'completed'|'cancelled'|'expired'),
+  user_bank_name, user_bank_account, user_bank_holder,
+  user_wallet_address, payment_proof_url, tx_hash,
+  admin_notes, created_at, completed_at
+
+app_settings
+  key (PK), value
+  — 16 rows that admin edits: buy_rate, sell_rate, exchange_open,
+    exchange_message, min_order_usdt, max_order_usdt, announcement,
+    telegram_token, telegram_chat_id, alloc_stable, alloc_btc, alloc_eth,
+    notify_new_order, notify_proof, notify_expired, notify_subscriber
+
+insights
+  id, title, content, tag,
+  tier_access ('all'|'basic'|'business'|'institutional'),
+  is_published (boolean), published_at, created_at
+
+notifications
+  id, user_id, title, message,
+  type ('order'|'insight'|'subscription'),
+  order_id, is_read (boolean), created_at
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ALL ROUTES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Public:
+/splash · /onboarding · /signin · /signup
+/forgot-password · /forgot-password/sent
+/reset-password · /reset-password/success
+/admin/login
+
+Protected (require Supabase auth session):
+/home · /exchange/buy · /exchange/sell/step1 · /exchange/sell/step2
+/exchange/order/:orderId · /exchange/complete/:orderId
+/exchange/expired/:orderId · /exchange/closed
+/intelligence · /intelligence/post/:postId · /plans
+/portfolio · /history · /notifications · /account · /account/banks
+
+Admin only (require auth + ADMIN_EMAIL match):
+/admin · /admin/orders · /admin/post/new · /admin/post/:id/edit
+/admin/posts · /admin/users · /admin/settings
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DESIGN SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+All user screens:  dark background (#0C0C0C), mobile-first, max-width 430px
+Admin panel:       light background (#F0EFED), desktop-first, fixed sidebar
+Fonts:             Syne (headings, weights 400/600/700/800)
+                   Inter (body, weights 300/400/500/600)
+Colours:
+  --ink:        #0C0C0C   (primary dark)
+  --gold:       #C8973F   (brand accent — CTAs, highlights)
+  --gold-light: #E8B865   (gold gradient end)
+  --green:      #1DB954   (success, buy, completed)
+  --red:        #E05252   (error, expired, sell)
+  --blue:       #3B82F6   (info, awaiting payment status)
+
+Bottom nav:
+  White nav background = Home screen and Portfolio screen
+  Dark nav background  = all other screens
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KEY BUSINESS RULES — memorise these
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+EXCHANGE:
+- Orders expire exactly 20 minutes after creation (pg_cron runs every minute)
+- Timer starts only after the order is created in DB — not when screen loads
+- Timer colour: gold (20:00–10:01) → orange (10:00–3:01) → red+pulse (3:00–0:00)
+- Buy complete:  "Your USDT has been sent to your wallet"
+- Sell complete: "₦[amount] has been sent to your [bank] account ••[last4]"
+- 06B state: when status = awaiting_payment and no proof uploaded yet,
+  show upload zone directly on the Order Status screen
+- Supabase realtime subscription watches orders table —
+  status changes appear instantly without user refreshing
+
+EXCHANGE STATES:
+- exchange_open = true  → normal home, cards fully visible
+- exchange_open = false → red status bar, action cards at 60% opacity,
+  tapping either card goes to /exchange/closed not /exchange/buy
+
+INTELLIGENCE / SUBSCRIPTION:
+- tier lock function:
+    canView('all', anyPlan)          → true
+    canView('basic', plan)           → basic, business, institutional
+    canView('business', plan)        → business, institutional only
+    canView('institutional', plan)   → institutional only
+- Locked post: blurred body, lock overlay, "Upgrade" button → /plans
+- No-plan users: gold subscription prompt banner above feed
+- Plan badge in top-right of feed header — tapping → /plans
+- Subscription is via Paystack only — not manual
+
+ADMIN:
+- Admin email is set in VITE_ADMIN_EMAIL environment variable
+- Sign in at /admin/login (separate from /signin)
+- If someone signs in with a non-admin email → sign them out immediately,
+  show "Access denied" toast, stay on /admin/login
+- Visiting /admin/* without admin auth → redirect to /admin/login
+- Pending orders badge on sidebar updates in realtime
+
+NOTIFICATIONS:
+- Every order created → Telegram alert to admin + email to user
+- Every proof uploaded → Telegram alert to admin
+- Order completed → email to user + in-app notification
+- New subscriber → Telegram alert to admin + in-app notification to user
+- Unread notifications show badge on the portfolio nav icon (▦)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WHAT I WILL GIVE YOU FOR EACH SCREEN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+For every screen I ask you to build, I will provide:
+1. A screenshot of the exact visual design (drag into Composer)
+2. A detailed prompt with layout, data sources, and behaviour rules
+3. UX flow rules describing every tap, DB write, and navigation
+
+Your job is to match the screenshot exactly and implement the behaviour
+exactly as described. Do not invent behaviour that isn't specified.
+Ask me if anything is unclear before writing code.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ENVIRONMENT VARIABLES (.env.local)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+VITE_SUPABASE_URL=
+VITE_SUPABASE_ANON_KEY=
+VITE_ADMIN_EMAIL=
+VITE_PAYSTACK_PUBLIC_KEY=
+VITE_RESEND_API_KEY=
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CONFIRMATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Reply with: "Ready. What are we building first?"
+and a brief summary (3-4 sentences) of what Liquid is, in your own words,
+so I can confirm you understood everything correctly before we start.
