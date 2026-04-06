@@ -534,3 +534,99 @@
   }
 }
 
+/* Card-style rows on very small screens (easier than wide table scroll) */
+@media (max-width: 640px) {
+  .adminUsersHeaderTitle {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .adminUsersCard {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .adminUsersList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .adminUsersRow {
+    margin: 0;
+    padding: 14px 16px;
+    border-radius: 16px;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    background: #ffffff;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.07);
+    border-top: 1px solid rgba(15, 23, 42, 0.08);
+    gap: 10px;
+  }
+
+  .adminUsersRow.selected {
+    border-color: rgba(103, 0, 175, 0.45);
+    box-shadow: 0 8px 26px rgba(103, 0, 175, 0.12);
+  }
+
+  .adminUsersCell.user {
+    padding-bottom: 4px;
+    border-bottom: 1px dashed rgba(15, 23, 42, 0.08);
+  }
+
+  .adminUsersCell.plan::before,
+  .adminUsersCell.orders::before,
+  .adminUsersCell.joined::before {
+    display: block;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.4);
+    margin-bottom: 4px;
+  }
+
+  .adminUsersCell.plan::before {
+    content: 'Plan';
+  }
+
+  .adminUsersCell.orders::before {
+    content: 'Orders';
+  }
+
+  .adminUsersCell.joined::before {
+    content: 'Joined';
+  }
+
+  .adminUsersCell.plan,
+  .adminUsersCell.orders,
+  .adminUsersCell.joined {
+    display: block;
+  }
+
+  .adminUsersCell.actions {
+    flex-wrap: wrap;
+    padding-top: 4px;
+    border-top: 1px dashed rgba(15, 23, 42, 0.08);
+  }
+
+  .adminUsersCell.actions::before {
+    content: 'Actions';
+    display: block;
+    width: 100%;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.4);
+    margin-bottom: 6px;
+  }
+
+  .adminUsersPlanSelect {
+    flex: 1;
+    min-width: 0;
+  }
+}
+

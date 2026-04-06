@@ -165,6 +165,12 @@
   padding: 18px 18px 96px;
 }
 
+.adminMobileTopbar,
+.adminMobileSidebarTop,
+.adminMobileBackdrop {
+  display: none;
+}
+
 @media (max-width: 520px) {
   .adminSidebar {
     padding: 14px 10px;
@@ -175,6 +181,98 @@
   }
   .adminMain {
     padding: 14px 14px 96px;
+  }
+}
+
+@media (max-width: 900px) {
+  .adminLayoutRoot {
+    display: block;
+    overflow: auto;
+  }
+
+  .adminMobileBackdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(12, 12, 12, 0.45);
+    border: 0;
+    z-index: 39;
+  }
+
+  .adminSidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: min(82vw, 300px);
+    transform: translateX(-105%);
+    transition: transform 180ms ease;
+    z-index: 40;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+  }
+
+  .adminSidebar.mobileOpen {
+    transform: translateX(0);
+  }
+
+  .adminMobileSidebarTop {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: -2px;
+  }
+
+  .adminMobileCloseBtn {
+    border: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.8);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .adminMain {
+    width: 100%;
+    min-height: 100vh;
+    padding: 10px 12px 88px;
+  }
+
+  .adminMobileTopbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    margin: -10px -12px 10px;
+    padding: 10px 12px;
+    background: rgba(240, 239, 237, 0.95);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+  }
+
+  .adminMobileMenuBtn {
+    border: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #151515;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+  }
+
+  .adminMobileTitle {
+    font-family: var(--font-h);
+    font-size: 14px;
+    font-weight: 800;
+    color: #151515;
   }
 }
 

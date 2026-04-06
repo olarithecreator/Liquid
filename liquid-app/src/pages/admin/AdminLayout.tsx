@@ -4,9 +4,11 @@ import {
   ArrowLeftRight,
   LayoutDashboard,
   Layers,
+  Menu,
   PenLine,
   Settings,
   Users,
+  X,
 } from 'lucide-react'
 
 import { supabase } from '../../lib/supabase'
@@ -52,6 +54,7 @@ export default function AdminLayout({ children }: Props) {
   const { user, loading, isAdmin } = useAuth()
 
   const [pendingCount, setPendingCount] = useState(0)
+  const [mobileNavOpen, setMobileNavOpen] = useState(false)
 
   const pathname = location.pathname
 
@@ -138,13 +141,37 @@ export default function AdminLayout({ children }: Props) {
     }
   }, [isAdmin, user])
 
+  useEffect(() => {
+    setMobileNavOpen(false)
+  }, [pathname])
+
   if (loading || !user || !isAdmin) {
     return null
   }
 
   return (
     <div className="adminLayoutRoot">
-      <aside className="adminSidebar">
+      {mobileNavOpen ? (
+        <button
+          type="button"
+          className="adminMobileBackdrop"
+          aria-label="Close menu overlay"
+          onClick={() => setMobileNavOpen(false)}
+        />
+      ) : null}
+
+      <aside className={`adminSidebar ${mobileNavOpen ? 'mobileOpen' : ''}`}>
+        <div className="adminMobileSidebarTop">
+          <button
+            type="button"
+            className="adminMobileCloseBtn"
+            onClick={() => setMobileNavOpen(false)}
+            aria-label="Close menu"
+          >
+            <X size={18} />
+          </button>
+        </div>
+
         <div className="adminBrand" aria-label="Liquid admin brand">
           <div className="adminBrandLogo">
             Liquid<span className="logoDot">.</span>
@@ -157,14 +184,20 @@ export default function AdminLayout({ children }: Props) {
             active={isActive.dashboard}
             icon={<LayoutDashboard size={18} />}
             label="Dashboard"
-            onClick={() => navigate('/admin')}
+            onClick={() => {
+              navigate('/admin')
+              setMobileNavOpen(false)
+            }}
           />
 
           <SidebarItem
             active={isActive.orders}
             icon={<ArrowLeftRight size={18} />}
             label="Orders"
-            onClick={() => navigate('/admin/orders')}
+            onClick={() => {
+              navigate('/admin/orders')
+              setMobileNavOpen(false)
+            }}
             right={
               pendingCount > 0 ? (
                 <span className="adminOrdersBadge" aria-label={`${pendingCount} pending orders`}>
@@ -178,28 +211,40 @@ export default function AdminLayout({ children }: Props) {
             active={isActive.newPost}
             icon={<PenLine size={18} />}
             label="New Post"
-            onClick={() => navigate('/admin/post/new')}
+            onClick={() => {
+              navigate('/admin/post/new')
+              setMobileNavOpen(false)
+            }}
           />
 
           <SidebarItem
             active={isActive.allPosts}
             icon={<Layers size={18} />}
             label="All Posts"
-            onClick={() => navigate('/admin/posts')}
+            onClick={() => {
+              navigate('/admin/posts')
+              setMobileNavOpen(false)
+            }}
           />
 
           <SidebarItem
             active={isActive.users}
             icon={<Users size={18} />}
             label="Users"
-            onClick={() => navigate('/admin/users')}
+            onClick={() => {
+              navigate('/admin/users')
+              setMobileNavOpen(false)
+            }}
           />
 
           <SidebarItem
             active={isActive.settings}
             icon={<Settings size={18} />}
             label="Settings"
-            onClick={() => navigate('/admin/settings')}
+            onClick={() => {
+              navigate('/admin/settings')
+              setMobileNavOpen(false)
+            }}
           />
         </nav>
 
@@ -215,6 +260,18 @@ export default function AdminLayout({ children }: Props) {
       </aside>
 
       <main className="adminMain" aria-label="Admin main content">
+        <div className="adminMobileTopbar">
+          <button
+            type="button"
+            className="adminMobileMenuBtn"
+            onClick={() => setMobileNavOpen(true)}
+            aria-label="Open admin menu"
+          >
+            <Menu size={18} />
+          </button>
+          <div className="adminMobileTitle">Admin Panel</div>
+          {pendingCount > 0 ? <span className="adminOrdersBadge">{pendingCount}</span> : <span />}
+        </div>
         {children}
       </main>
     </div>

@@ -230,3 +230,94 @@
   }
 }
 
+/* Distinct cards per post on very small screens */
+@media (max-width: 560px) {
+  .adminPostsHeader {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .adminPostsNewBtn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .adminPostsCard {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .adminPostsList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .adminPostRow {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 14px 16px;
+    margin: 0;
+    border-radius: 16px;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    background: #ffffff;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.07);
+  }
+
+  .adminPostRow:first-child {
+    border-top: 1px solid rgba(15, 23, 42, 0.08);
+  }
+
+  .adminPostRowLeft {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .adminRowTag {
+    align-self: flex-start;
+  }
+
+  .adminRowTitle {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+    max-width: 100%;
+  }
+
+  .adminRowMeta {
+    font-size: 12px;
+  }
+
+  .adminPostRowActions {
+    width: 100%;
+    justify-content: stretch;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 10px;
+    margin-top: 8px;
+    border-top: 1px dashed rgba(15, 23, 42, 0.1);
+  }
+
+  .adminPostRowActions .adminRowBtn {
+    flex: 1;
+    min-width: min(120px, 100%);
+    text-align: center;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.04);
+  }
+
+  .adminPostRowActions .adminRowBtn.danger {
+    background: rgba(224, 82, 82, 0.1);
+  }
+
+  .adminPostRowActions .adminRowBtn.success {
+    background: rgba(29, 185, 84, 0.14);
+    color: #146a33;
+  }
+}
+

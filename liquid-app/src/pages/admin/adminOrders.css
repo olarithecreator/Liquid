@@ -87,6 +87,8 @@
 
 .adminOrdersTable {
   width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .adminOrdersHeaderRow {
@@ -568,6 +570,7 @@
 
   .adminOrdersHeaderRow,
   .adminOrdersRow {
+    min-width: 860px;
     grid-template-columns: 1.7fr 0.7fr 0.8fr 0.9fr 0.9fr 0.7fr 1.2fr;
   }
 }
