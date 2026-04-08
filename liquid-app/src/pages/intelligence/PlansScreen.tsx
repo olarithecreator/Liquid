@@ -8,7 +8,7 @@ import { supabase } from '../../lib/supabase'
 import './intelligenceScreens.css'
 
 type PlanId = 'basic' | 'business' | 'institutional'
-type DurationId = '3m' | '6m' | '12m'
+type DurationId = '1m' | '3m' | '6m' | '12m'
 
 type DurationOption = {
   id: DurationId
@@ -72,6 +72,7 @@ const plans: PlanOption[] = [
 ]
 
 const durations: DurationOption[] = [
+  { id: '1m', label: '1 Month', months: 1, discount: 0, badge: 'Base price' },
   { id: '3m', label: '3 Months', months: 3, discount: 0.15, badge: '15% off' },
   { id: '6m', label: '6 Months', months: 6, discount: 0.2, badge: '20% off' },
   { id: '12m', label: '1 Year', months: 12, discount: 0.3, badge: '30% off' },
@@ -117,7 +118,7 @@ export default function PlansScreen() {
   const navigate = useNavigate()
   const { user } = useAuth()
 
-  const [selectedDurationId, setSelectedDurationId] = useState<DurationId>('12m')
+  const [selectedDurationId, setSelectedDurationId] = useState<DurationId>('1m')
   const [subscription, setSubscription] = useState<UserSubscription>({
     subscription_plan: 'none',
     subscription_expires_at: null,
@@ -127,7 +128,7 @@ export default function PlansScreen() {
   const [toast, setToast] = useState<{ message: string; kind: 'success' | 'error' | 'info' } | null>(null)
 
   const selectedDuration = useMemo(
-    () => durations.find((d) => d.id === selectedDurationId) ?? durations[2],
+    () => durations.find((d) => d.id === selectedDurationId) ?? durations[0],
     [selectedDurationId],
   )
 
@@ -305,7 +306,14 @@ export default function PlansScreen() {
 
         {toast ? <div className={`plan-toast ${toast.kind}`}>{toast.message}</div> : null}
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, margin: '0 20px 16px' }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(82px, 1fr))',
+            gap: 8,
+            margin: '0 20px 16px',
+          }}
+        >
           {durations.map((duration) => {
             const active = duration.id === selectedDuration.id
             return (
@@ -356,23 +364,31 @@ export default function PlansScreen() {
                   <div style={{ color: 'rgba(255,255,255,0.74)', fontSize: 13, marginTop: 4 }}>
                     Pay ${getPrice(plan.monthlyUsd, selectedDuration)} for {selectedDuration.label}
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 6 }}>
-                    <span style={{ color: 'rgba(255,255,255,0.42)', textDecoration: 'line-through', fontSize: 12 }}>
-                      was ${getOriginalPrice(plan.monthlyUsd, selectedDuration)}
-                    </span>
-                    <span
-                      style={{
-                        fontSize: 11,
-                        color: '#1B5E20',
-                        background: 'rgba(67, 160, 71, 0.2)',
-                        borderRadius: 999,
-                        padding: '2px 8px',
-                        fontWeight: 700,
-                      }}
-                    >
-                      Save ${getSavings(plan.monthlyUsd, selectedDuration)}
-                    </span>
-                  </div>
+                  {selectedDuration.discount > 0 ? (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 6 }}>
+                      <span
+                        style={{
+                          color: 'rgba(255,255,255,0.42)',
+                          textDecoration: 'line-through',
+                          fontSize: 12,
+                        }}
+                      >
+                        was ${getOriginalPrice(plan.monthlyUsd, selectedDuration)}
+                      </span>
+                      <span
+                        style={{
+                          fontSize: 11,
+                          color: '#1B5E20',
+                          background: 'rgba(67, 160, 71, 0.2)',
+                          borderRadius: 999,
+                          padding: '2px 8px',
+                          fontWeight: 700,
+                        }}
+                      >
+                        Save ${getSavings(plan.monthlyUsd, selectedDuration)}
+                      </span>
+                    </div>
+                  ) : null}
                 </div>
 
                 <ul className="plan-features">

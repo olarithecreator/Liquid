@@ -32,6 +32,7 @@ function formatDate(iso?: string | null): string {
 }
 
 function durationLabel(v?: string | null): string {
+  if (v === '1m') return '1 Month'
   if (v === '3m') return '3 Months'
   if (v === '6m') return '6 Months'
   if (v === '12m') return '1 Year'

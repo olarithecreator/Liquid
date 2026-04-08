@@ -1,10 +1,11 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-type DurationId = '3m' | '6m' | '12m'
+type DurationId = '1m' | '3m' | '6m' | '12m'
 type PlanId = 'basic' | 'business' | 'institutional'
 
 const durationMonths: Record<DurationId, number> = {
+  '1m': 1,
   '3m': 3,
   '6m': 6,
   '12m': 12,
