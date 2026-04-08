@@ -161,6 +161,7 @@ export default function AcquireScreen() {
       }
 
       const orderId = inserted.id as string
+      setActiveOrder(inserted as Order)
 
       let proofPath: string | null = null
 
@@ -177,7 +178,7 @@ export default function AcquireScreen() {
           .upload(proofPath, proofFile, { contentType: proofFile.type })
 
         if (uploadError) {
-          setError('Could not upload proof.')
+          setError('Order created, but proof upload failed. Open order status to retry upload.')
           return
         }
 
@@ -190,7 +191,7 @@ export default function AcquireScreen() {
           .eq('id', orderId)
 
         if (updateError) {
-          setError('Could not update order with proof.')
+          setError('Order created, but proof update failed. Open order status to retry upload.')
           return
         }
       }
@@ -235,9 +236,9 @@ export default function AcquireScreen() {
     <div className="buy-screen">
       <div className="buy-top" style={{ paddingBottom: 10 }}>
         <div className="screen-nav">
-          <div className="back-circle" role="button" tabIndex={0} onClick={handleBack} aria-label="Back">
+          <button type="button" className="back-circle" onClick={handleBack} aria-label="Back">
             ←
-          </div>
+          </button>
           <div className="screen-nav-title">Acquire USDT</div>
         </div>
 
@@ -311,10 +312,9 @@ export default function AcquireScreen() {
               ) : null}
             </div>
 
-            <div
+            <button
+              type="button"
               className="upload-row"
-              role="button"
-              tabIndex={0}
               onClick={() => fileInputRef.current?.click()}
               aria-label="Upload payment proof"
             >
@@ -324,15 +324,15 @@ export default function AcquireScreen() {
                 <br />
                 Screenshot or PDF · Max 5MB
               </div>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/jpeg,image/png,image/webp,application/pdf"
-                style={{ display: 'none' }}
-                disabled={loading}
-                onChange={(e) => onChooseFile(e.target.files?.[0] ?? null)}
-              />
-            </div>
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp,application/pdf"
+              style={{ display: 'none' }}
+              disabled={loading}
+              onChange={(e) => onChooseFile(e.target.files?.[0] ?? null)}
+            />
 
             {error ? <div className="buy-error">{error}</div> : null}
 
@@ -395,27 +395,23 @@ export default function AcquireScreen() {
       </div>
 
       <div className="bottom-nav-dark" role="navigation" aria-label="Bottom navigation">
-        <div className="nav-it-dark" onClick={() => navigate('/home')}>
+        <button type="button" className="nav-it-dark" onClick={() => navigate('/home')}>
           <div className="nav-ico-dark">⌂</div>
           <div className="nav-lbl-dark">Home</div>
-        </div>
-        <div
-          className="nav-it-dark"
-          onClick={() => navigate('/exchange/buy')}
-          role="button"
-        >
+        </button>
+        <button type="button" className="nav-it-dark" onClick={() => navigate('/exchange/buy')}>
           <div className="nav-ico-dark active">⇄</div>
           <div className="nav-lbl-dark active">Exchange</div>
-        </div>
-        <div className="nav-it-dark" onClick={() => navigate('/intelligence')}>
+        </button>
+        <button type="button" className="nav-it-dark" onClick={() => navigate('/intelligence')}>
           <div className="nav-ico-dark">◈</div>
           <div className="nav-lbl-dark">Insights</div>
-        </div>
-        <div className="nav-it-dark" onClick={() => navigate('/plans')}>
+        </button>
+        <button type="button" className="nav-it-dark" onClick={() => navigate('/plans')}>
           <div className="nav-ico-dark">◎</div>
           <div className="nav-lbl-dark">Plans</div>
-        </div>
-        <div className="nav-it-dark" />
+        </button>
+        <button type="button" className="nav-it-dark" />
       </div>
     </div>
   )

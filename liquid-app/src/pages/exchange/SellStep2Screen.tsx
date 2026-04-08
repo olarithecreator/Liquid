@@ -161,7 +161,7 @@ export default function SellStep2Screen() {
           .upload(proofPath, proofFile, { contentType: proofFile.type })
 
         if (uploadError) {
-          setError('Could not upload proof.')
+          setError('Order created, but proof upload failed. Open order status to retry upload.')
           return
         }
 
@@ -174,7 +174,7 @@ export default function SellStep2Screen() {
           .eq('id', orderId)
 
         if (updateError) {
-          setError('Could not update order with proof.')
+          setError('Order created, but proof update failed. Open order status to retry upload.')
           return
         }
       }
@@ -221,9 +221,9 @@ export default function SellStep2Screen() {
     <div className="sell-screen">
       <div className="buy-top">
         <div className="screen-nav">
-          <div className="back-circle" role="button" tabIndex={0} onClick={handleBack}>
+          <button type="button" className="back-circle" onClick={handleBack} aria-label="Back">
             ←
-          </div>
+          </button>
           <div className="screen-nav-title">Liquidate USDT</div>
         </div>
 
@@ -304,15 +304,14 @@ export default function SellStep2Screen() {
           <div className="wb-label">Send USDT to this wallet</div>
           <div className="wb-network">● TRC-20 Network</div>
           <div className="wb-addr">{LIQUID_TRX_WALLET}</div>
-          <div className="wb-copy" role="button" tabIndex={0} onClick={onCopyWallet}>
+          <button type="button" className="wb-copy" onClick={onCopyWallet}>
             ⧉ {copied ? '✓ Copied' : 'Copy address'}
-          </div>
+          </button>
         </div>
 
-        <div
+        <button
+          type="button"
           className="upload-row"
-          role="button"
-          tabIndex={0}
           onClick={() => fileInputRef.current?.click()}
           aria-label="Upload transaction hash"
           style={{ opacity: loading ? 0.6 : 1 }}
@@ -323,17 +322,29 @@ export default function SellStep2Screen() {
             <br />
             TxID screenshot or PDF · Max 5MB
           </div>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/jpeg,image/png,image/webp,application/pdf"
-            style={{ display: 'none' }}
-            disabled={loading}
-            onChange={(e) => onChooseFile(e.target.files?.[0] ?? null)}
-          />
-        </div>
+        </button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/jpeg,image/png,image/webp,application/pdf"
+          style={{ display: 'none' }}
+          disabled={loading}
+          onChange={(e) => onChooseFile(e.target.files?.[0] ?? null)}
+        />
 
         {error ? <div className="buy-error">{error}</div> : null}
+
+        {orderCreated && orderId ? (
+          <button
+            type="button"
+            className="primary-btn btn-white"
+            onClick={() => navigate(`/exchange/order/${orderId}`)}
+            disabled={loading}
+            style={{ marginTop: 10 }}
+          >
+            View Order Status
+          </button>
+        ) : null}
 
         <button
           type="button"
@@ -346,26 +357,26 @@ export default function SellStep2Screen() {
       </div>
 
       <div className="bottom-nav-dark" role="navigation" aria-label="Bottom navigation">
-        <div className="nav-it-dark" onClick={() => navigate('/home')}>
+        <button type="button" className="nav-it-dark" onClick={() => navigate('/home')}>
           <div className="nav-ico-dark">⌂</div>
           <div className="nav-lbl-dark">Home</div>
-        </div>
-        <div className="nav-it-dark" onClick={() => navigate('/exchange/buy')}>
+        </button>
+        <button type="button" className="nav-it-dark" onClick={() => navigate('/exchange/buy')}>
           <div className="nav-ico-dark active">⇄</div>
           <div className="nav-lbl-dark active">Exchange</div>
-        </div>
-        <div className="nav-it-dark" onClick={() => navigate('/intelligence')}>
+        </button>
+        <button type="button" className="nav-it-dark" onClick={() => navigate('/intelligence')}>
           <div className="nav-ico-dark">◈</div>
           <div className="nav-lbl-dark">Insights</div>
-        </div>
-        <div className="nav-it-dark" onClick={() => navigate('/plans')}>
+        </button>
+        <button type="button" className="nav-it-dark" onClick={() => navigate('/plans')}>
           <div className="nav-ico-dark">◎</div>
           <div className="nav-lbl-dark">Plans</div>
-        </div>
-        <div className="nav-it-dark" onClick={() => navigate('/portfolio')}>
+        </button>
+        <button type="button" className="nav-it-dark" onClick={() => navigate('/portfolio')}>
           <div className="nav-ico-dark">▦</div>
           <div className="nav-lbl-dark">Portfolio</div>
-        </div>
+        </button>
       </div>
     </div>
   )
