@@ -107,12 +107,13 @@ export default function PostDetailScreen() {
     const notificationId = notificationIdFromQuery ?? stateObj?.notificationId ?? null
     if (!notificationId) return
 
-    supabase
-      .from('notifications')
-      .update({ is_read: true })
-      .eq('id', notificationId)
-      .then(() => undefined)
-      .catch(() => undefined)
+    void (async () => {
+      try {
+        await supabase.from('notifications').update({ is_read: true }).eq('id', notificationId)
+      } catch {
+        // Non-blocking mark-as-read write.
+      }
+    })()
   }, [location.state, searchParams])
 
   const unlocked = useMemo(() => {

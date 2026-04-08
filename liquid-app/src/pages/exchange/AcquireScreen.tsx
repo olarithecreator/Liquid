@@ -45,16 +45,6 @@ export default function AcquireScreen() {
     return v
   }
 
-  const amountValue = useMemo(() => {
-    return parseAmount()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [usdtAmount])
-
-  const isAmountWithinLimits = useMemo(() => {
-    if (amountValue === null) return false
-    return amountValue >= minOrderUsdt && amountValue <= maxOrderUsdt
-  }, [amountValue, maxOrderUsdt, minOrderUsdt])
-
   const trimmedWallet = walletAddress.trim()
   const isWalletValid = useMemo(() => {
     return trimmedWallet.startsWith('T') && trimmedWallet.length === 34
@@ -205,7 +195,8 @@ export default function AcquireScreen() {
         }
       }
 
-      const telegramMessage = `🔔 NEW BUY ORDER\n💵 ${orderAmountUsdt} USDT\n👤 ${user?.full_name ?? user?.email ?? 'User'}\n₦${amountNgn}\n🆔 #${orderId}`
+      const displayName = (user?.user_metadata?.full_name as string | undefined) ?? user?.email ?? 'User'
+      const telegramMessage = `🔔 NEW BUY ORDER\n💵 ${orderAmountUsdt} USDT\n👤 ${displayName}\n₦${amountNgn}\n🆔 #${orderId}`
 
       // Notifications run server-side via Supabase edge functions.
       await sendTelegram(telegramMessage)

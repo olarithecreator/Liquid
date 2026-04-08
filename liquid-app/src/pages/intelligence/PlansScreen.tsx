@@ -18,13 +18,22 @@ type DurationOption = {
   badge: string
 }
 
+type PlanOption = {
+  id: PlanId
+  name: string
+  monthlyUsd: number
+  desc: string
+  features: string[]
+  popular?: boolean
+}
+
 type UserSubscription = {
   subscription_plan: PlanId | 'none'
   subscription_expires_at: string | null
   subscription_duration?: DurationId | null
 }
 
-const plans = [
+const plans: PlanOption[] = [
   {
     id: 'basic',
     name: 'Basic',
@@ -60,7 +69,7 @@ const plans = [
       '1-on-1 consultation',
     ],
   },
-] as const
+]
 
 const durations: DurationOption[] = [
   { id: '3m', label: '3 Months', months: 3, discount: 0.15, badge: '15% off' },
@@ -205,7 +214,9 @@ export default function PlansScreen() {
               price,
             })
           }
-          await sendTelegram(`🎉 NEW SUBSCRIBER\n${user?.full_name ?? user?.email ?? 'User'} → ${activePlan?.name ?? nextPlan}\n$${price}`)
+          const displayName =
+            (user?.user_metadata?.full_name as string | undefined) ?? user?.email ?? 'User'
+          await sendTelegram(`🎉 NEW SUBSCRIBER\n${displayName} → ${activePlan?.name ?? nextPlan}\n$${price}`)
           showToast(`Subscription activated 🎉 Welcome to ${activePlan?.name ?? 'your plan'}!`, 'success')
         } else {
           showToast('Payment received. Subscription update is processing.', 'info')
@@ -252,7 +263,7 @@ export default function PlansScreen() {
     return { kind: 'subscribe' as const }
   }
 
-  async function onPlanAction(plan: (typeof plans)[number]) {
+  async function onPlanAction(plan: PlanOption) {
     if (!user?.id || busyPlanId) return
     setBusyPlanId(plan.id)
 

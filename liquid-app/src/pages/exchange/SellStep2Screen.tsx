@@ -179,7 +179,8 @@ export default function SellStep2Screen() {
         }
       }
 
-      const telegramMessage = `🔔 NEW SELL ORDER\n💵 ${amountUsdt} USDT\n👤 ${user?.full_name ?? user?.email ?? 'User'}\n₦${ngnAmount}\n🆔 #${orderId}`
+      const displayName = (user?.user_metadata?.full_name as string | undefined) ?? user?.email ?? 'User'
+      const telegramMessage = `🔔 NEW SELL ORDER\n💵 ${amountUsdt} USDT\n👤 ${displayName}\n₦${ngnAmount}\n🆔 #${orderId}`
 
       await sendTelegram(telegramMessage)
 

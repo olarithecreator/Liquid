@@ -115,20 +115,22 @@ export default function OrderStatusScreen() {
         }).catch(() => undefined)
       }
 
-      supabase
-        .from('notifications')
-        .insert({
-          user_id: order.user_id,
-          title: 'Order Complete',
-          message:
-            order.type === 'buy'
-              ? 'Your USDT has been sent successfully.'
-              : `Your ${formatNaira(order.amount_ngn)} transfer is complete.`,
-          type: 'order_completed',
-          is_read: false,
-        })
-        .then(() => undefined)
-        .catch(() => undefined)
+      void (async () => {
+        try {
+          await supabase.from('notifications').insert({
+            user_id: order.user_id,
+            title: 'Order Complete',
+            message:
+              order.type === 'buy'
+                ? 'Your USDT has been sent successfully.'
+                : `Your ${formatNaira(order.amount_ngn)} transfer is complete.`,
+            type: 'order_completed',
+            is_read: false,
+          })
+        } catch {
+          // Non-blocking notification write.
+        }
+      })()
 
       const timer = window.setTimeout(() => {
         navigate(`/exchange/complete/${order.id}`, { replace: true })
