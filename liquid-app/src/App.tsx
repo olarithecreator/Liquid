@@ -2,6 +2,7 @@ import { Suspense, lazy, useEffect, useMemo, useState } from 'react'
 import {
   BrowserRouter,
   Navigate,
+  Outlet,
   Route,
   Routes,
   useLocation,
@@ -129,6 +130,16 @@ function ProtectedRoute({ children }: { children: React.ReactElement }) {
   if (!ready) return <RouteLoadingFallback />
   if (redirectTo) return <Navigate to={redirectTo} replace />
   return children
+}
+
+function AdminShell() {
+  return (
+    <ProtectedRoute>
+      <AdminLayout>
+        <Outlet />
+      </AdminLayout>
+    </ProtectedRoute>
+  )
 }
 
 export default function App() {
@@ -296,78 +307,17 @@ export default function App() {
             }
           />
 
-          {/* Admin (email required except /admin/login) */}
-          <Route path="/admin/login" element={<AdminSignInScreen />} />
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute>
-                <AdminLayout>
-                  <AdminDashboard />
-                </AdminLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/orders"
-            element={
-              <ProtectedRoute>
-                <AdminLayout>
-                  <AdminOrders />
-                </AdminLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/post/new"
-            element={
-              <ProtectedRoute>
-                <AdminLayout>
-                  <AdminNewPost mode="new" />
-                </AdminLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/post/:id/edit"
-            element={
-              <ProtectedRoute>
-                <AdminLayout>
-                  <AdminNewPost mode="edit" />
-                </AdminLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/posts"
-            element={
-              <ProtectedRoute>
-                <AdminLayout>
-                  <AdminPosts />
-                </AdminLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/users"
-            element={
-              <ProtectedRoute>
-                <AdminLayout>
-                  <AdminUsers />
-                </AdminLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/settings"
-            element={
-              <ProtectedRoute>
-                <AdminLayout>
-                  <AdminSettings />
-                </AdminLayout>
-              </ProtectedRoute>
-            }
-          />
+            {/* Admin (email required except /admin/login) */}
+            <Route path="/admin/login" element={<AdminSignInScreen />} />
+            <Route path="/admin" element={<AdminShell />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="orders" element={<AdminOrders />} />
+              <Route path="post/new" element={<AdminNewPost mode="new" />} />
+              <Route path="post/:id/edit" element={<AdminNewPost mode="edit" />} />
+              <Route path="posts" element={<AdminPosts />} />
+              <Route path="users" element={<AdminUsers />} />
+              <Route path="settings" element={<AdminSettings />} />
+            </Route>
           </Routes>
         </Suspense>
       </BrowserRouter>
