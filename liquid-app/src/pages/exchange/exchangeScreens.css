@@ -831,3 +831,32 @@
   color: rgba(255, 206, 206, 0.92);
 }
 
+@media (max-width: 520px) {
+  .buy-top {
+    padding: 14px 14px 20px;
+  }
+
+  .rate-bar,
+  .timer-compact,
+  .buy-card,
+  .upload-row,
+  .primary-btn,
+  .wallet-block,
+  .ost-card,
+  .os-upload-card,
+  .oe-dark-card,
+  .ec-badge {
+    margin-left: 14px;
+    margin-right: 14px;
+    width: calc(100% - 28px);
+  }
+
+  .buy-big-input {
+    font-size: 30px;
+  }
+
+  .screen-nav-title {
+    font-size: 16px;
+  }
+}
+

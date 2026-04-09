@@ -11,6 +11,7 @@ import './adminDashboard.css'
 
 type DashboardStats = {
   todayVolumeNgn: number
+  todayOrdersCount: number
   spreadEarnedNgn: number
   activeSubscribers: number
   monthlyRevenueNgn: number
@@ -158,6 +159,7 @@ export default function AdminDashboard() {
         if (ordersError) {
           setStats({
             todayVolumeNgn: 0,
+            todayOrdersCount: 0,
             spreadEarnedNgn: 0,
             activeSubscribers: subsRes.count ?? 0,
             monthlyRevenueNgn: 0,
@@ -170,6 +172,7 @@ export default function AdminDashboard() {
         const allOrders = (orders as any[]) ?? []
 
         let todayVolumeNgn = 0
+        let todayOrdersCount = allOrders.length
         let spreadEarnedNgn = 0
         let completedToday = 0
         let pendingCount = 0
@@ -208,6 +211,7 @@ export default function AdminDashboard() {
 
         setStats({
           todayVolumeNgn,
+          todayOrdersCount,
           spreadEarnedNgn,
           activeSubscribers: subsRes.count ?? 0,
           monthlyRevenueNgn,
@@ -218,6 +222,7 @@ export default function AdminDashboard() {
         if (!cancelled) {
           setStats({
             todayVolumeNgn: 0,
+            todayOrdersCount: 0,
             spreadEarnedNgn: 0,
             activeSubscribers: 0,
             monthlyRevenueNgn: 0,
@@ -434,6 +439,13 @@ export default function AdminDashboard() {
             {statsLoading || !stats ? '—' : formatNaira(stats.todayVolumeNgn)}
           </div>
           <div className="adminStatHint">Sum of all order Naira amounts today.</div>
+        </article>
+        <article className="adminStatCard">
+          <div className="adminStatLabel">Orders Received Today</div>
+          <div className="adminStatValue">
+            {statsLoading || !stats ? '—' : stats.todayOrdersCount.toLocaleString('en-NG')}
+          </div>
+          <div className="adminStatHint">All new orders submitted today.</div>
         </article>
         <article className="adminStatCard">
           <div className="adminStatLabel">Spread Earned Today</div>

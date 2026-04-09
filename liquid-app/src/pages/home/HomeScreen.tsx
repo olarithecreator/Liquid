@@ -5,6 +5,7 @@ import { supabase } from '../../lib/supabase'
 import { formatNaira, formatUsdt } from '../../lib/helpers'
 import { useAuth } from '../../hooks/useAuth'
 import { useAppSettings } from '../../hooks/useAppSettings'
+import BottomNav from '../../components/ui/BottomNav'
 
 import './homeScreen.css'
 
@@ -126,8 +127,31 @@ export default function HomeScreen() {
       setDataLoading(false)
     })
 
+    let refetchInFlight = false
+    async function safeRefetch() {
+      if (refetchInFlight || !userId) return
+      refetchInFlight = true
+      try {
+        await run()
+      } finally {
+        refetchInFlight = false
+      }
+    }
+
+    const channel = userId
+      ? supabase
+          .channel(`home-orders-live-${userId}`)
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => {
+            void safeRefetch()
+          })
+          .subscribe()
+      : null
+
     return () => {
       cancelled = true
+      if (channel) {
+        void supabase.removeChannel(channel)
+      }
     }
   }, [appSettings.buyRate, userId])
 
@@ -247,6 +271,9 @@ export default function HomeScreen() {
             </>
           )}
         </div>
+        <div className="homeOrderLimits" aria-label="Current order limits">
+          Min {appSettings.minOrderUsdt} USDT · Max {appSettings.maxOrderUsdt} USDT
+        </div>
 
         {appSettings.exchangeOpen ? null : isLoading ? (
           <div className="homeClosedStatusSkeleton" aria-hidden="true" />
@@ -355,35 +382,7 @@ export default function HomeScreen() {
         </div>
       </div>
 
-      <div className="homeBottomNav" role="navigation" aria-label="Bottom navigation">
-        <button type="button" className="homeNavItem homeNavItemActive" onClick={() => navigate('/home')}>
-          <span className="homeNavIcon" aria-hidden="true">
-            ⌂
-          </span>
-          <span className="homeNavText">Home</span>
-        </button>
-
-        <button type="button" className="homeNavItem" onClick={() => navigate('/exchange/buy')}>
-          <span className="homeNavIcon" aria-hidden="true">
-            ↕
-          </span>
-          <span className="homeNavText">Exchange</span>
-        </button>
-
-        <button type="button" className="homeNavItem" onClick={() => navigate('/intelligence')}>
-          <span className="homeNavIcon" aria-hidden="true">
-            ✦
-          </span>
-          <span className="homeNavText">Intelligence</span>
-        </button>
-
-        <button type="button" className="homeNavItem" onClick={() => navigate('/portfolio')}>
-          <span className="homeNavIcon" aria-hidden="true">
-            ⬚
-          </span>
-          <span className="homeNavText">Portfolio</span>
-        </button>
-      </div>
+      <BottomNav active="home" />
     </div>
   )
 }

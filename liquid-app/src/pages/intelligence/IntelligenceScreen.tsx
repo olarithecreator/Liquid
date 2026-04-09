@@ -5,6 +5,7 @@ import { useAuth } from '../../hooks/useAuth'
 import { useAppSettings } from '../../hooks/useAppSettings'
 import { supabase } from '../../lib/supabase'
 import type { Insight } from '../../types'
+import BottomNav from '../../components/ui/BottomNav'
 
 import './intelligenceScreens.css'
 
@@ -191,24 +192,7 @@ export default function IntelligenceScreen() {
         )}
       </div>
 
-      <div className="intel-bottom-nav" role="navigation" aria-label="Bottom navigation">
-        <button type="button" className="intel-nav-item" onClick={() => navigate('/home')}>
-          <span className="intel-nav-ico">⌂</span>
-          <span className="intel-nav-lbl">Home</span>
-        </button>
-        <button type="button" className="intel-nav-item" onClick={() => navigate('/exchange/buy')}>
-          <span className="intel-nav-ico">↕</span>
-          <span className="intel-nav-lbl">Exchange</span>
-        </button>
-        <button type="button" className="intel-nav-item active" onClick={() => navigate('/intelligence')}>
-          <span className="intel-nav-ico">◈</span>
-          <span className="intel-nav-lbl">Insights</span>
-        </button>
-        <button type="button" className="intel-nav-item" onClick={() => navigate('/portfolio')}>
-          <span className="intel-nav-ico">⬚</span>
-          <span className="intel-nav-lbl">Portfolio</span>
-        </button>
-      </div>
+      <BottomNav active="insights" />
     </div>
   )
 }

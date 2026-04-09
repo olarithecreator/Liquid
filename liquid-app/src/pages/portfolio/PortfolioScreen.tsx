@@ -5,6 +5,7 @@ import { useAuth } from '../../hooks/useAuth'
 import { useAppSettings } from '../../hooks/useAppSettings'
 import { formatNaira } from '../../lib/helpers'
 import { supabase } from '../../lib/supabase'
+import BottomNav from '../../components/ui/BottomNav'
 
 import './portfolioScreens.css'
 
@@ -42,8 +43,39 @@ export default function PortfolioScreen() {
       setUnreadCount(notifRes.count ?? 0)
     }
     run().catch(() => undefined)
+
+    let refetchInFlight = false
+    async function safeRefetch() {
+      if (refetchInFlight || !user?.id) return
+      refetchInFlight = true
+      try {
+        await run()
+      } finally {
+        refetchInFlight = false
+      }
+    }
+
+    const channel = user?.id
+      ? supabase
+          .channel(`portfolio-live-${user.id}`)
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => {
+            void safeRefetch()
+          })
+          .on(
+            'postgres_changes',
+            { event: '*', schema: 'public', table: 'notifications' },
+            () => {
+              void safeRefetch()
+            },
+          )
+          .subscribe()
+      : null
+
     return () => {
       cancelled = true
+      if (channel) {
+        void supabase.removeChannel(channel)
+      }
     }
   }, [user?.id])
 
@@ -115,16 +147,7 @@ export default function PortfolioScreen() {
         </div>
       </div>
 
-      <div className="pf-bottom-panel" />
-      <div className="pf-nav-white" role="navigation" aria-label="Bottom navigation">
-        <button type="button" className="pf-nav-item" onClick={() => navigate('/home')}><span className="pf-ico">⌂</span><span className="pf-lbl">Home</span></button>
-        <button type="button" className="pf-nav-item" onClick={() => navigate('/exchange/buy')}><span className="pf-ico">↕</span><span className="pf-lbl">Exchange</span></button>
-        <button type="button" className="pf-nav-item" onClick={() => navigate('/intelligence')}><span className="pf-ico">◈</span><span className="pf-lbl">Insights</span></button>
-        <button type="button" className="pf-nav-item active" onClick={() => navigate('/portfolio')}>
-          <span className="pf-ico">▦</span><span className="pf-lbl">Portfolio</span>
-          {unreadCount > 0 ? <span className="pf-unread-badge">{unreadCount > 99 ? '99+' : unreadCount}</span> : null}
-        </button>
-      </div>
+      <BottomNav active="portfolio" unreadCount={unreadCount} />
     </div>
   )
 }

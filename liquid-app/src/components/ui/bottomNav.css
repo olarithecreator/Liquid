@@ -1,0 +1,84 @@
+.appBottomNav {
+  background: rgba(12, 12, 12, 0.97);
+  border-top: 0.5px solid rgba(255, 255, 255, 0.07);
+  display: flex;
+  padding: 12px 10px 20px;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 84px;
+  z-index: 50;
+}
+
+.appBottomNavItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  position: relative;
+}
+
+.appBottomNavIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.appBottomNavLabel {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.3);
+  font-family: var(--font-h);
+  font-weight: 600;
+}
+
+.appBottomNavItem.active .appBottomNavIcon {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.appBottomNavItem.active .appBottomNavLabel {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.appBottomNavBadge {
+  position: absolute;
+  top: 0;
+  right: 20%;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: var(--purple);
+  color: #fff;
+  font-size: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+}
+
+@media (max-width: 520px) {
+  .appBottomNav {
+    padding: 10px 6px 16px;
+    height: 76px;
+  }
+
+  .appBottomNavIcon {
+    width: 32px;
+    height: 32px;
+    font-size: 15px;
+  }
+
+  .appBottomNavLabel {
+    font-size: 9px;
+  }
+}
