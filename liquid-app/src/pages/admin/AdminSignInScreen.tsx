@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { supabase } from '../../lib/supabase'
-import { ADMIN_EMAIL } from '../../lib/constants'
+import { isAdminEmail } from '../../lib/constants'
 
 import '../entry/authScreens.css'
 
@@ -68,8 +68,8 @@ export default function AdminSignInScreen() {
       const { data } = await supabase.auth.getSession()
       if (cancelled) return
 
-      const currentEmail = data.session?.user?.email ?? ''
-      if (currentEmail && currentEmail === ADMIN_EMAIL) {
+      const currentEmail = data.session?.user?.email
+      if (isAdminEmail(currentEmail)) {
         navigate('/admin', { replace: true })
       }
     }
@@ -105,8 +105,8 @@ export default function AdminSignInScreen() {
         return
       }
 
-      const signedInEmail = data.user.email ?? ''
-      if (signedInEmail === ADMIN_EMAIL) {
+      const signedInEmail = data.user.email
+      if (isAdminEmail(signedInEmail)) {
         navigate('/admin')
         return
       }

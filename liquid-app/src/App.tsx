@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { Suspense, lazy, useEffect, useMemo, useState } from 'react'
 import {
   BrowserRouter,
   Navigate,
@@ -8,45 +8,45 @@ import {
 } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { supabase } from './lib/supabase'
-import { ADMIN_EMAIL } from './lib/constants'
+import { isAdminEmail } from './lib/constants'
 
-import SplashScreen from './pages/entry/SplashScreen'
-import OnboardingScreen from './pages/entry/OnboardingScreen'
-import SignInScreen from './pages/entry/SignInScreen'
-import SignUpScreen from './pages/entry/SignUpScreen'
-import ForgotPasswordScreen from './pages/entry/ForgotPasswordScreen'
-import ResetLinkSentScreen from './pages/entry/ResetLinkSentScreen'
-import NewPasswordScreen from './pages/entry/NewPasswordScreen'
-import PasswordUpdatedScreen from './pages/entry/PasswordUpdatedScreen'
+const SplashScreen = lazy(() => import('./pages/entry/SplashScreen'))
+const OnboardingScreen = lazy(() => import('./pages/entry/OnboardingScreen'))
+const SignInScreen = lazy(() => import('./pages/entry/SignInScreen'))
+const SignUpScreen = lazy(() => import('./pages/entry/SignUpScreen'))
+const ForgotPasswordScreen = lazy(() => import('./pages/entry/ForgotPasswordScreen'))
+const ResetLinkSentScreen = lazy(() => import('./pages/entry/ResetLinkSentScreen'))
+const NewPasswordScreen = lazy(() => import('./pages/entry/NewPasswordScreen'))
+const PasswordUpdatedScreen = lazy(() => import('./pages/entry/PasswordUpdatedScreen'))
 
-import HomeScreen from './pages/home/HomeScreen'
+const HomeScreen = lazy(() => import('./pages/home/HomeScreen'))
 
-import AcquireScreen from './pages/exchange/AcquireScreen'
-import SellStep1Screen from './pages/exchange/SellStep1Screen'
-import SellStep2Screen from './pages/exchange/SellStep2Screen'
-import OrderStatusScreen from './pages/exchange/OrderStatusScreen'
-import OrderCompleteScreen from './pages/exchange/OrderCompleteScreen'
-import OrderExpiredScreen from './pages/exchange/OrderExpiredScreen'
-import ExchangeClosedScreen from './pages/exchange/ExchangeClosedScreen'
+const AcquireScreen = lazy(() => import('./pages/exchange/AcquireScreen'))
+const SellStep1Screen = lazy(() => import('./pages/exchange/SellStep1Screen'))
+const SellStep2Screen = lazy(() => import('./pages/exchange/SellStep2Screen'))
+const OrderStatusScreen = lazy(() => import('./pages/exchange/OrderStatusScreen'))
+const OrderCompleteScreen = lazy(() => import('./pages/exchange/OrderCompleteScreen'))
+const OrderExpiredScreen = lazy(() => import('./pages/exchange/OrderExpiredScreen'))
+const ExchangeClosedScreen = lazy(() => import('./pages/exchange/ExchangeClosedScreen'))
 
-import IntelligenceScreen from './pages/intelligence/IntelligenceScreen'
-import PostDetailScreen from './pages/intelligence/PostDetailScreen'
-import PlansScreen from './pages/intelligence/PlansScreen'
+const IntelligenceScreen = lazy(() => import('./pages/intelligence/IntelligenceScreen'))
+const PostDetailScreen = lazy(() => import('./pages/intelligence/PostDetailScreen'))
+const PlansScreen = lazy(() => import('./pages/intelligence/PlansScreen'))
 
-import PortfolioScreen from './pages/portfolio/PortfolioScreen'
-import TransactionHistoryScreen from './pages/portfolio/TransactionHistoryScreen'
-import NotificationsScreen from './pages/portfolio/NotificationsScreen'
-import AccountScreen from './pages/portfolio/AccountScreen'
-import SavedBanksScreen from './pages/portfolio/SavedBanksScreen'
+const PortfolioScreen = lazy(() => import('./pages/portfolio/PortfolioScreen'))
+const TransactionHistoryScreen = lazy(() => import('./pages/portfolio/TransactionHistoryScreen'))
+const NotificationsScreen = lazy(() => import('./pages/portfolio/NotificationsScreen'))
+const AccountScreen = lazy(() => import('./pages/portfolio/AccountScreen'))
+const SavedBanksScreen = lazy(() => import('./pages/portfolio/SavedBanksScreen'))
 
-import AdminSignInScreen from './pages/admin/AdminSignInScreen'
-import AdminLayout from './pages/admin/AdminLayout'
-import AdminDashboard from './pages/admin/AdminDashboard'
-import AdminOrders from './pages/admin/AdminOrders'
-import AdminNewPost from './pages/admin/AdminNewPost'
-import AdminPosts from './pages/admin/AdminPosts'
-import AdminUsers from './pages/admin/AdminUsers'
-import AdminSettings from './pages/admin/AdminSettings'
+const AdminSignInScreen = lazy(() => import('./pages/admin/AdminSignInScreen'))
+const AdminLayout = lazy(() => import('./pages/admin/AdminLayout'))
+const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'))
+const AdminOrders = lazy(() => import('./pages/admin/AdminOrders'))
+const AdminNewPost = lazy(() => import('./pages/admin/AdminNewPost'))
+const AdminPosts = lazy(() => import('./pages/admin/AdminPosts'))
+const AdminUsers = lazy(() => import('./pages/admin/AdminUsers'))
+const AdminSettings = lazy(() => import('./pages/admin/AdminSettings'))
 
 function RootRedirect() {
   const [target, setTarget] = useState<string | null>(null)
@@ -99,9 +99,8 @@ function ProtectedRoute({ children }: { children: React.ReactElement }) {
         return
       }
 
-      const email = data.session.user.email ?? ''
-
-      if (isAdminRoute && email !== ADMIN_EMAIL) {
+      const email = data.session.user.email
+      if (isAdminRoute && !isAdminEmail(email)) {
         setRedirectTo('/admin/login')
         setReady(true)
         return
@@ -128,8 +127,15 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<RootRedirect />} />
+        <Suspense
+          fallback={
+            <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center' }}>
+              Loading...
+            </div>
+          }
+        >
+          <Routes>
+            <Route path="/" element={<RootRedirect />} />
 
           <Route path="/splash" element={<SplashScreen />} />
           <Route path="/onboarding" element={<OnboardingScreen />} />
@@ -354,7 +360,8 @@ export default function App() {
               </ProtectedRoute>
             }
           />
-        </Routes>
+          </Routes>
+        </Suspense>
       </BrowserRouter>
     </QueryClientProvider>
   )
