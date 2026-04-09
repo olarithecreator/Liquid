@@ -48,6 +48,14 @@ const AdminPosts = lazy(() => import('./pages/admin/AdminPosts'))
 const AdminUsers = lazy(() => import('./pages/admin/AdminUsers'))
 const AdminSettings = lazy(() => import('./pages/admin/AdminSettings'))
 
+function RouteLoadingFallback() {
+  return (
+    <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center' }}>
+      Loading...
+    </div>
+  )
+}
+
 function RootRedirect() {
   const [target, setTarget] = useState<string | null>(null)
 
@@ -60,6 +68,7 @@ function RootRedirect() {
 
       const onboarded = localStorage.getItem('liquid_onboarded') === 'true'
 
+      if (cancelled) return
       if (session) setTarget(onboarded ? '/home' : '/onboarding')
       else setTarget(onboarded ? '/signin' : '/onboarding')
     }
@@ -73,12 +82,13 @@ function RootRedirect() {
     }
   }, [])
 
-  if (!target) return null
+  if (!target) return <RouteLoadingFallback />
   return <Navigate to={target} replace />
 }
 
 function ProtectedRoute({ children }: { children: React.ReactElement }) {
   const location = useLocation()
+  const isAdminRoute = location.pathname.startsWith('/admin')
   const [ready, setReady] = useState(false)
   const [redirectTo, setRedirectTo] = useState<string | null>(null)
 
@@ -88,7 +98,6 @@ function ProtectedRoute({ children }: { children: React.ReactElement }) {
     async function run() {
       setReady(false)
 
-      const isAdminRoute = location.pathname.startsWith('/admin')
       const authClient = isAdminRoute ? adminSupabase : supabase
       const { data, error } = await authClient.auth.getSession()
       if (cancelled) return
@@ -115,9 +124,9 @@ function ProtectedRoute({ children }: { children: React.ReactElement }) {
     return () => {
       cancelled = true
     }
-  }, [location.pathname])
+  }, [isAdminRoute])
 
-  if (!ready) return null
+  if (!ready) return <RouteLoadingFallback />
   if (redirectTo) return <Navigate to={redirectTo} replace />
   return children
 }
@@ -130,9 +139,7 @@ export default function App() {
       <BrowserRouter>
         <Suspense
           fallback={
-            <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center' }}>
-              Loading...
-            </div>
+            <RouteLoadingFallback />
           }
         >
           <Routes>
