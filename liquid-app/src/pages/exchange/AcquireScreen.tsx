@@ -14,6 +14,7 @@ import './exchangeScreens.css'
 type AmountErrors = {
   amount?: string
   wallet?: string
+  proof?: string
 }
 
 export default function AcquireScreen() {
@@ -131,6 +132,9 @@ export default function AcquireScreen() {
     } else if (!isWalletValid) {
       errors.wallet = 'Wallet address must start with T and be 34 characters.'
     }
+    if (!proofFile) {
+      errors.proof = 'Upload payment proof before submitting.'
+    }
 
     const hasErrors = Object.keys(errors).length > 0
     setFormErrors(hasErrors ? errors : null)
@@ -165,35 +169,33 @@ export default function AcquireScreen() {
 
       let proofPath: string | null = null
 
-      if (proofFile) {
-        const ext =
-          proofFile.name.includes('.') && proofFile.name.split('.').length > 1
-            ? proofFile.name.split('.').pop()!.toLowerCase()
-            : 'pdf'
+      const ext =
+        proofFile!.name.includes('.') && proofFile!.name.split('.').length > 1
+          ? proofFile!.name.split('.').pop()!.toLowerCase()
+          : 'pdf'
 
-        proofPath = `${orderId}/proof.${ext}`
+      proofPath = `${orderId}/proof.${ext}`
 
-        const { error: uploadError } = await supabase.storage
-          .from('payment-proofs')
-          .upload(proofPath, proofFile, { contentType: proofFile.type })
+      const { error: uploadError } = await supabase.storage
+        .from('payment-proofs')
+        .upload(proofPath, proofFile!, { contentType: proofFile!.type })
 
-        if (uploadError) {
-          setError('Order created, but proof upload failed. Open order status to retry upload.')
-          return
-        }
+      if (uploadError) {
+        setError('Order created, but proof upload failed. Open order status to retry upload.')
+        return
+      }
 
-        const { error: updateError } = await supabase
-          .from('orders')
-          .update({
-            payment_proof_url: proofPath,
-            status: 'proof_uploaded',
-          })
-          .eq('id', orderId)
+      const { error: updateError } = await supabase
+        .from('orders')
+        .update({
+          payment_proof_url: proofPath,
+          status: 'proof_uploaded',
+        })
+        .eq('id', orderId)
 
-        if (updateError) {
-          setError('Order created, but proof update failed. Open order status to retry upload.')
-          return
-        }
+      if (updateError) {
+        setError('Order created, but proof update failed. Open order status to retry upload.')
+        return
       }
 
       const displayName = (user?.user_metadata?.full_name as string | undefined) ?? user?.email ?? 'User'
@@ -215,6 +217,42 @@ export default function AcquireScreen() {
       navigate(`/exchange/order/${orderId}`)
     } catch (e) {
       setError('Something went wrong while creating your order.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function submitProofForActiveOrder() {
+    if (!activeOrder || activeOrder.status === 'proof_uploaded' || loading) return
+    if (!proofFile) {
+      setError('Upload payment proof before submitting.')
+      return
+    }
+    setLoading(true)
+    setError(null)
+    try {
+      const ext =
+        proofFile.name.includes('.') && proofFile.name.split('.').length > 1
+          ? proofFile.name.split('.').pop()!.toLowerCase()
+          : 'pdf'
+      const proofPath = `${activeOrder.id}/proof.${ext}`
+      const { error: uploadError } = await supabase.storage
+        .from('payment-proofs')
+        .upload(proofPath, proofFile, { contentType: proofFile.type, upsert: true })
+      if (uploadError) {
+        setError('Proof upload failed. Please try again.')
+        return
+      }
+      const { error: updateError } = await supabase
+        .from('orders')
+        .update({ payment_proof_url: proofPath, status: 'proof_uploaded' })
+        .eq('id', activeOrder.id)
+      if (updateError) {
+        setError('Proof saved but order status update failed. Please retry.')
+        return
+      }
+      setActiveOrder((prev) => (prev ? { ...prev, payment_proof_url: proofPath, status: 'proof_uploaded' } : prev))
+      navigate(`/exchange/order/${activeOrder.id}`)
     } finally {
       setLoading(false)
     }
@@ -320,9 +358,9 @@ export default function AcquireScreen() {
             >
               <div className="up-ico">📎</div>
               <div className="up-txt">
-                <strong>Upload payment proof</strong>
+                <strong>{proofFile ? 'Proof selected ✓' : 'Upload payment proof (Required)'}</strong>
                 <br />
-                Screenshot or PDF · Max 5MB
+                {proofFile ? proofFile.name : 'Screenshot or PDF · Max 5MB'}
               </div>
             </button>
             <input
@@ -333,6 +371,9 @@ export default function AcquireScreen() {
               disabled={loading}
               onChange={(e) => onChooseFile(e.target.files?.[0] ?? null)}
             />
+            {formErrors?.proof ? (
+              <div className="buy-error">{formErrors.proof}</div>
+            ) : null}
 
             {error ? <div className="buy-error">{error}</div> : null}
 
@@ -381,6 +422,40 @@ export default function AcquireScreen() {
                 <span className="bc-val purple">{formatNaira(activeOrder.amount_ngn)}</span>
               </div>
             </div>
+
+            {activeOrder.status !== 'proof_uploaded' ? (
+              <>
+                <button
+                  type="button"
+                  className="upload-row"
+                  onClick={() => fileInputRef.current?.click()}
+                  aria-label="Upload payment proof for active order"
+                >
+                  <div className="up-ico">📎</div>
+                  <div className="up-txt">
+                    <strong>{proofFile ? 'Proof selected ✓' : 'Upload payment proof (Required)'}</strong>
+                    <br />
+                    {proofFile ? proofFile.name : 'Screenshot or PDF · Max 5MB'}
+                  </div>
+                </button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,application/pdf"
+                  style={{ display: 'none' }}
+                  disabled={loading}
+                  onChange={(e) => onChooseFile(e.target.files?.[0] ?? null)}
+                />
+                <button
+                  type="button"
+                  className="primary-btn btn-purple"
+                  onClick={submitProofForActiveOrder}
+                  disabled={loading}
+                >
+                  {loading ? 'Uploading...' : 'Submit Proof'}
+                </button>
+              </>
+            ) : null}
 
             <button
               type="button"

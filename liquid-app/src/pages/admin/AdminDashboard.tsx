@@ -120,6 +120,7 @@ export default function AdminDashboard() {
   // Load dashboard stats.
   useEffect(() => {
     let cancelled = false
+    let refetchInFlight = false
 
     async function loadStats() {
       setStatsLoading(true)
@@ -133,7 +134,7 @@ export default function AdminDashboard() {
           await Promise.all([
             supabase
               .from('orders')
-              .select('amount_ngn,amount_usdt,status,created_at,buy_rate,sell_rate,rate')
+              .select('type,amount_ngn,amount_usdt,status,created_at,rate')
               .gte('created_at', start.toISOString())
               .lt('created_at', end.toISOString()),
             supabase
@@ -176,13 +177,18 @@ export default function AdminDashboard() {
         let spreadEarnedNgn = 0
         let completedToday = 0
         let pendingCount = 0
+        const spreadPerUsdt = Math.max(0, Number(buyRate) - Number(sellRate))
 
         for (const row of allOrders) {
           const amountNgn = Number(row.amount_ngn) || 0
           const amountUsdt = Number(row.amount_usdt) || 0
           const status = row.status as OrderStatus
+          const type = row.type as OrderType
 
-          todayVolumeNgn += amountNgn
+          if (status === 'completed') {
+            // Dashboard should reflect approved/completed transactions.
+            todayVolumeNgn += amountNgn
+          }
 
           if (status === 'completed') {
             completedToday += 1
@@ -193,10 +199,14 @@ export default function AdminDashboard() {
           }
 
           if (status === 'completed' && amountUsdt > 0) {
-            const buyR = typeof row.buy_rate === 'number' ? row.buy_rate : buyRate
-            const sellR = typeof row.sell_rate === 'number' ? row.sell_rate : sellRate
-            const spread = (Number(buyR) - Number(sellR)) * amountUsdt
-            if (Number.isFinite(spread)) spreadEarnedNgn += spread
+            const rateAtOrder = Number(row.rate) || 0
+            const spread =
+              type === 'buy'
+                ? Math.max(0, rateAtOrder - Number(sellRate)) * amountUsdt
+                : Math.max(0, Number(buyRate) - rateAtOrder) * amountUsdt
+            const fallbackSpread = spreadPerUsdt * amountUsdt
+            const resolvedSpread = Number.isFinite(spread) && spread > 0 ? spread : fallbackSpread
+            if (Number.isFinite(resolvedSpread)) spreadEarnedNgn += resolvedSpread
           }
         }
 
@@ -237,8 +247,29 @@ export default function AdminDashboard() {
 
     loadStats().catch(() => undefined)
 
+    async function safeRefetch() {
+      if (refetchInFlight) return
+      refetchInFlight = true
+      try {
+        await loadStats()
+      } finally {
+        refetchInFlight = false
+      }
+    }
+
+    const channel = supabase
+      .channel('admin-dashboard-live-stats')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => {
+        void safeRefetch()
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'users' }, () => {
+        void safeRefetch()
+      })
+      .subscribe()
+
     return () => {
       cancelled = true
+      void supabase.removeChannel(channel)
     }
   }, [buyRate, sellRate])
 
@@ -307,8 +338,7 @@ export default function AdminDashboard() {
       })
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'orders' }, () => {
         void safeRefetch()
-        // Stats also shift as orders move between statuses.
-        queryClient.invalidateQueries({ queryKey: ['app_settings'] }).catch(() => undefined)
+        // Stats are handled by dedicated live stats channel.
       })
       .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'orders' }, () => {
         void safeRefetch()
