@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 
-import { supabase } from '../../lib/supabase'
+import { adminSupabase as supabase } from '../../lib/supabase'
 import { ADMIN_EMAIL } from '../../lib/constants'
 
 import './adminSettings.css'

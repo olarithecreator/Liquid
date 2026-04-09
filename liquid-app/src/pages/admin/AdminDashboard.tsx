@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { supabase } from '../../lib/supabase'
+import { adminSupabase as supabase } from '../../lib/supabase'
 import { useAppSettings } from '../../hooks/useAppSettings'
 import { formatNaira, getInitials, getTimerRemaining } from '../../lib/helpers'
 import type { OrderStatus, OrderType } from '../../types'

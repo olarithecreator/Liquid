@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { supabase } from '../../lib/supabase'
+import { adminSupabase as supabase } from '../../lib/supabase'
 import { formatNaira, getInitials, getTimerRemaining } from '../../lib/helpers'
 import { sendEmail, sendTelegram } from '../../lib/notifications'
 import type { Order, OrderStatus, OrderType } from '../../types'

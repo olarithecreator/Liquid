@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { X } from 'lucide-react'
 
-import { supabase } from '../../lib/supabase'
+import { adminSupabase as supabase } from '../../lib/supabase'
 import type { OrderStatus, OrderType, User } from '../../types'
 
 import './adminUsers.css'

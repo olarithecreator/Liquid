@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { supabase } from '../../lib/supabase'
+import { adminSupabase as supabase } from '../../lib/supabase'
 import { isAdminEmail } from '../../lib/constants'
 
 import '../entry/authScreens.css'

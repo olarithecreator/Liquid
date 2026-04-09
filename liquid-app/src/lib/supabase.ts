@@ -7,4 +7,16 @@ const key = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined
 if (!url) throw new Error('Missing VITE_SUPABASE_URL in environment')
 if (!key) throw new Error('Missing VITE_SUPABASE_ANON_KEY in environment')
 
-export const supabase: SupabaseClient = createClient(url, key)
+export const supabase: SupabaseClient = createClient(url, key, {
+  auth: {
+    storageKey: 'liquid-user-auth',
+  },
+})
+
+// Keep admin auth isolated so admin and user can stay signed-in independently
+// on the same browser/device without overriding each other's session.
+export const adminSupabase: SupabaseClient = createClient(url, key, {
+  auth: {
+    storageKey: 'liquid-admin-auth',
+  },
+})

@@ -7,7 +7,7 @@ import {
   useLocation,
 } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { supabase } from './lib/supabase'
+import { adminSupabase, supabase } from './lib/supabase'
 import { isAdminEmail } from './lib/constants'
 
 const SplashScreen = lazy(() => import('./pages/entry/SplashScreen'))
@@ -89,7 +89,8 @@ function ProtectedRoute({ children }: { children: React.ReactElement }) {
       setReady(false)
 
       const isAdminRoute = location.pathname.startsWith('/admin')
-      const { data, error } = await supabase.auth.getSession()
+      const authClient = isAdminRoute ? adminSupabase : supabase
+      const { data, error } = await authClient.auth.getSession()
       if (cancelled) return
 
       if (error || !data.session) {

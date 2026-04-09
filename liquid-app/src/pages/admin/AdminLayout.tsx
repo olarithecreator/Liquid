@@ -10,10 +10,10 @@ import {
   Users,
   X,
 } from 'lucide-react'
+import type { User } from '@supabase/supabase-js'
 
-import { supabase } from '../../lib/supabase'
-import { ADMIN_EMAIL } from '../../lib/constants'
-import { useAuth } from '../../hooks/useAuth'
+import { adminSupabase as supabase } from '../../lib/supabase'
+import { isAdminEmail } from '../../lib/constants'
 
 import './adminLayout.css'
 
@@ -51,7 +51,8 @@ function SidebarItem({
 export default function AdminLayout({ children }: Props) {
   const navigate = useNavigate()
   const location = useLocation()
-  const { user, loading, isAdmin } = useAuth()
+  const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
 
   const [pendingCount, setPendingCount] = useState(0)
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
@@ -69,10 +70,39 @@ export default function AdminLayout({ children }: Props) {
     }
   }, [pathname])
 
+  const isAdmin = isAdminEmail(user?.email)
+
+  useEffect(() => {
+    let mounted = true
+
+    async function loadSession() {
+      const { data } = await supabase.auth.getSession()
+      if (!mounted) return
+      setUser(data.session?.user ?? null)
+      setLoading(false)
+    }
+
+    loadSession().catch(() => {
+      if (!mounted) return
+      setLoading(false)
+    })
+
+    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!mounted) return
+      setUser(session?.user ?? null)
+      setLoading(false)
+    })
+
+    return () => {
+      mounted = false
+      data.subscription.unsubscribe()
+    }
+  }, [])
+
   useEffect(() => {
     if (loading) return
 
-    if (!user || user.email !== ADMIN_EMAIL || !isAdmin) {
+    if (!user || !isAdmin) {
       navigate('/admin/login', { replace: true })
     }
   }, [isAdmin, loading, navigate, user])
