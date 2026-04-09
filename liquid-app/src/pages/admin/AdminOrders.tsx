@@ -73,6 +73,18 @@ async function signedProofUrl(path: string): Promise<string | null> {
   }
 }
 
+function canVerify(status: OrderStatus): boolean {
+  return status === 'proof_uploaded'
+}
+
+function canComplete(status: OrderStatus): boolean {
+  return status === 'verifying' || status === 'proof_uploaded'
+}
+
+function canCancel(status: OrderStatus): boolean {
+  return status === 'awaiting_payment' || status === 'proof_uploaded' || status === 'verifying'
+}
+
 export default function AdminOrders() {
   const [tab, setTab] = useState<FilterTab>('pending')
   const [orders, setOrders] = useState<OrderRow[]>([])
@@ -250,6 +262,7 @@ export default function AdminOrders() {
   }
 
   async function quickApproveToVerifying(order: OrderRow) {
+    if (!canVerify(order.status)) return
     if (actionBusy) return
     setActionBusy(true)
     try {
@@ -262,6 +275,7 @@ export default function AdminOrders() {
   }
 
   async function cancelOrder(order: OrderRow) {
+    if (!canCancel(order.status)) return
     const ok = window.confirm('Cancel this order?')
     if (!ok) return
     if (actionBusy) return
@@ -279,6 +293,7 @@ export default function AdminOrders() {
   }
 
   async function markComplete(order: OrderRow) {
+    if (!canComplete(order.status)) return
     const ok = window.confirm('Mark this order as complete? This cannot be undone.')
     if (!ok) return
     if (actionBusy) return
@@ -464,7 +479,7 @@ export default function AdminOrders() {
                           View
                         </button>
 
-                        {o.status === 'proof_uploaded' ? (
+                        {canVerify(o.status) ? (
                           <button
                             type="button"
                             className="rowAction approve"
@@ -475,7 +490,7 @@ export default function AdminOrders() {
                           </button>
                         ) : null}
 
-                        {o.status !== 'completed' ? (
+                        {canCancel(o.status) ? (
                           <button
                             type="button"
                             className="rowAction cancel"
@@ -639,7 +654,7 @@ export default function AdminOrders() {
                 <button
                   type="button"
                   className="detailBtn verify"
-                  disabled={actionBusy || selected.status === 'completed'}
+                  disabled={actionBusy || !canVerify(selected.status)}
                   onClick={() => void quickApproveToVerifying(selected)}
                 >
                   Approve ✓
@@ -648,7 +663,7 @@ export default function AdminOrders() {
                 <button
                   type="button"
                   className="detailBtn complete"
-                  disabled={actionBusy || selected.status === 'completed'}
+                  disabled={actionBusy || !canComplete(selected.status)}
                   onClick={() => void markComplete(selected)}
                 >
                   Mark Complete ✓
@@ -657,7 +672,7 @@ export default function AdminOrders() {
                 <button
                   type="button"
                   className="detailBtn cancel"
-                  disabled={actionBusy || selected.status === 'completed'}
+                  disabled={actionBusy || !canCancel(selected.status)}
                   onClick={() => void cancelOrder(selected)}
                 >
                   Cancel ✕

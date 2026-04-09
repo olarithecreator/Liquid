@@ -411,7 +411,10 @@ export default function AcquireScreen() {
           <div className="nav-ico-dark">◎</div>
           <div className="nav-lbl-dark">Plans</div>
         </button>
-        <button type="button" className="nav-it-dark" />
+        <button type="button" className="nav-it-dark" onClick={() => navigate('/portfolio')}>
+          <div className="nav-ico-dark">▦</div>
+          <div className="nav-lbl-dark">Portfolio</div>
+        </button>
       </div>
     </div>
   )

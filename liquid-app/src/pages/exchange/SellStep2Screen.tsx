@@ -107,6 +107,10 @@ export default function SellStep2Screen() {
     if (!isWalletValid)
       hasErrors.push('Wallet must start with T and be 34 characters.')
 
+    if (!proofFile) {
+      hasErrors.push('Upload transaction proof before submitting.')
+    }
+
 
     if (hasErrors.length > 0) {
       setError(hasErrors.join(' · '))
@@ -318,9 +322,9 @@ export default function SellStep2Screen() {
         >
           <div className="up-ico">📎</div>
           <div className="up-txt">
-            <strong>Upload transaction hash</strong>
+            <strong>{proofFile ? 'Proof selected ✓' : 'Upload transaction proof'}</strong>
             <br />
-            TxID screenshot or PDF · Max 5MB
+            {proofFile ? proofFile.name : 'TxID screenshot or PDF · Max 5MB'}
           </div>
         </button>
         <input
