@@ -76,6 +76,29 @@ function TermsLinks() {
   )
 }
 
+function GoogleLogo() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+      <path
+        fill="#4285F4"
+        d="M17.64 9.2c0-.64-.06-1.26-.16-1.85H9v3.5h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.63Z"
+      />
+      <path
+        fill="#34A853"
+        d="M9 18c2.43 0 4.47-.8 5.96-2.17l-2.92-2.26c-.8.54-1.83.86-3.04.86-2.34 0-4.33-1.58-5.04-3.7H.96v2.34A9 9 0 0 0 9 18Z"
+      />
+      <path
+        fill="#FBBC05"
+        d="M3.96 10.73A5.4 5.4 0 0 1 3.68 9c0-.6.1-1.17.28-1.73V4.93H.96A9 9 0 0 0 0 9c0 1.45.35 2.82.96 4.07l3-2.34Z"
+      />
+      <path
+        fill="#EA4335"
+        d="M9 3.57c1.33 0 2.52.46 3.46 1.36l2.6-2.6C13.46.84 11.43 0 9 0A9 9 0 0 0 .96 4.93l3 2.34c.71-2.12 2.7-3.7 5.04-3.7Z"
+      />
+    </svg>
+  )
+}
+
 export default function SignUpScreen() {
   const navigate = useNavigate()
 
@@ -95,6 +118,13 @@ export default function SignUpScreen() {
   const [termsError, setTermsError] = useState(false)
 
   const phoneDigits = phoneNumber.replace(/\D/g, '')
+
+  async function onGoogle() {
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: `${window.location.origin}/home` },
+    })
+  }
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault()
@@ -311,6 +341,17 @@ export default function SignUpScreen() {
           <button className="primaryBtn" type="submit" disabled={loading}>
             {loading ? <div className="spinner" aria-hidden="true" /> : null}
             {loading ? 'Creating...' : 'Create Account'}
+          </button>
+
+          <div className="dividerRow">
+            <div className="dividerLine" />
+            <div className="dividerText">or continue with</div>
+            <div className="dividerLine" />
+          </div>
+
+          <button className="googleBtn" type="button" onClick={onGoogle} disabled={loading}>
+            <GoogleLogo />
+            <span>Continue with Google</span>
           </button>
 
           <div className="footerRow">
