@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { supabase } from '../../lib/supabase'
+import { sendEmail } from '../../lib/notifications'
 
 import './authScreens.css'
 
@@ -168,6 +169,26 @@ export default function SignUpScreen() {
 
         setToast({ tone: 'error', message: msg })
         return
+      }
+
+      const toEmail = data?.user?.email ?? email.trim()
+      if (toEmail) {
+        sendEmail('welcome', toEmail, { fullName: fullName.trim() }).catch(() => undefined)
+      }
+      if (data?.user?.id) {
+        void supabase
+          .from('notifications')
+          .insert({
+            user_id: data.user.id,
+            title: 'Welcome to Liquid',
+            message: 'Your account is ready. Explore the app to acquire/liquidate USDT and access intelligence.',
+            type: 'welcome',
+            is_read: false,
+          })
+          .then(
+            () => undefined,
+            () => undefined,
+          )
       }
 
       // data.session is optional. Per prompt, we navigate on success.

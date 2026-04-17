@@ -239,6 +239,20 @@ export default function SellStep2Screen() {
         })
       }
 
+      // In-app notification (best-effort; depends on RLS policy).
+      try {
+        if (!user?.id) throw new Error('Missing user id')
+        await supabase.from('notifications').insert({
+          user_id: user.id,
+          title: 'Order Created',
+          message: `Your SELL order for ${amountUsdt} USDT was created. Upload proof to complete processing.`,
+          type: 'order',
+          is_read: false,
+        })
+      } catch {
+        // Non-blocking.
+      }
+
       navigate(`/exchange/order/${orderId}`)
     } catch {
       setError('Something went wrong while creating your order.')

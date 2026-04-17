@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import OrderStepTracker from '../../components/exchange/OrderStepTracker'
 import { useAuth } from '../../hooks/useAuth'
 import { formatNaira } from '../../lib/helpers'
-import { sendEmail } from '../../lib/notifications'
+import { sendEmail, sendTelegram } from '../../lib/notifications'
 import { supabase } from '../../lib/supabase'
 import type { Order, OrderStatus } from '../../types'
 
@@ -184,6 +184,26 @@ export default function OrderStatusScreen() {
         setError('Could not update order status.')
         return
       }
+
+      if (user?.email) {
+        sendEmail('proof_received', user.email, { orderId: order.id }).catch(() => undefined)
+      }
+      void sendTelegram(`🧾 PROOF UPLOADED\n🆔 #${order.id}\n👤 ${user?.email ?? order.user_id}`).catch(() => undefined)
+
+      // In-app notification (best-effort; depends on RLS policy).
+      void supabase
+        .from('notifications')
+        .insert({
+          user_id: order.user_id,
+          title: 'Proof Uploaded',
+          message: 'We received your proof. An admin will review it shortly.',
+          type: 'proof_received',
+          is_read: false,
+        })
+        .then(
+          () => undefined,
+          () => undefined,
+        )
     } catch {
       setError('Upload failed. Please try again.')
     } finally {

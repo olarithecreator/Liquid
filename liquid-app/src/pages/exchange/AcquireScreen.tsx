@@ -214,6 +214,19 @@ export default function AcquireScreen() {
         })
       }
 
+      // In-app notification (best-effort; depends on RLS policy).
+      try {
+        await supabase.from('notifications').insert({
+          user_id: user!.id,
+          title: 'Order Created',
+          message: `Your BUY order for ${orderAmountUsdt} USDT was created. Upload proof to complete processing.`,
+          type: 'order',
+          is_read: false,
+        })
+      } catch {
+        // Non-blocking.
+      }
+
       navigate(`/exchange/order/${orderId}`)
     } catch (e) {
       setError('Something went wrong while creating your order.')

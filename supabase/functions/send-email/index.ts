@@ -11,7 +11,7 @@ type EmailPayload = {
 serve(async (req) => {
   const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'authorization, content-type',
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
   }
 
   if (req.method === 'OPTIONS') {
@@ -41,6 +41,24 @@ serve(async (req) => {
     let html = customBody ?? '<div style="font-family:Inter,sans-serif;">Notification received.</div>'
 
     switch (type) {
+      case 'welcome': {
+        subject = 'Welcome to Liquid'
+        html = `
+          <div style="font-family:Inter,system-ui,sans-serif;max-width:520px;margin:0 auto;background:#0C0C0C;color:#fff;padding:32px;border-radius:16px;">
+            <div style="font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#A855F7;margin-bottom:10px;">Liquid</div>
+            <h1 style="color:#fff;font-size:26px;margin:0 0 10px;">Welcome to Liquid</h1>
+            <p style="color:#B4B4B4;line-height:1.6;margin:0 0 18px;">
+              Your account is ready. You can now acquire or liquidate USDT and access intelligence content.
+            </p>
+            <div style="background:#141414;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px;">
+              <p style="margin:0;color:#B4B4B4;font-size:13px;line-height:1.55;">
+                Need help? Email us at <a href="mailto:support@stayliquid.app" style="color:#A855F7;text-decoration:none;">support@stayliquid.app</a>.
+              </p>
+            </div>
+          </div>
+        `
+        break
+      }
       case 'order_created': {
         subject = `Your Liquid ${String(data.type ?? '').toUpperCase()} order is received`
         html = `
