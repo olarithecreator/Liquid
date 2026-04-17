@@ -20,6 +20,8 @@ const ResetLinkSentScreen = lazy(() => import('./pages/entry/ResetLinkSentScreen
 const NewPasswordScreen = lazy(() => import('./pages/entry/NewPasswordScreen'))
 const PasswordUpdatedScreen = lazy(() => import('./pages/entry/PasswordUpdatedScreen'))
 
+const LegalScreen = lazy(() => import('./pages/legal/LegalScreen'))
+
 const HomeScreen = lazy(() => import('./pages/home/HomeScreen'))
 
 const AcquireScreen = lazy(() => import('./pages/exchange/AcquireScreen'))
@@ -160,6 +162,7 @@ export default function App() {
           <Route path="/onboarding" element={<OnboardingScreen />} />
           <Route path="/signin" element={<SignInScreen />} />
           <Route path="/signup" element={<SignUpScreen />} />
+          <Route path="/legal" element={<LegalScreen />} />
           <Route
             path="/forgot-password"
             element={<ForgotPasswordScreen />}

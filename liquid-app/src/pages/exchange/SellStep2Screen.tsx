@@ -16,7 +16,45 @@ type BankDetails = {
   bankHolder: string
 }
 
-const LIQUID_TRX_WALLET = 'TQn9Y2khEsLJW1ChVWFMSMeRDow5KcbLSE'
+type PaymentAddress = {
+  id: string
+  asset: 'BTC' | 'USDT' | 'USDC'
+  network: string
+  address: string
+}
+
+const LIQUID_PAYMENT_ADDRESSES: PaymentAddress[] = [
+  {
+    id: 'btc-bitcoin',
+    asset: 'BTC',
+    network: 'Bitcoin',
+    address: '1FPbLKvxpURkn8V9QkDfDXGPZ4Wiy8RKU6',
+  },
+  {
+    id: 'usdt-trc20',
+    asset: 'USDT',
+    network: 'TRC20',
+    address: 'TGhZW483i8wxoZVJhDcGeFVEjb4WT4yLMU',
+  },
+  {
+    id: 'usdt-bep20',
+    asset: 'USDT',
+    network: 'BEP20',
+    address: '0xa27cd4eb265749f1255c77870bb7825d226e111b',
+  },
+  {
+    id: 'usdc-solana',
+    asset: 'USDC',
+    network: 'Solana',
+    address: 'BarEmDxwLb5V9rWWbcPmrzbH7P4oEs6AisNAayceN7Dh',
+  },
+  {
+    id: 'usdc-bep20',
+    asset: 'USDC',
+    network: 'BEP20',
+    address: '0xa27cd4eb265749f1255c77870bb7825d226e111b',
+  },
+]
 
 export default function SellStep2Screen() {
   const navigate = useNavigate()
@@ -37,6 +75,7 @@ export default function SellStep2Screen() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  const [selectedPaymentId, setSelectedPaymentId] = useState(LIQUID_PAYMENT_ADDRESSES[1]?.id ?? LIQUID_PAYMENT_ADDRESSES[0]!.id)
   const [copied, setCopied] = useState(false)
 
   const [orderCreated, setOrderCreated] = useState(false)
@@ -78,7 +117,8 @@ export default function SellStep2Screen() {
 
   async function onCopyWallet() {
     try {
-      await navigator.clipboard.writeText(LIQUID_TRX_WALLET)
+      const selected = LIQUID_PAYMENT_ADDRESSES.find((a) => a.id === selectedPaymentId) ?? LIQUID_PAYMENT_ADDRESSES[0]!
+      await navigator.clipboard.writeText(selected.address)
       setCopied(true)
       window.setTimeout(() => setCopied(false), 2000)
     } catch {
@@ -305,9 +345,40 @@ export default function SellStep2Screen() {
         </div>
 
         <div className="wallet-block">
-          <div className="wb-label">Send USDT to this wallet</div>
-          <div className="wb-network">● TRC-20 Network</div>
-          <div className="wb-addr">{LIQUID_TRX_WALLET}</div>
+          <div className="wb-label">Send crypto to Liquid</div>
+
+          <div className="wb-warning">
+            Use the <strong>exact</strong> asset + network shown. Sending on the wrong network may result in permanent loss.
+          </div>
+
+          <div className="wb-select-row">
+            <select
+              className="wb-select"
+              value={selectedPaymentId}
+              onChange={(e) => {
+                setSelectedPaymentId(e.target.value)
+                setCopied(false)
+              }}
+              disabled={loading}
+              aria-label="Select payment address"
+            >
+              {LIQUID_PAYMENT_ADDRESSES.map((a) => (
+                <option key={a.id} value={a.id}>
+                  {a.asset} · {a.network}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {(() => {
+            const selected = LIQUID_PAYMENT_ADDRESSES.find((a) => a.id === selectedPaymentId) ?? LIQUID_PAYMENT_ADDRESSES[0]!
+            return (
+              <>
+                <div className="wb-network">● {selected.asset} on {selected.network}</div>
+                <div className="wb-addr">{selected.address}</div>
+              </>
+            )
+          })()}
           <button type="button" className="wb-copy" onClick={onCopyWallet}>
             ⧉ {copied ? '✓ Copied' : 'Copy address'}
           </button>

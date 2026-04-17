@@ -118,6 +118,25 @@ export default function NotificationsScreen() {
             </button>
           ))
         )}
+
+        <div
+          style={{
+            marginTop: 14,
+            padding: 14,
+            borderRadius: 16,
+            border: '1px solid rgba(255,255,255,0.08)',
+            background: 'rgba(255,255,255,0.04)',
+            color: 'rgba(255,255,255,0.74)',
+            fontSize: 13,
+            lineHeight: 1.45,
+          }}
+        >
+          Need help? Contact Liquid support at{' '}
+          <a href="mailto:support@stayliquid.app" style={{ color: 'var(--purple-ll)', textDecoration: 'none' }}>
+            support@stayliquid.app
+          </a>
+          .
+        </div>
       </div>
 
       <div className="pf-nav-dark" role="navigation" aria-label="Bottom navigation">

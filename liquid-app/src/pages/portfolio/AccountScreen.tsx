@@ -252,8 +252,8 @@ export default function AccountScreen() {
         </div>
 
         <div className="acc-section-title">Support</div>
-        <button type="button" className="acc-row" onClick={() => window.open('https://wa.me/2340000000000', '_blank')}>WhatsApp Support <span>↗</span></button>
-        <button type="button" className="acc-row" onClick={() => window.open('https://example.com/terms', '_blank')}>Terms & Privacy <span>↗</span></button>
+        <button type="button" className="acc-row" onClick={() => window.open('mailto:support@stayliquid.app', '_blank')}>Email Support <span>↗</span></button>
+        <button type="button" className="acc-row" onClick={() => navigate('/legal?tab=terms')}>Terms & Privacy <span>›</span></button>
 
         <button type="button" className="acc-signout" onClick={signOut}>Sign Out</button>
       </div>

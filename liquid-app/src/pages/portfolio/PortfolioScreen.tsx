@@ -58,12 +58,16 @@ export default function PortfolioScreen() {
     const channel = user?.id
       ? supabase
           .channel(`portfolio-live-${user.id}`)
-          .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => {
-            void safeRefetch()
-          })
           .on(
             'postgres_changes',
-            { event: '*', schema: 'public', table: 'notifications' },
+            { event: '*', schema: 'public', table: 'orders', filter: `user_id=eq.${user.id}` },
+            () => {
+              void safeRefetch()
+            },
+          )
+          .on(
+            'postgres_changes',
+            { event: '*', schema: 'public', table: 'notifications', filter: `user_id=eq.${user.id}` },
             () => {
               void safeRefetch()
             },

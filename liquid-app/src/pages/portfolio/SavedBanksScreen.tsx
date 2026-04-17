@@ -173,7 +173,9 @@ export default function SavedBanksScreen() {
     await persist(normalized.map((b) => ({ ...b, is_default: b.account_number === target.account_number })))
   }
 
-  async function removeBank(target: SavedBank) {
+  async function deleteBank(target: SavedBank) {
+    const ok = window.confirm(`Delete ${target.bank_name} ••${target.account_number.slice(-4)}?`)
+    if (!ok) return
     const filtered = normalized.filter((b) => b.account_number !== target.account_number)
     if (filtered.length > 0 && !filtered.some((b) => b.is_default)) filtered[0].is_default = true
     await persist(filtered)
@@ -197,11 +199,16 @@ export default function SavedBanksScreen() {
             <div className="bank-holder">{b.account_holder}</div>
             <div className="bank-actions">
               {b.is_default ? (
-                <span className="bank-default">DEFAULT</span>
+                <>
+                  <span className="bank-default">DEFAULT</span>
+                  <button type="button" className="bank-link remove" disabled={saving} onClick={() => deleteBank(b)}>
+                    Delete
+                  </button>
+                </>
               ) : (
                 <>
                   <button type="button" className="bank-link" disabled={saving} onClick={() => setDefault(b)}>Set default</button>
-                  <button type="button" className="bank-link remove" disabled={saving} onClick={() => removeBank(b)}>Remove</button>
+                  <button type="button" className="bank-link remove" disabled={saving} onClick={() => deleteBank(b)}>Delete</button>
                 </>
               )}
             </div>

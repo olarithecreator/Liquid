@@ -319,15 +319,15 @@ export default function AcquireScreen() {
             <div className="buy-card">
               <div className="bc-row">
                 <span className="bc-key">Bank</span>
-                <span className="bc-val">Opay</span>
+                <span className="bc-val">Moniepoint MFB</span>
               </div>
               <div className="bc-row">
                 <span className="bc-key">Account No.</span>
-                <span className="bc-val green">8143 2750 91</span>
+                <span className="bc-val green">6706 2644 73</span>
               </div>
               <div className="bc-row">
                 <span className="bc-key">Account Name</span>
-                <span className="bc-val">Liquid Assets Ltd</span>
+                <span className="bc-val">Podiumblock Mgt Ltd</span>
               </div>
               <div className="bc-row">
                 <span className="bc-key">Total to pay</span>

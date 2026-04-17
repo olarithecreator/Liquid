@@ -62,14 +62,14 @@ function NigeriaFlag() {
   )
 }
 
-function TermsLinks() {
+function TermsLinks({ onTerms, onPrivacy }: { onTerms: () => void; onPrivacy: () => void }) {
   return (
     <>
-      <button type="button" className="linkPurpleInline">
+      <button type="button" className="linkPurpleInline" onClick={onTerms}>
         Terms of Service
       </button>{' '}
       and{' '}
-      <button type="button" className="linkPurpleInline">
+      <button type="button" className="linkPurpleInline" onClick={onPrivacy}>
         Privacy Policy
       </button>
     </>
@@ -302,7 +302,10 @@ export default function SignUpScreen() {
               </div>
               <div className="checkboxText">
                 I agree to the{' '}
-                <TermsLinks />
+                <TermsLinks
+                  onTerms={() => navigate('/legal?tab=terms')}
+                  onPrivacy={() => navigate('/legal?tab=privacy')}
+                />
               </div>
             </div>
             {termsError ? (
